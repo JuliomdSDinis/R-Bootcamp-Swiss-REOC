@@ -1,6 +1,4 @@
-# ============================================================
 # 1. Load packages
-# ============================================================
 
 library(readxl)
 library(tidyverse)
@@ -8,11 +6,8 @@ library(lubridate)
 library(skimr)
 library(janitor)
 
-
-# ============================================================
 # 2. Load the first dataset
 #    Daily data: 2000-2019
-# ============================================================
 
 Interest_2000_2019 <- read_excel(
   "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Interest Rate Y2000-Y2019.xlsx",
@@ -45,9 +40,7 @@ colnames(Interest_2000_2019) <- c(
 
 colnames(Interest_2000_2019)
 
-# ============================================================
 # 4. Remove duplicate rows
-# ============================================================
 
 Interest_2000_2019 <- Interest_2000_2019 %>%
   distinct()
@@ -57,9 +50,7 @@ Interest_2000_2019 <- Interest_2000_2019 %>%
 
 sum(duplicated(Interest_2000_2019))
 
-# ============================================================
 # 5. Convert variables to the correct format
-# ============================================================
 
 Interest_2000_2019 <- Interest_2000_2019 %>%
   mutate(
@@ -93,9 +84,25 @@ Interest_2000_2019 <- Interest_2000_2019 %>%
 
 str(Interest_2000_2019)
 
-# ============================================================
+# 6. Check date range
+
+
+min(Interest_2000_2019$date, na.rm = TRUE)
+
+max(Interest_2000_2019$date, na.rm = TRUE)
+
+
+# First observations
+
+head(Interest_2000_2019, 10)
+
+
+# Last observations
+
+tail(Interest_2000_2019, 10)
+
+
 # 7. Check missing values
-# ============================================================
 
 missing_2000_2019 <- Interest_2000_2019 %>%
   summarise(
@@ -117,9 +124,7 @@ missing_2000_2019 <- Interest_2000_2019 %>%
 
 missing_2000_2019
 
-# ============================================================
 # 8. Check duplicated dates
-# ============================================================
 
 Interest_2000_2019 %>%
   count(date) %>%
@@ -128,9 +133,7 @@ Interest_2000_2019 %>%
 
 sum(duplicated(Interest_2000_2019$date))
 
-# ============================================================
 # 9. Create monthly dates
-# ============================================================
 
 Interest_2000_2019 <- Interest_2000_2019 %>%
   mutate(
@@ -147,9 +150,7 @@ Interest_2000_2019 %>%
   select(date, month) %>%
   head(20)
 
-# ============================================================
 # 10. Convert daily data to monthly averages
-# ============================================================
 
 Interest_monthly_old <- Interest_2000_2019 %>%
   group_by(month) %>%
@@ -176,9 +177,7 @@ Interest_monthly_old <- Interest_2000_2019 %>%
     .groups = "drop"
   )
 
-# ============================================================
 # 11. Preview monthly dataset
-# ============================================================
 
 head(Interest_monthly_old, 20)
 
@@ -186,10 +185,8 @@ tail(Interest_monthly_old, 20)
 
 str(Interest_monthly_old)
 
-# ============================================================
 # 12. Load second dataset
 #     Monthly data: 2019-2026
-# ============================================================
 
 Interest_2019_2026 <- read_excel(
   "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Interest Rate Y2019-Y2026.xlsx",
@@ -206,9 +203,7 @@ tail(Interest_2019_2026)
 
 str(Interest_2019_2026)
 
-# ============================================================
 # 13. Rename columns
-# ============================================================
 
 colnames(Interest_2019_2026) <- c(
   "month",
@@ -220,9 +215,7 @@ colnames(Interest_2019_2026) <- c(
 
 colnames(Interest_2019_2026)
 
-# ============================================================
 # 14. Convert month to proper Date
-# ============================================================
 
 Interest_2019_2026 <- Interest_2019_2026 %>%
   mutate(
@@ -241,9 +234,7 @@ head(Interest_2019_2026, 20)
 
 str(Interest_2019_2026)
 
-# ============================================================
 # 15. Convert month to proper Date
-# ============================================================
 
 Interest_2019_2026 <- Interest_2019_2026 %>%
   mutate(
@@ -263,9 +254,7 @@ head(Interest_2019_2026, 20)
 
 str(Interest_2019_2026)
 
-# ============================================================
 # 16. Check duplicate months
-# ============================================================
 
 Interest_2019_2026 %>%
   count(month) %>%
@@ -274,9 +263,7 @@ Interest_2019_2026 %>%
 
 sum(duplicated(Interest_2019_2026$month))
 
-# ============================================================
 # 17. Check date range
-# ============================================================
 
 min(
   Interest_2019_2026$month,
@@ -295,12 +282,7 @@ head(Interest_2019_2026)
 
 tail(Interest_2019_2026)
 
-# ============================================================
-
-
-# ============================================================
 # 18. Check missing values
-# ============================================================
 
 missing_2019_2026 <- Interest_2019_2026 %>%
   summarise(
@@ -322,9 +304,7 @@ missing_2019_2026 <- Interest_2019_2026 %>%
 
 missing_2019_2026
 
-# ============================================================
 # 19. Join the two monthly datasets
-# ============================================================
 
 Interest_Rates <- full_join(
   Interest_monthly_old,
@@ -338,9 +318,7 @@ Interest_Rates <- full_join(
 Interest_Rates <- Interest_Rates %>%
   arrange(month)
 
-# ============================================================
 # 20. Preview final dataset
-# ============================================================
 
 head(
   Interest_Rates,
@@ -357,9 +335,7 @@ tail(
 
 str(Interest_Rates)
 
-# ============================================================
 # 21. Inspect the 2019 transition
-# ============================================================
 
 Interest_Rates %>%
   filter(
@@ -367,9 +343,7 @@ Interest_Rates %>%
     month <= as.Date("2019-12-01")
   )
 
-# ============================================================
 # 22. Check duplicated months
-# ============================================================
 
 Interest_Rates %>%
   count(month) %>%
@@ -380,9 +354,7 @@ sum(
   duplicated(Interest_Rates$month)
 )
 
-# ============================================================
 # 23. Check monthly continuity
-# ============================================================
 
 Interest_Rates %>%
   arrange(month) %>%
@@ -405,9 +377,7 @@ Interest_Rates %>%
       )
   )
 
-# ============================================================
 # 24. Check for missing months
-# ============================================================
 
 expected_months <- seq.Date(
   from = min(
@@ -437,9 +407,7 @@ missing_months
 
 length(missing_months)
 
-# ============================================================
 # 25. Missing values in final dataset
-# ============================================================
 
 missing_final <- Interest_Rates %>%
   summarise(
@@ -461,9 +429,7 @@ missing_final <- Interest_Rates %>%
 
 missing_final
 
-# ============================================================
 # 26. Final date range
-# ============================================================
 
 min(
   Interest_Rates$month,
@@ -475,9 +441,7 @@ max(
   na.rm = TRUE
 )
 
-# ============================================================
 # 27. Final inspection
-# ============================================================
 
 head(
   Interest_Rates,
@@ -497,13 +461,9 @@ skim(
   Interest_Rates
 )
 
-# ============================================================
 # 28. Save cleaned dataset
-# ============================================================
 
 write_csv(
   Interest_Rates,
   "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB Interest Rates Monthly Clean.csv"
 )
-
-
