@@ -9,7 +9,7 @@ library(janitor)
 # 2. Load the dataset
 
 Unemployment <- read_excel(
-  "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Unemployment.xlsx",
+  "./Dataset 2 excel/SNB - Unemployment.xlsx",
   skip = 21,
   col_names = FALSE
 )
