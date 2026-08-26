@@ -11,7 +11,7 @@ library(leaflet)
 # ============================================================
 
 PSPN_properties_geo <- read_csv(
-  "Groupwork dataset script/Data cleaning/Geo_Firms_Portfolios/PSPN_properties.csv",
+  "Groupwork dataset script/Data cleaning/Geo_Firms_Portfolios/DataTop3Properties/PSPN_properties_2025_final.csv",
   show_col_types = FALSE
 )
 
