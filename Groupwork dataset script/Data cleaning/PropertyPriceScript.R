@@ -8,7 +8,7 @@ library(janitor)
 # 2. Load the dataset
 
 Property <- read_excel(
-  "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Property princing index.xlsx",
+  "./Dataset 2 excel/SNB - Property princing index.xlsx",
   skip = 21
 )
 

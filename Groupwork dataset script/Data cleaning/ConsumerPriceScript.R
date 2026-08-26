@@ -13,7 +13,7 @@ library(corrplot)
 
 # 1. Load the dataset, remove the 17 first rows
 
-ConsumerPrice <- read_excel("C:/Users/Alix/Downloads/SNB - Consumer prices – SNB and SFSO core inflation rates.xlsx",
+ConsumerPrice <- read_excel("./Dataset 2 excel/Consumer prices – SNB and SFSO core inflation rates.xlsx",
                    skip=17)
 
 # 2. Preview of the dataset
