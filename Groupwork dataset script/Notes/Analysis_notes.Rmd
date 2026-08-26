@@ -3,3 +3,201 @@ title: "Analysis_notes"
 output: html_document
 ---
 
+# Swiss REOC Project – Analysis Notes
+
+## Dataset 1 – Historical Performance
+
+### Portfolio construction
+
+Two portfolios were constructed from the 11 Swiss listed real estate
+companies:
+
+- Equal-weighted portfolio (EW)
+- Value-weighted portfolio (VW), using lagged market capitalization
+
+Both portfolios are indexed to 100 for performance comparison.
+
+---
+
+## Firm Performance
+
+### Risk-return analysis
+
+Figure:
+`Outputs/Plots/risk_return_companies.png`
+
+Main observations:
+
+- Considerable variation exists in risk and return across firms.
+- Some firms have much shorter return histories, particularly EPIC and CHAM.
+- Therefore, long-run performance comparisons across all 11 companies
+  should be interpreted carefully because the observation periods differ.
+
+---
+
+## Market Capitalization and Concentration Analysis
+
+Figure:
+`Outputs/Plots/market_weights_evolution.png`
+
+Table:
+`Outputs/Tables/market_weights_concentration_yearly.csv`
+
+### Sample coverage
+
+The analysis focuses on 11 large-cap Swiss listed real estate companies.
+Although these companies represent only 11 of approximately 40 firms in the
+broader Swiss listed real estate universe, they account for approximately
+86% of total market capitalization based on the sample-selection data.
+
+The analysis should therefore be interpreted as representing the large-cap
+segment of the Swiss listed real estate market rather than the complete market.
+
+### Main results
+
+Market capitalization is unevenly distributed across the firms in the sample.
+
+In the latest available observation:
+
+- SPSN represents approximately 31.9% of sample market capitalization.
+- PSPN represents approximately 21.0%.
+- ALLN represents approximately 10.4%.
+- The Top 3 firms together represent approximately 63.3%.
+- The HHI is approximately 0.176.
+
+The yearly analysis also shows that concentration changes over time.
+The Top 3 share declines from approximately 81.1% in 2000 to 63.3% in
+the latest available period, while the HHI declines from approximately
+0.256 to 0.176.
+
+### Interpretation
+
+The large-cap Swiss listed real estate sample remains relatively concentrated,
+with a substantial proportion of market capitalization represented by a small
+number of firms.
+
+However, the apparent decline in concentration over time must be interpreted
+carefully because the panel is unbalanced. The number of firms represented in
+the dataset increases over time, from 4 firms at the beginning of the sample
+to 11 firms in the most recent period. Part of the decline in concentration
+therefore reflects changes in sample composition rather than necessarily a
+redistribution of market capitalization among the same firms.
+
+This concentration is particularly relevant for the construction of the
+portfolio benchmarks. The value-weighted portfolio gives greater influence
+to the largest firms, particularly SPSN and PSPN, whereas the equal-weighted
+portfolio gives the available firms equal importance.
+
+Consequently, differences between the performance of the EW and VW portfolios
+can provide information about whether returns in the large-cap Swiss listed
+real estate segment are being driven primarily by the largest companies or
+are more broadly distributed across firms.
+
+## Correlation Analysis
+
+Figures:
+
+- `Outputs/Plots/monthly_return_correlations.png`
+- `Outputs/Plots/benchmark_correlations.png`
+- `Outputs/Plots/rolling_benchmark_correlations.png`
+
+Tables:
+
+- `Outputs/Tables/firm_benchmark_correlations.csv`
+- `Outputs/Tables/benchmark_correlation_table.csv`
+
+### Correlations among individual REOCs
+
+Monthly returns are positively correlated across all companies in the
+sample, although the magnitude of the correlations varies considerably.
+
+Some of the strongest pairwise relationships are observed between MOBN,
+PSPN and SPSN, with correlations of approximately 0.74. In contrast,
+several company pairs exhibit correlations close to 0.20.
+
+The generally positive correlations indicate that Swiss listed real estate
+companies share common sources of return variation, potentially reflecting
+common real estate, capital-market and macroeconomic exposures. However,
+correlations remain substantially below one, indicating meaningful
+firm-specific variation.
+
+This suggests that diversification benefits remain available within a
+portfolio of Swiss listed real estate companies, although these benefits
+may vary across firms and over time.
+
+
+### Correlation with external benchmarks
+
+The REOCs exhibit substantially stronger correlations with the SXI Real
+Estate Shares Broad Total Return Index (REAL) than with the broader Swiss
+Performance Index Total Return (SPI).
+
+At the portfolio level, the value-weighted portfolio has a correlation of
+0.833 with REAL, while the equal-weighted portfolio has a correlation of
+0.764. Their corresponding correlations with the SPI are only 0.242 and
+0.229, respectively.
+
+This distinction is also visible at the individual-company level. All 11
+REOCs exhibit a higher correlation with REAL than with the SPI. The
+strongest relationships with REAL are observed for PSPN (0.797), SPSN
+(0.788), and MOBN (0.696), while CHAM, EPIC and ZUGEST exhibit considerably
+lower correlations.
+
+The results suggest that the returns of the selected Swiss listed real
+estate companies are much more closely associated with the listed real
+estate equity segment than with the broader Swiss equity market.
+
+The particularly high correlation between the value-weighted portfolio
+and REAL is consistent with the idea that market-capitalization weighting
+places greater emphasis on the larger REOCs. However, this interpretation
+should be considered alongside the precise weighting methodology and
+constituent composition of the external benchmark.
+
+
+### Correlations through time
+
+The 36-month rolling correlations show that the relationship between the
+constructed portfolios and the benchmarks is not constant through time.
+
+Correlations between both portfolios and REAL remain positive throughout
+the observed rolling windows and are generally high, frequently exceeding
+0.7. The value-weighted portfolio generally exhibits the strongest
+correlation with REAL.
+
+In contrast, rolling correlations with the SPI are substantially lower and
+much more variable. They range from negative values in some periods to
+above 0.5 in others.
+
+The difference indicates that the relationship between listed real estate
+companies and the broader Swiss equity market changes considerably over
+time, whereas their relationship with the listed real estate benchmark is
+more persistent.
+
+An important next step is therefore to examine whether these changes in
+correlation coincide systematically with periods of financial or
+macroeconomic stress.
+
+
+### Data considerations
+
+The firm-level correlations are calculated using the available
+observations for each company. Because the panel is unbalanced and several
+firms enter the sample later, correlations are not necessarily estimated
+over identical periods.
+
+For example, ALLN has more than 300 monthly observations available, whereas
+EPIC has fewer than 50. Direct comparisons between firm-level correlations
+should therefore be interpreted with caution because differences may
+reflect both firm characteristics and differences in the estimation
+period.
+
+
+### Firm Size and Benchmark Correlation
+
+To investigate whether the greater benchmark correlation of the value-weighted portfolio is related to firm size, average market capitalization weights were compared with each firm’s return correlation with the SXI Real Estate Shares Broad Total Return Index (REAL). To ensure comparability across firms, both measures were calculated over the common sample period from May 2022 to March 2026.
+
+A strong positive relationship is observed between firm size and benchmark correlation. The Pearson correlation between average market weight and REAL correlation is 0.775, while the Spearman rank correlation is 0.870. The two largest firms in the sample, SPSN and PSPN, account for average market capitalization shares of approximately 30% and 23%, respectively, and exhibit correlations with REAL of approximately 0.90 and 0.89. In contrast, several of the smaller firms display substantially lower benchmark correlations.
+
+These results help explain why the value-weighted portfolio exhibits a higher correlation with REAL than the equal-weighted portfolio. Value weighting assigns greater portfolio weights to the largest firms, which also tend to be more strongly correlated with the real estate benchmark. Consequently, the value-weighted portfolio more closely resembles the return dynamics of the broader listed real estate market.
+
+The relationship should nevertheless be interpreted as descriptive rather than causal. The common sample contains only 47 monthly observations and 11 firms, and the construction of the market benchmark itself may contribute to the stronger relationship observed for larger companies.
