@@ -13,7 +13,7 @@ library(corrplot)
 
 # 1. Load the dataset
 
-GDP <- read_excel("R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Gross domestic product by type of production – real.xlsx",
+GDP <- read_excel("./Dataset 2 excel/SNB - Gross domestic product by type of production – real.xlsx",
               skip = 17,
               col_names = FALSE
 )
