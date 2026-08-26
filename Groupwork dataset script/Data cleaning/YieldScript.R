@@ -8,7 +8,7 @@ library(janitor)
 # 2. Load the dataset
 
 Yields <- read_excel(
-  "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Yields on bond issues.xlsx",
+  "./Dataset 2 excel/SNB - Yields on bond issues.xlsx",
   skip = 19,
   col_names = FALSE
 )
