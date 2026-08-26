@@ -1,0 +1,151 @@
+ticker,company,report_date,portfolio_segment,region,report_property,land_area_m2,office_area_m2,retail_area_m2,gastronomy_area_m2,other_area_m2,rentable_area_m2,parking_spaces,vacancy_rate_pct,implied_yield_net_pct,year_construction,year_renovation,purchase_date,owner,ownership_status,ownership_percentage,source_pdf_page,area_components_sum_m2,area_difference_m2,needs_manual_review
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Alfred Escher-Strasse 17",275,950.0,0.0,0,47,997.0,0.0,0.0,3.6,1907,200017,01.10.1999,PR,SO,100.0,2,997,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Augustinergasse 25",236,255.0,0.0,327,157,739.0,1.0,0.0,2.8,1850,1994|2000|04,01.04.2004,PP,SO,100.0,2,739,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bahnhofplatz 1, 2 / Bahnhofquai 9, 11, 15",2014,6783.0,1020.0,307,1053,9163.0,0.0,0.0,2.4,1894|95|99,1990|2021|23|25,01.01.2017,PP,SO,100.0,2,9163,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bahnhofplatz 9",998,2425.0,2011.0,0,26,4462.0,0.0,0.0,2.5,1933,2003/04114|25,01.04.2004,PP,SO,100.0,2,4462,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bahnhofstrasse 10 / Börsenstrasse 18",344,646.0,844.0,0,0,1490.0,0.0,0.0,2.0,1885,1984|2015,01.10.1999,PR,SO,100.0,2,1490,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bahnhofstrasse 28a/Waaggasse 6",763,1894.0,649.0,419,262,3224.0,0.0,0.0,2.5,1812,2005/10/19,01.04.2004,PP,SO,100.0,2,3224,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bahnhofstrasse 39",1093,1750.0,1804.0,0,0,3554.0,7.0,0.0,2.0,1911,1984|2003|13,01.01.2000,PR,SO,100.0,2,3554,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bahnhofstrasse 66",627,0.0,4868.0,0,0,4868.0,0.0,0.0,2.1,1967,1995/2014|25,01.07.2005,PP,SO,100.0,2,4868,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bahnhofstrasse 81 / Schweizergasse 2, 4",355,717.0,1370.0,0,286,2373.0,0.0,0.0,2.3,1931,2001/24,01.04.2004,PP,SO,100.0,2,2373,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Binzring 15, 17",33878,35680.0,0.0,0,5935,41615.0,140.0,0.0,5.8,1992,,01.04.2001,PR,SO,100.0,2,41615,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bleicherweg 10 /Schanzengraben 7",1155,3293.0,341.0,0,418,4052.0,17.0,1.3,2.4,1930|76,1985|2006|09|20,01.10.1999,PR,SO,100.0,2,4052,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Bleicherweg 14",398,489.0,0.0,0,0,489.0,7.0,0.0,3.2,1857,1998]99|2023/24,01.07.2005,PP,SO,100.0,2,489,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 70",298,0.0,0.0,0,0,0.0,0.0,0.0,0.0,1924,2003,01.04.2004,PP,FA,15.4,2,0,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 72",247,,,0,0,,,0.0,0.0,2003,,01.04.2004,PP,FA,10.8,2,0,,
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 80, 82, 84",7384,0.0,0.0,0,13072,13072.0,56.0,0.0,3.0,2005,2020,01.04.2004,PP,SO,100.0,2,13072,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 90",12770,11686.0,0.0,0,158,11844.0,271.0,0.4,2.8,2003,2021,01.04.2004,PP,SO,100.0,2,11844,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 100",5139,8522.0,0.0,0,1134,9656.0,0.0,0.0,3.0,2003,,01.04.2004,PP,SO,100.0,2,9656,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 110",5860,15984.0,0.0,0,0,15984.0,0.0,0.0,3.7,2007,,01.04.2004,PP,SO,100.0,2,15984,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 130, 132",3605,1254.0,808.0,641,0,2703.0,0.0,0.0,2.6,1877|82,2004,01.04.2004,PP,SO,100.0,2,2703,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 150",5926,3519.0,1067.0,0,374,4960.0,0.0,0.0,2.3,1882,2004,01.04.2004,PP,SO,100.0,2,4960,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 152",5194,0.0,0.0,3802,4759,8561.0,0.0,0.0,5.0,1913,2012,01.04.2004,PP,SO,100.0,2,8561,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 152a",583,2443.0,0.0,0,0,2443.0,0.0,0.0,3.4,2008,,01.04.2004,PP,SO,100.0,2,2443,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Brandschenkestrasse 152b",818,714.0,0.0,0,0,711.0,0.0,0.0,4.2,1890,2013,01.04.2004,PP,SO,100.0,2,714,-3,TRUE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Dufourstrasse 56",900,2599.0,292.0,0,0,2891.0,12.0,0.0,3.0,1950,1997|2006/20,01.10.1999,PR,SO,100.0,2,2891,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Förrlibuckstrasse 10",4122,7582.0,0.0,0,617,8199.0,80.0,18.3,3.3,1963,2002|20/21,29.06.2001,PR,SO,100.0,2,8199,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Förrlibuckstrasse 60, 62",10382,15695.0,0.0,885,7830,24410.0,305.0,1.5,4.5,1989,2016/17/21,01.04.2001,PR,SO,100.0,2,24410,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Förrlibuckstrasse 66",2055,5267.0,0.0,0,1851,7118.0,78.0,0.4,4.5,1969,1992|2003|04,01.12.2002,PR,SO,100.0,2,7118,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Förrlibuckstrasse 110",2963,8772.0,350.0,194,1859,11175.0,54.0,0.1,4.5,1962,2000/23,01.12.2002,PR,SO,100.0,2,11175,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Förrlibuckstrasse 151",3495,0.0,0.0,0,1800,1800.0,870.0,0.0,3.7,1975,2000/23,01.12.2002,PR,SO,100.0,2,1800,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Förrlibuckstrasse 181",1789,4831.0,0.0,0,144,4975.0,39.0,0.0,3.8,2002,2021,01.12.2002,PR,SO,100.0,2,4975,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Freieckgasse 7",295,285.0,89.0,210,224,808.0,0.0,0.0,2.9,1700,1992/2012,01.04.2004,PP,SO,100.0,2,808,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Füsslistrasse 6",907,2054.0,905.0,0,45,3004.0,0.0,22.0,1.1,1925,1998/2005|24,01.04.2001,PR,SO,100.0,3,3004,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Gartenstrasse 32",694,1693.0,0.0,0,0,1693.0,18.0,0.0,2.4,1967,1986/2005|22,01.07.2005,PP,SO,100.0,3,1693,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Genferstrasse 23",343,946.0,0.0,0,59,1005.0,0.0,0.0,2.7,1895,1998/2014,01.10.1999,PR,SO,100.0,3,1005,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Gerbergasse 5",606,1766.0,784.0,0,0,2550.0,2.0,0.0,2.7,1904,1993]2010/12|18,27.05.2004,PP,SO,100.0,3,2550,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Goethestrasse 24",842,613.0,181.0,0,19,813.0,1.0,0.0,2.6,1874,2014,01.04.2004,PP,SO,100.0,3,813,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Grubenstrasse 6, 8",4152,5022.0,0.0,0,7447,12469.0,49.0,50.9,0.7,2023,2025,25.03.2020,PR,SO,100.0,3,12469,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Gutenbergstrasse 1, 9",1488,3597.0,810.0,0,4646,9053.0,15.0,0.3,3.4,1969,1986/2008|214,31.12.2004,PR,SO,100.0,3,9053,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Hardturmstrasse 101, 103, 105 / Förrlibuckstrasse 30",7567,18001.0,4936.0,0,698,23635.0,236.0,8.4,4.1,1992,2009/13,01.08.2016,PR,SO,100.0,3,23635,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Hardturmstrasse 131, 133, 135",6236,16751.0,1624.0,0,4960,23335.0,40.0,2.3,4.3,1982,2008/16,01.12.2002,PR,SO,100.0,3,23335,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Hardturmstrasse 161 / Förrlibuckstrasse 150",8225,28907.0,0.0,280,4441,33628.0,67.0,3.3,4.4,1975,1999|2019/22,01.12.2002,PR,SO,100.0,3,33628,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Hardturmstrasse 169, 171, 173, 175",5189,13257.0,350.0,96,4768,18471.0,38.0,0.0,5.3,1952,1997|2006|18|/21,01.12.2002,PR,SO,100.0,3,18471,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Hardturmstrasse 181, 183 /Förrlibuckstrasse 160, 190, 192",10557,23586.0,0.0,781,116,24483.0,200.0,0.1,3.0,2021,,01.12.2002,PR,SO,100.0,3,24483,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Hottingerstrasse 10, 12",1922,3788.0,0.0,0,210,3998.0,18.0,0.7,3.5,1914|40,1994|2020|24,01.04.2001,PR,SO,100.0,3,3998,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, In Gassen 16",331,0.0,0.0,487,618,1105.0,0.0,0.0,2.7,1812,1984/2007,01.04.2004,PP,SO,100.0,3,1105,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Konradstrasse 1",343,265.0,0.0,190,1162,1617.0,0.0,0.0,2.2,1879,1990,01.04.2004,PP,SO,100.0,3,1617,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Kurvenstrasse 17 / Beckenhofstrasse 26",657,1468.0,0.0,0,269,1737.0,35.0,2.5,3.3,1971,1999|2006|07|12,01.10.1999,PR,SO,100.0,3,1737,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Limmatquai 4",529,2477.0,183.0,189,80,2929.0,0.0,0.0,2.2,1837,2023,01.01.2000,PR,SO,100.0,3,2929,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Limmatquai 144 / Zähringerstrasse 51",429,1471.0,0.0,243,366,2080.0,0.0,0.0,3.1,1888,1994,01.04.2004,PP,SO,100.0,3,2080,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Limmatstrasse 291",973,2773.0,0.0,0,154,2927.0,7.0,0.0,4.5,1985,2016,01.04.2001,PR,SO,100.0,3,2927,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Lintheschergasse 10",184,810.0,247.0,0,0,1057.0,0.0,0.0,3.0,1878,2010,17.02.2022,PP,SO,100.0,3,1057,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Lowenstrasse 22",250,679.0,198.0,0,79,956.0,4.0,12.0,0.1,1964,2003/07/11,31.12.2000,PR,SO,100.0,3,956,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Muhlebachstrasse 2 / Falkenstrasse 30",681,1677.0,260.0,152,567,2656.0,0.0,0.1,3.6,1929,1990,17.02.2022,PR,SO,100.0,3,2656,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Muhlebachstrasse 6",622,616.0,0.0,0,0,616.0,7.0,0.0,2.5,1975,1993|2025,01.10.1999,PR,FA,29.8,3,616,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Muhlebachstrasse 32",536,2079.0,0.0,0,55,2134.0,21.0,0.0,3.1,1981,1999/2007,01.10.1999,PR,SO,100.0,3,2134,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Obstgartenstrasse 7",842,1882.0,0.0,0,0,1882.0,16.0,0.0,3.6,1958,1981/2002,01.10.1999,PR,SO,100.0,3,1882,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Pfingstweidstrasse 60, 60b",13803,24887.0,1054.0,155,955,27051.0,135.0,2.7,3.4,2002,2016,01.06.2023,PR,SO,100.0,3,27051,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Poststrasse 3",390,814.0,608.0,0,178,1597.0,0.0,0.0,2.3,1893,1999/2023,01.10.1999,PR,SO,100.0,3,1600,-3,TRUE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Seebahnstrasse 89",2455,3115.0,739.0,0,1208,5062.0,76.0,1.7,3.6,1959,2003/08/18,01.04.2001,PR,SO,100.0,4,5062,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Seefeldstrasse 5",498,571.0,0.0,294,289,1154.0,0.0,0.0,2.7,1840,2000/22/25,01.04.2004,PP,SO,100.0,4,1154,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Seefeldstrasse 123",2580,6586.0,1562.0,0,138,8286.0,85.0,0.4,2.7,1972,2004|17,01.10.1999,PR,SO,100.0,4,8286,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Seestrasse 353°",3593,7403.0,0.0,0,296,7699.0,125.0,1.6,5.7,1981/2001,2010/14|25,01.04.2010,PR,SO,100.0,4,7699,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Splügenstrasse 6",430,1072.0,0.0,0,31,1103.0,8.0,0.0,3.2,1896,1998/2011,01.10.1999,PR,SO,100.0,4,1103,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Stampfenbachstrasse 48 / Sumatrastrasse 11",1589,4354.0,222.0,0,455,5031.0,35.0,1.8,3.8,1929,1999|2001|07,01.10.1999,PR,SO,100.0,4,5031,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Stauffacherstrasse 31",400,534.0,0.0,204,863,1601.0,2.0,0.7,2.8,1896,2000,01.04.2004,PP,SO,100.0,4,1601,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Theaterstrasse 12",1506,3611.0,2315.0,0,675,6601.0,3.0,0.0,2.5,1973,1993|2004|07|24,01.10.1999,PR,SO,100.0,4,6601,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Theaterstrasse 22",324,459.0,0.0,283,237,979.0,0.0,0.0,2.3,2013,2025,01.04.2004,PP,SO,100.0,4,979,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Uraniastrasse 9",989,3485.0,209.0,909,746,5349.0,2.0,0.3,2.7,1906,1992|2002/21,01.04.2004,PP,SO,100.0,4,5349,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Waisenhausstrasse 2, 4/ Bahnhofquai 7",1365,0.0,0.0,7399,0,7399.0,0.0,0.0,3.7,1913,1985/2021,01.04.2004,PP,SO,100.0,4,7399,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Walchestrasse 11, 15 / Neumühlequai 26, 28",1074,2801.0,628.0,103,495,4027.0,6.0,11.0,2.3,1919,2000|08|09,01.10.1999,PR,SO,100.0,4,4027,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Wasserwerkstrasse 10, 12 /Stampfenbachstrasse 109",1760,6406.0,0.0,0,1527,7933.0,125.0,2.7,3.7,1983,2006/16/18,01.04.2004,PP,SO,100.0,4,7933,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Zollstrasse 6",343,0.0,385.0,0,1057,1442.0,0.0,0.0,2.4,1982,2018/21,01.01.2004,PP,SO,100.0,4,1442,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Zürich, Zweierstrasse 129",597,1759.0,261.0,0,834,2854.0,7.0,0.0,4.0,1958,2003,01.10.1999,PR,SO,100.0,4,2854,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Ruschlikon, Moosstrasse 2",6798,5392.0,0.0,0,3870,9262.0,122.0,25.6,5.7,1969/89,2010/20,01.06.2002,PR,SO,100.0,4,9262,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Urdorf, Heinrich Stutz-Strasse 23, 25",3788,988.0,0.0,0,2960,3948.0,59.0,0.4,6.0,1967,1989,01.11.2015,PR,SO,100.0,4,3948,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Zurich,"Urdorf, Heinrich Stutz-Strasse 27, 29",30671,43259.0,0.0,195,3192,46646.0,245.0,0.4,6.3,1976,2002|03|10/13/25,01.07.2004,PR,SO,100.0,4,46646,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Cours de Rive 13, 15/ Boulevard Helvétique 25",882,4513.0,1184.0,0,45,5742.0,62.0,1.3,3.3,1981,,01.10.1999,PR,SO,100.0,5,5742,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genéve, Place de la Synagogue 3, 5/ Rue Jean-Petitot 4, 6",585,2526.0,109.0,0,85,2720.0,0.0,0.0,2.9,1874,2020,01.01.2022,PD,SO,100.0,5,2720,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Place du Molard 7",593,2121.0,0.0,821,403,3345.0,0.0,0.1,2.8,1975,2005|06|25,01.04.2004,SI,SO,100.0,5,3345,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue Henriette-et-Jeanne-Rath 14 / Rue de Hesse 16bis",1017,4962.0,,0,0,4962.0,0.0,0.0,3.1,1919,2018,28.06.2024,PR,SO,100.0,5,4962,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue de l’Arquebuse 8",347,1788.0,0.0,0,111,1899.0,9.0,76.2,-0.4,1900,2011/14/25,01.02.2018,PR,SO,100.0,5,1899,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue de la Confédération 2",8650,6490.0,920.0,0,929,8339.0,0.0,0.4,2.2,1935,1991/2022,22.09.2020,PR,SO,100.0,5,8339,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genéve, Rue de la Corraterie 5, 7 / Rue de la Cité 6",7900,5195.0,1865.0,0,149,7209.0,0.0,0.3,2.2,1920,2023,22.09.2020,PR,SO,100.0,5,7209,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue de la Corraterie 24, 26",1005,1609.0,614.0,0,210,2433.0,10.0,2.1,2.6,1825,1996|2016,01.10.1999,PR,SO,100.0,5,2433,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue de la Fontaine 5",226,946.0,240.0,0,77,1263.0,0.0,0.0,3.1,1920,2000|01|20,01.10.1999,PR,SO,100.0,5,1263,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue des Bains 31bis, 33, 35",3368,10422.0,1270.0,0,302,11994.0,255.0,10.5,3.7,1994,2016,01.07.2002,PR,SO,100.0,5,11994,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue du Marché 40",798,0.0,1123.0,4416,27,5566.0,0.0,0.0,3.8,1972,2006|20,01.07.2002,PR,SO,100.0,5,5566,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue du Mont-Blanc 12",258,1355.0,126.0,0,0,1481.0,0.0,0.0,2.9,1860,2000|22,01.10.1999,PR,SO,100.0,5,1481,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue du Prince 9, 11",578,2915.0,800.0,0,426,4141.0,4.0,0.5,2.6,1966,2000/01/06,01.01.2000,PR,SO,100.0,5,4141,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue du XXXI-Décembre 8",1062,2257.0,367.0,134,1012,3767.0,0.0,0.0,3.8,1962,1992|2001|11,01.10.1999,PR,SO,100.0,5,3770,-3,TRUE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genéve, Rue F. Bonivard 12/ Rue des Alpes 11",392,2048.0,269.0,0,46,2363.0,0.0,0.0,3.2,1852,1995/2013/14,01.10.1999,PR,SO,100.0,5,2363,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue François-Diday 8",632,2438.0,0.0,0,0,2438.0,0.0,0.0,3.0,1924,2012|17,01.02.2018,PR,SO,100.0,5,2438,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Genève, Rue Richard-Wagner 6",6634,9976.0,0.0,0,0,9976.0,69.0,0.0,3.2,1986,,01.07.2004,PR,SO,100.0,5,9976,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Carouge,"Carouge, Route des Acacias 50, 52",4666,9557.0,0.0,0,31,9588.0,181.0,0.0,4.5,1965,2006/10/13,31.12.2000,PR,SO,100.0,5,9588,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Carouge,"Carouge, Rue de la Gabelle 6",990,1016.0,0.0,0,0,1016.0,5.0,0.0,4.6,1987,,01.01.2000,PR,SO,100.0,5,1016,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Geneva,"Cologny, Quai de Cologny 5",0,0.0,0.0,0,2829,2829.0,0.0,0.0,5.6,2015,,07.05.2013,PR,BL,100.0,5,2829,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Barfüsserplatz 10",365,350.0,0.0,533,314,1197.0,0.0,0.0,3.0,1914,1997|2006|11,01.04.2004,PP,SO,100.0,6,1197,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Dornacherstrasse 210",4994,9634.0,2770.0,0,2105,14509.0,4.0,2.2,4.1,1969,1998]2004|06|15,31.12.2000,PR,SO,100.0,6,14509,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Falknerstrasse 31 /Weisse Gasse 16",320,127.0,0.0,345,728,1200.0,0.0,12.3,2.6,1902,1998|2005|08|12,01.04.2004,PP,SO,100.0,6,1200,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Freie Strasse 38",299,957.0,230.0,0,5,1192.0,0.0,0.0,2.6,1896,1982|2005|16|22,01.07.2005,PP,SO,100.0,6,1192,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Greifengasse 21",416,201.0,826.0,0,798,1825.0,0.0,0.0,3.0,1930,1984|98/2015|19,01.04.2004,PP,SO,100.0,6,1825,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Grosspeterstrasse 18 / Grosspeteranlage 11",2008,5115.0,0.0,413,803,6331.0,79.0,1.8,3.4,2023,,01.12.2005,PR,SO,100.0,6,6331,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Grosspeterstrasse 44",3657,11476.0,0.0,5493,1031,18000.0,159.0,5.1,3.6,2017,,01.12.2005,PR,SO,100.0,6,18000,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Hochstrasse 16 / Pfeffingerstrasse 5",6953,5649.0,0.0,8220,675,14544.0,222.0,8.8,3.5,1986,2000|24,01.01.2001,PR,SO,100.0,6,14544,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Kirschgartenstrasse 12, 14",1376,5004.0,787.0,143,469,6403.0,90.0,19.2,3.6,1978,2003|05|10/22,01.01.2000,PR,SO,100.0,6,6403,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Marktgasse 4",272,498.0,216.0,0,331,1045.0,0.0,0.0,1.6,1910,2002|08|24,01.04.2004,PP,SO,100.0,6,1045,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Marktgasse 5",330,964.0,314.0,0,241,1516.0,0.0,8.7,2.9,1924,1975|2002|05|20,01.10.1999,PR,SO,100.0,6,1519,-3,TRUE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Marktplatz 30, 30a",560,2064.0,0.0,430,314,2808.0,0.0,6.3,3.0,1936,2001/06,01.04.2004,PP,SO,100.0,6,2808,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Peter Merian-Strasse 88, 90",3900,10707.0,0.0,0,566,11273.0,108.0,37.2,1.7,2000,2022/23/25,01.09.2014,PR,FA,100.0,6,11273,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, St. Alban-Anlage 46",1197,3182.0,0.0,245,342,3769.0,52.0,13.0,3.7,1968,2000/11,01.10.1999,PR,SO,100.0,6,3769,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Basel,"Basel, Steinentorberg 8, 12",2845,6989.0,0.0,0,7758,14747.0,68.0,0.7,3.8,1991,2020,01.12.2001,PR,SO,100.0,6,14747,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Barenplatz 9, 11, 27 / Kafiggasschen 10, 22, 26",649,1292.0,0.0,1109,964,3365.0,0.0,1.4,2.6,1694/1932,2022,01.01.2019,IS,SO,100.0,6,3365,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Bollwerk 15",403,1209.0,560.0,0,127,1896.0,0.0,25.3,0.8,1924,2002|25,01.10.1999,PR,SO,100.0,6,1896,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Eigerstrasse 2",3268,4237.0,240.0,0,212,4689.0,115.0,6.3,4.9,1964,1999|2005|114,01.10.1999,PR,SO,100.0,6,4689,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Genfergasse 4",325,952.0,0.0,544,291,1787.0,0.0,9.6,2.5,1899,1984|2005|06,01.04.2004,IS,SO,100.0,6,1787,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Kramgasse 49",235,50.0,172.0,270,322,814.0,0.0,10.2,2.6,1900,2011/13/20,01.04.2004,IS,SO,100.0,6,814,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Kramgasse 78",241,178.0,506.0,0,348,1032.0,0.0,0.0,3.1,vor 1900,1991/92,01.07.2005,PP,SO,100.0,6,1032,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Laupenstrasse 10",969,1817.0,573.0,0,247,2637.0,0.0,0.0,3.4,1965,1997|2004/11|17,01.07.2004,PR,SO,100.0,6,2637,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Laupenstrasse 18, 18a",5436,7177.0,870.0,0,1396,9443.0,7.0,0.0,3.4,1935/60,1997|2009|12,01.07.2004,PR,SO,100.0,6,9443,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Seilerstrasse 8, 8a",2183,5914.0,561.0,0,2604,9079.0,117.0,0.5,4.3,1971,2001,01.10.1999,PR,SO,100.0,6,9079,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Waisenhausplatz 14",826,1224.0,1849.0,0,354,3427.0,0.0,0.0,2.2,1950,2001|22,01.10.1999,PR,SO,100.0,6,3427,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Bern, Zeughausgasse 26, 28",629,0.0,779.0,2724,68,3571.0,0.0,0.0,3.3,1900,1999/2022,01.04.2004,IS,SO,100.0,6,3571,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Liebefeld, Waldeggstrasse 30",5547,15243.0,0.0,0,327,15570.0,140.0,0.9,4.3,2014,,01.01.2019,IS,SO,100.0,6,15570,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Liebefeld, Waldeggstrasse 37",5335,10739.0,0.0,0,842,11581.0,228.0,9.0,3.9,2003,,01.01.2019,IS,SO,100.0,6,11581,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Liebefeld, Waldeggstrasse 38",5479,3137.0,0.0,0,717,3854.0,62.0,3.1,4.7,1918,2016,01.01.2019,IS,SO,100.0,6,3854,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Bern,"Liebefeld, Waldeggstrasse 41, 45, 47",7044,3294.0,0.0,182,777,4253.0,83.0,0.9,4.6,1907|12,2008/10/21,01.01.2019,IS,SO,100.0,6,4253,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Avenue Agassiz 2",757,1394.0,0.0,0,0,1394.0,9.0,0.0,3.0,1880,2002|12|15,01.02.2018,PR,SO,100.0,7,1394,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Avenue de Cour 135",1800,2259.0,0.0,262,385,2906.0,23.0,10.1,5.7,1973,2001|04|05,01.10.1999,PR,SO,100.0,7,2906,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Avenue de Sévelin 40",3060,1623.0,0.0,0,4939,6562.0,144.0,10.2,6.4,1992,,01.12.2005,PR,SO,100.0,7,6562,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Avenue de Sévelin 46",3320,9982.0,0.0,361,4981,15324.0,10.0,10.4,5.9,1994,,01.12.2005,PR,SO,100.0,7,15324,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Avenue de Sévelin 54",1288,544.0,0.0,0,2466,3010.0,0.0,0.0,7.3,1932,1990/2002,01.12.2005,PR,SO,100.0,7,3010,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Chemin de Bossons 2",1930,2135.0,0.0,0,0,2135.0,8.0,0.0,7.5,1971,1998,01.04.2001,PR,SO,100.0,7,2135,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Chemin du Rionzi 52",0,3407.0,0.0,0,5662,9069.0,63.0,0.0,5.2,1971,1996/2014,01.04.2004,IS,BL,100.0,7,9069,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Grand Pont 1",371,0.0,1069.0,0,0,1069.0,0.0,0.0,4.2,1957,2000,01.07.2005,PP,SO,100.0,7,1069,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Place Saint-François 5",1070,3705.0,1214.0,0,874,5793.0,0.0,38.5,1.8,1913,1989|2004|20|24,01.10.1999,PR,SO,100.0,7,5793,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Rue Centrale 15",486,1260.0,545.0,0,503,2308.0,0.0,15.1,3.2,1938,1987/2013,01.01.2000,PR,SO,100.0,7,2308,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Rue de Sébeillon 1, 3, 5",2870,7807.0,265.0,0,4181,12253.0,62.0,1.6,5.8,1963,1998,01.12.2005,PR,SO,100.0,7,12253,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Rue de Sébeillon 2",5955,,,0,0,,210.0,2.5,2.3,n.a.,,01.12.2005,PR,SO,100.0,7,0,,
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Rue du Grand-Chéne 2",555,1770.0,1338.0,0,0,3108.0,0.0,0.0,3.4,1910/11,1985/2001,01.10.1999,PR,SO,100.0,7,3108,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Lausanne,"Lausanne, Rue Saint-Martin 7",2087,3326.0,1458.0,0,137,4921.0,77.0,0.6,4.4,1962/63,1998/2002|19,31.12.2000,PR,SO,100.0,7,4921,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Aarau, lgelweid 1",356,280.0,104.0,0,184,568.0,0.0,0.0,4.4,1945,2000,01.07.2005,PP,SO,100.0,7,568,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Biel, Aarbergstrasse 107",5362,12541.0,579.0,0,5150,18270.0,74.0,10.6,6.4,1994,2018,15.12.2005,PR,SO,100.0,7,18270,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Biel, Bahnhofplatz 2",4928,7464.0,3354.0,0,1949,12767.0,89.0,1.0,5.5,1928|62,1986|93/2012,01.08.2006,PR,SO,100.0,7,12767,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Lugano, Via Emilio Bossi 9",1049,1726.0,0.0,0,-1,1725.0,25.0,0.0,3.6,1977,2000/14/25,01.02.2018,PP,SO,100.0,7,1725,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Lugano, Via Ginevra 2",1176,2267.0,0.0,0,0,2267.0,10.0,0.0,5.3,1930/95,2012/25,01.02.2018,PP,SO,100.0,7,2267,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Lugano, Via Pessina 16",356,565.0,611.0,0,270,1446.0,0.0,0.0,3.6,1900,1980/2021,01.07.2005,PP,SO,100.0,7,1446,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Rheinfelden, Baslerstrasse 2-16",34241,4993.0,5788.0,0,13302,24083.0,607.0,2.6,3.9,2016,,01.01.2004,PP,SO,100.0,7,24083,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Winterthur, Marktgasse 74",361,0.0,625.0,0,619,1244.0,0.0,0.0,3.1,1595,2002|03|14|19,01.07.2005,PP,SO,100.0,7,1244,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Winterthur, Untertor 34",146,403.0,0.0,92,214,709.0,0.0,0.0,3.0,1879,1996|2014/22,01.04.2004,PP,SO,100.0,7,709,0,FALSE
+PSPN,PSP Swiss Property AG,2025-12-31,Investment property,Other locations,"Zug, Kolinplatz 2",285,723.0,119.0,0,197,1039.0,1.0,0.0,3.9,1491,1925|70|2004|09,01.10.1999,PR,SO,100.0,7,1039,0,FALSE
