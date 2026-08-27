@@ -10,7 +10,7 @@ library(janitor)
 #    Daily data: 2000-2019
 
 Interest_2000_2019 <- read_excel(
-  "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Interest Rate Y2000-Y2019.xlsx",
+  "./Dataset 2 excel/SNB - Interest Rate Y2000-Y2019.xlsx",
   skip = 15,
   col_names = FALSE
 )
@@ -66,23 +66,6 @@ Interest_2000_2019 <- Interest_2000_2019 %>%
 
 str(Interest_2000_2019)
 
-# ============================================================
-# 5. Convert variables to the correct format
-# ============================================================
-
-Interest_2000_2019 <- Interest_2000_2019 %>%
-  mutate(
-    date = as.Date(date),
-    across(
-      -date,
-      as.numeric
-    )
-  )
-
-
-# Check structure
-
-str(Interest_2000_2019)
 
 # 6. Check date range
 
@@ -189,7 +172,7 @@ str(Interest_monthly_old)
 #     Monthly data: 2019-2026
 
 Interest_2019_2026 <- read_excel(
-  "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB - Interest Rate Y2019-Y2026.xlsx",
+  "./Dataset 2 excel/SNB - Interest Rate Y2019-Y2026.xlsx",
   skip = 23,
   col_names = FALSE
 )
