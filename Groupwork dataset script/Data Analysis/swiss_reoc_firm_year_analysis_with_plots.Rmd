@@ -1,0 +1,543 @@
+---
+title: "Swiss REOC Firm-Level Development"
+author: "Analysis draft"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+---
+
+# 1. Objective
+
+This document develops a first exploratory framework for analysing Swiss real-estate operating companies (REOCs) at the **firm-year level**.
+
+The main question is:
+
+> How does each REOC develop over time, and which financial and market variables are most informative for describing that development?
+
+The analysis uses the two cleaned input files:
+
+- `swiss_reoc_yearly_FA.csv`: annual fundamental/accounting and valuation variables.
+- `swiss_reoc_monthly_HP.csv`: monthly market variables and returns.
+
+The first version deliberately focuses on **descriptive analysis**. It does not yet make causal claims.
+
+# 2. Packages and data
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(knitr)
+
+theme_set(theme_minimal())
+
+fa <- read_csv("swiss_reoc_yearly_FA.csv", show_col_types = FALSE) |>
+  clean_names()
+
+hp <- read_csv("swiss_reoc_monthly_HP.csv", show_col_types = FALSE) |>
+  clean_names()
+
+fa <- fa |>
+  mutate(year = as.integer(year))
+
+hp <- hp |>
+  mutate(
+    date = as.Date(date),
+    year = year(date)
+  )
+```
+
+# 3. Initial data audit
+
+## 3.1 Dataset structure
+
+```{r structure}
+data_overview <- tibble(
+  dataset = c("Annual fundamentals", "Monthly market data"),
+  rows = c(nrow(fa), nrow(hp)),
+  firms = c(n_distinct(fa$ticker), n_distinct(hp$ticker)),
+  first_date_or_year = c(min(fa$year, na.rm = TRUE), min(hp$date, na.rm = TRUE)),
+  last_date_or_year = c(max(fa$year, na.rm = TRUE), max(hp$date, na.rm = TRUE))
+)
+
+kable(data_overview)
+```
+
+The annual dataset contains one observation per firm-year, while the monthly dataset contains one observation per firm-month.
+
+```{r duplicate-check}
+duplicates <- tibble(
+  annual_duplicate_ticker_year = sum(duplicated(fa[c("ticker", "year")])),
+  monthly_duplicate_ticker_date = sum(duplicated(hp[c("ticker", "date")]))
+)
+
+kable(duplicates)
+```
+
+## 3.2 Firm coverage
+
+```{r coverage}
+firm_coverage <- fa |>
+  group_by(ticker) |>
+  summarise(
+    first_year = min(year, na.rm = TRUE),
+    last_year = max(year, na.rm = TRUE),
+    n_years = n(),
+    .groups = "drop"
+  ) |>
+  arrange(first_year, ticker)
+
+kable(firm_coverage)
+```
+
+This matters because the panel is **unbalanced**: some REOCs are observed for much longer than others. Therefore, changes in the aggregate sample can reflect both genuine firm development and the entry of additional firms.
+
+# 4. Which variables are most interesting?
+
+The variables naturally fall into four groups.
+
+## 4.1 Core financial development variables
+
+These should be the main variables for the firm-year analysis:
+
+1.  **Total assets (`fa_total_assets`)** — captures firm scale and balance-sheet growth.
+2.  **Net income (`net_income`)** — captures profitability in absolute terms.
+3.  **Dividend per share (`dividend_per_share`)** — captures shareholder distribution.
+4.  **Debt-to-assets (`debt_to_assets`)** — captures balance-sheet leverage.
+5.  **Net debt / EBITDA (`net_debt_ebitda`)** — captures debt burden relative to operating earnings.
+
+These variables together give a useful picture of **growth, profitability, shareholder distributions and financial risk**.
+
+## 4.2 Market variables
+
+From the monthly dataset, the most useful variables are:
+
+1.  **Market capitalization (`market_cap`)** — firm size from the market's perspective.
+2.  **Price (`price`)** — share-price development.
+3.  **Total return index (`total_return_index`)** — preferred for measuring investor performance.
+4.  **Monthly return (`monthly_return`)** — used to construct annual returns.
+
+The total return index is especially important because it captures a broader investor return measure than price alone.
+
+## 4.3 Secondary valuation/profitability variables
+
+The annual file also contains:
+
+- `dividend_yield`
+- `pe_ratio`
+- `profit_margin`
+
+These are potentially interesting, but they should **not be treated as core variables in the first analysis** because their availability is much more limited in the supplied data. We therefore report their coverage first and use them only where observations are sufficiently available.
+
+```{r missingness}
+key_vars <- c(
+  "fa_total_assets", "net_income", "dividend_per_share",
+  "debt_to_assets", "net_debt_ebitda",
+  "dividend_yield", "pe_ratio", "profit_margin"
+)
+
+missingness <- fa |>
+  summarise(across(all_of(key_vars), ~ mean(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "missing_share") |>
+  mutate(
+    available_share = 1 - missing_share,
+    missing_share = scales::percent(missing_share, accuracy = 0.1),
+    available_share = scales::percent(available_share, accuracy = 0.1)
+  ) |>
+  arrange(desc(as.numeric(gsub("%", "", missing_share))))
+
+kable(missingness)
+```
+
+**Interpretation:** the first analysis should concentrate on assets, net income, dividends, leverage and net debt/EBITDA. Valuation variables such as P/E and dividend yield should be treated as secondary because they are sparse in this extract.
+
+# 5. Annual firm-year dataset
+
+The core analytical object is one row per **firm-year**.
+
+We add year-on-year changes for the main variables.
+
+```{r firm-year}
+firm_year <- fa |>
+  select(
+    ticker, year,
+    fa_total_assets,
+    net_income,
+    dividend_per_share,
+    debt_to_assets,
+    net_debt_ebitda,
+    dividend_yield,
+    pe_ratio,
+    profit_margin
+  ) |>
+  arrange(ticker, year) |>
+  group_by(ticker) |>
+  mutate(
+    assets_yoy = fa_total_assets / lag(fa_total_assets) - 1,
+    net_income_yoy = net_income / lag(net_income) - 1,
+    dividend_yoy = dividend_per_share / lag(dividend_per_share) - 1,
+    debt_to_assets_change = debt_to_assets - lag(debt_to_assets),
+    net_debt_ebitda_change = net_debt_ebitda - lag(net_debt_ebitda)
+  ) |>
+  ungroup()
+```
+
+The year-on-year variables are useful because levels answer **"how large/profitable is the firm?"**, while changes answer **"how quickly is the firm changing?"**
+
+# 6. Firm development: one firm at a time
+
+A useful first visualisation is to plot the main variables for every firm.
+
+## 6.1 Total assets
+
+```{r assets-plot, fig.height=6, fig.width=10}
+ggplot(
+  firm_year |> filter(year <= 2025),
+  aes(x = year, y = fa_total_assets, group = ticker)
+) +
+  geom_line(na.rm = TRUE) +
+  facet_wrap(~ ticker, scales = "free_y") +
+  labs(
+    title = "Development of total assets by REOC",
+    x = NULL,
+    y = "Total assets"
+  )
+```
+
+This is the main measure of **firm scale and growth**. Because firms differ substantially in size, `scales = "free_y"` is used to make within-firm trajectories visible.
+
+## 6.2 Net income
+
+```{r income-plot, fig.height=6, fig.width=10}
+ggplot(
+  firm_year |> filter(year <= 2025),
+  aes(x = year, y = net_income, group = ticker)
+) +
+  geom_line(na.rm = TRUE) +
+  facet_wrap(~ ticker, scales = "free_y") +
+  labs(
+    title = "Development of net income by REOC",
+    x = NULL,
+    y = "Net income"
+  )
+```
+
+Net income should be interpreted together with assets. A firm can grow its asset base without generating proportionally stronger earnings.
+
+## 6.3 Dividend per share
+
+```{r dividend-plot, fig.height=6, fig.width=10}
+ggplot(
+  firm_year |> filter(year <= 2025),
+  aes(x = year, y = dividend_per_share, group = ticker)
+) +
+  geom_line(na.rm = TRUE) +
+  facet_wrap(~ ticker, scales = "free_y") +
+  labs(
+    title = "Development of dividend per share by REOC",
+    x = NULL,
+    y = "Dividend per share"
+  )
+```
+
+Dividend per share is useful for identifying firms with stable, growing or volatile shareholder distributions.
+
+## 6.4 Leverage
+
+```{r leverage-plot, fig.height=6, fig.width=10}
+ggplot(
+  firm_year |> filter(year <= 2025),
+  aes(x = year, y = debt_to_assets, group = ticker)
+) +
+  geom_line(na.rm = TRUE) +
+  facet_wrap(~ ticker, scales = "free_y") +
+  labs(
+    title = "Debt-to-assets by REOC",
+    x = NULL,
+    y = "Debt-to-assets"
+  )
+```
+
+Leverage should be considered jointly with growth and profitability. Increasing leverage can support expansion, but persistent increases can also indicate greater financial risk.
+
+# 7. Firm-year growth rates
+
+For comparing firms of different sizes, growth rates are often more informative than levels.
+
+```{r growth-table}
+growth_summary <- firm_year |>
+  filter(year >= 2005, year <= 2025) |>
+  group_by(ticker) |>
+  summarise(
+    avg_asset_growth = mean(assets_yoy, na.rm = TRUE),
+    median_asset_growth = median(assets_yoy, na.rm = TRUE),
+    avg_income_growth = mean(net_income_yoy, na.rm = TRUE),
+    median_income_growth = median(net_income_yoy, na.rm = TRUE),
+    avg_dividend_growth = mean(dividend_yoy, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+kable(
+  growth_summary |>
+    mutate(across(where(is.numeric), ~ round(.x, 3)))
+)
+```
+
+Large year-on-year changes should be inspected individually rather than automatically interpreted as structural growth. They can arise from acquisitions, disposals, restructurings, one-off gains/losses or changes in the underlying accounting data.
+
+# 8. Long-run firm development
+
+A compact way to describe each firm is to compare its first and last available historical observation.
+
+For comparability, the initial version uses **2001–2025 as the historical window**. The 2026–2027 observations in the annual file are not treated as ordinary historical observations because coverage is incomplete and the monthly market dataset currently ends in April 2026.
+
+```{r long-run}
+long_run <- firm_year |>
+  filter(year <= 2025) |>
+  group_by(ticker) |>
+  summarise(
+    first_year = min(year[!is.na(fa_total_assets)]),
+    last_year = max(year[!is.na(fa_total_assets)]),
+    assets_start = first(fa_total_assets[!is.na(fa_total_assets)]),
+    assets_end = last(fa_total_assets[!is.na(fa_total_assets)]),
+    net_income_start = first(net_income[!is.na(net_income)]),
+    net_income_end = last(net_income[!is.na(net_income)]),
+    dividend_start = first(dividend_per_share[!is.na(dividend_per_share)]),
+    dividend_end = last(dividend_per_share[!is.na(dividend_per_share)]),
+    .groups = "drop"
+  ) |>
+  mutate(
+    asset_cagr = (assets_end / assets_start)^(1 / (last_year - first_year)) - 1,
+    net_income_cagr = (net_income_end / net_income_start)^(1 / (last_year - first_year)) - 1,
+    dividend_cagr = if_else(
+      dividend_start > 0 & dividend_end > 0,
+      (dividend_end / dividend_start)^(1 / (last_year - first_year)) - 1,
+      NA_real_
+    )
+  )
+
+kable(
+  long_run |>
+    mutate(
+      asset_cagr = scales::percent(asset_cagr, accuracy = 0.1),
+      net_income_cagr = scales::percent(net_income_cagr, accuracy = 0.1),
+      dividend_cagr = scales::percent(dividend_cagr, accuracy = 0.1)
+    )
+)
+```
+
+The long-run table is a **descriptive ranking**, not a performance league table. Firms have different starting dates and business histories.
+
+# 9. Cross-sectional development by year
+
+The next question is how the typical REOC changed over time.
+
+Because the panel is unbalanced, it is useful to show both:
+
+- the number of firms available in each year;
+- the median value across firms.
+
+Medians are preferred to means for the first pass because the firms differ considerably in size.
+
+```{r annual-cross-section}
+annual_summary <- firm_year |>
+  filter(year <= 2025) |>
+  group_by(year) |>
+  summarise(
+    n_firms = n_distinct(ticker),
+    median_assets = median(fa_total_assets, na.rm = TRUE),
+    median_net_income = median(net_income, na.rm = TRUE),
+    median_dividend = median(dividend_per_share, na.rm = TRUE),
+    median_debt_to_assets = median(debt_to_assets, na.rm = TRUE),
+    median_net_debt_ebitda = median(net_debt_ebitda, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+kable(annual_summary |> mutate(across(where(is.numeric), ~ round(.x, 2))))
+```
+
+```{r annual-assets-median, fig.height=5, fig.width=9}
+ggplot(annual_summary, aes(year, median_assets)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Median total assets across REOCs",
+    x = NULL,
+    y = "Median total assets"
+  )
+```
+
+# 10. Connecting fundamentals to market development
+
+The monthly file allows us to construct annual market measures.
+
+For each firm-year we calculate:
+
+- annual total return;
+- year-end market capitalization;
+- average monthly return.
+
+The annual total return is calculated from the total return index and is therefore preferable to simply using the change in price.
+
+```{r annual-market}
+hp_annual <- hp |>
+  group_by(ticker, year) |>
+  arrange(date, .by_group = TRUE) |>
+  summarise(
+    year_end_date = max(date, na.rm = TRUE),
+    year_end_market_cap = market_cap[which.max(date)],
+    year_end_tri = total_return_index[which.max(date)],
+    .groups = "drop"
+  ) |>
+  arrange(ticker, year) |>
+  group_by(ticker) |>
+  mutate(
+    annual_total_return = year_end_tri / lag(year_end_tri) - 1
+  ) |>
+  ungroup()
+```
+
+The fundamental and market datasets can then be combined at the firm-year level.
+
+```{r merge-firm-year}
+firm_year_market <- firm_year |>
+  left_join(
+    hp_annual |>
+      select(ticker, year, year_end_market_cap, annual_total_return),
+    by = c("ticker", "year")
+  )
+```
+
+## 10.1 Annual total return by firm
+
+Market performance provides a complementary perspective to the accounting variables. The following figure shows how annual total returns developed for each REOC.
+
+```{r annual-return-plot, fig.height=6, fig.width=10}
+ggplot(
+  firm_year_market |> filter(year <= 2025),
+  aes(x = year, y = annual_total_return, group = ticker)
+) +
+  geom_line(na.rm = TRUE) +
+  geom_point(na.rm = TRUE) +
+  facet_wrap(~ ticker, scales = "free_y") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Annual total return by REOC",
+    x = "Year",
+    y = "Annual total return"
+  )
+```
+
+This plot allows us to compare the market performance of individual REOCs over time. It should be interpreted alongside the fundamental variables rather than on its own.
+
+## 10.2 Assets and market capitalisation
+
+```{r assets-market-cap, fig.height=6, fig.width=10}
+ggplot(
+  firm_year_market |> filter(year <= 2025),
+  aes(x = fa_total_assets, y = year_end_market_cap)
+) +
+  geom_point(na.rm = TRUE) +
+  facet_wrap(~ year, scales = "free") +
+  labs(
+    title = "Total assets and year-end market capitalisation",
+    x = "Total assets",
+    y = "Year-end market capitalisation"
+  )
+```
+
+This is a descriptive relationship only. A stronger analysis would need to account for firm-specific effects, market conditions and timing.
+
+## 10.3 Profitability and subsequent market return
+
+For a later stage, it is more interesting to relate **information known in year t** to market performance in year t+1.
+
+```{r lagged-fundamentals}
+lagged_analysis <- firm_year_market |>
+  arrange(ticker, year) |>
+  group_by(ticker) |>
+  mutate(
+    next_year_return = lead(annual_total_return),
+    next_year_market_cap = lead(year_end_market_cap)
+  ) |>
+  ungroup()
+```
+
+## 10.4 Net income growth and subsequent return
+
+A more informative relationship is between the change in fundamentals in year *t* and market performance in year *t+1*.
+
+```{r income-growth-next-return, fig.height=6, fig.width=9}
+ggplot(
+  lagged_analysis |>
+    filter(year <= 2024, is.finite(net_income_yoy), is.finite(next_year_return)),
+  aes(x = net_income_yoy, y = next_year_return)
+) +
+  geom_point(na.rm = TRUE) +
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Net income growth and subsequent annual return",
+    x = "Net income growth in year t",
+    y = "Annual total return in year t+1"
+  )
+```
+
+This is an exploratory relationship and does not by itself establish causality.
+
+## 10.5 Leverage change and subsequent return
+
+The same idea can be applied to leverage.
+
+```{r leverage-next-return, fig.height=6, fig.width=9}
+ggplot(
+  lagged_analysis |>
+    filter(year <= 2024, is.finite(debt_to_assets_change), is.finite(next_year_return)),
+  aes(x = debt_to_assets_change, y = next_year_return)
+) +
+  geom_point(na.rm = TRUE) +
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Change in leverage and subsequent annual return",
+    x = "Change in debt-to-assets in year t",
+    y = "Annual total return in year t+1"
+  )
+```
+
+Again, this is descriptive and exploratory. A regression analysis would be needed to investigate whether the relationship remains after controlling for firm and year effects.
+
+This creates a cleaner basis for future predictive tests, because the fundamental variable is measured before the subsequent return.
+
+# 11. Variables to keep for the main analysis
+
+The recommended first specification is:
+
+| Role | Variable | Why it matters |
+|----|----|----|
+| Firm size | `fa_total_assets` | Balance-sheet scale and growth |
+| Profitability | `net_income` | Absolute earnings |
+| Shareholder distribution | `dividend_per_share` | Dividend policy |
+| Leverage | `debt_to_assets` | Balance-sheet risk |
+| Debt burden | `net_debt_ebitda` | Debt relative to earnings |
+| Market size | `year_end_market_cap` | Market valuation/size |
+| Market performance | `annual_total_return` | Investor return |
+| Market price | `price` | Price development |
+| Secondary | `profit_margin` | Relative profitability, but sparse |
+| Secondary | `pe_ratio` | Valuation, but sparse |
+| Secondary | `dividend_yield` | Income valuation, but sparse |
+
+# 12. Important data-quality observations
+
+The annual file contains observations for **2026 and 2027**, but the coverage of the core accounting variables is incomplete in those years. The monthly market file currently runs only through April 2026.
+
+Therefore, this first historical analysis uses **2001–2025** for the main long-run comparisons.
+
+The annual panel is also unbalanced because firms enter the dataset at different dates. This means that aggregate yearly statistics should always be accompanied by the number of firms observed.
+
+Missing values should not automatically be converted to zero. In particular, a missing dividend is not necessarily equivalent to a zero dividend.
