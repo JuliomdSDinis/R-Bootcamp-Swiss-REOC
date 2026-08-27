@@ -20,8 +20,8 @@ The main question is:
 
 The analysis uses the two cleaned input files:
 
-- `swiss_reoc_yearly_FA.csv`: annual fundamental/accounting and valuation variables.
-- `swiss_reoc_monthly_HP.csv`: monthly market variables and returns.
+-   `swiss_reoc_yearly_FA.csv`: annual fundamental/accounting and valuation variables.
+-   `swiss_reoc_monthly_HP.csv`: monthly market variables and returns.
 
 The first version deliberately focuses on **descriptive analysis**. It does not yet make causal claims.
 
@@ -35,10 +35,11 @@ library(knitr)
 
 theme_set(theme_minimal())
 
-fa <- read_csv("swiss_reoc_yearly_FA.csv", show_col_types = FALSE) |>
+fa <- read_csv("../Dataset 1 excel/swiss_reoc_yearly_FA.csv", show_col_types = FALSE) |>
   clean_names()
 
-hp <- read_csv("swiss_reoc_monthly_HP.csv", show_col_types = FALSE) |>
+
+hp <- read_csv("../Dataset 1 excel/swiss_reoc_monthly_HP.csv", show_col_types = FALSE) |>
   clean_names()
 
 fa <- fa |>
@@ -127,9 +128,9 @@ The total return index is especially important because it captures a broader inv
 
 The annual file also contains:
 
-- `dividend_yield`
-- `pe_ratio`
-- `profit_margin`
+-   `dividend_yield`
+-   `pe_ratio`
+-   `profit_margin`
 
 These are potentially interesting, but they should **not be treated as core variables in the first analysis** because their availability is much more limited in the supplied data. We therefore report their coverage first and use them only where observations are sufficiently available.
 
@@ -338,8 +339,8 @@ The next question is how the typical REOC changed over time.
 
 Because the panel is unbalanced, it is useful to show both:
 
-- the number of firms available in each year;
-- the median value across firms.
+-   the number of firms available in each year;
+-   the median value across firms.
 
 Medians are preferred to means for the first pass because the firms differ considerably in size.
 
@@ -377,9 +378,9 @@ The monthly file allows us to construct annual market measures.
 
 For each firm-year we calculate:
 
-- annual total return;
-- year-end market capitalization;
-- average monthly return.
+-   annual total return;
+-   year-end market capitalization;
+-   average monthly return.
 
 The annual total return is calculated from the total return index and is therefore preferable to simply using the change in price.
 
