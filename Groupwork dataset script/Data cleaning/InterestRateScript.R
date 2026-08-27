@@ -448,5 +448,5 @@ skim(
 
 write_csv(
   Interest_Rates,
-  "C:/Users/Alix/Desktop/HSLU/Data science/Programming R/R-Bootcamp-Swiss-REOC/Dataset 2 excel/SNB Interest Rates Monthly Clean.csv"
+  "./Dataset 2 excel/SNB Interest Rates Monthly Clean.csv"
 )
