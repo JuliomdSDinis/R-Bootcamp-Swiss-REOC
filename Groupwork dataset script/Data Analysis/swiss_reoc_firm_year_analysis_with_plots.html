@@ -2751,7 +2751,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Swiss REOC Firm-Level Development</h1>
 <h4 class="author">Analysis draft</h4>
-<h4 class="date">27 août 2026</h4>
+<h4 class="date">31 août 2026</h4>
 
 </div>
 
@@ -2783,13 +2783,15 @@ data</h1>
 library(janitor)
 library(lubridate)
 library(knitr)
+library(scales)
 
 theme_set(theme_minimal())
 
-fa &lt;- read_csv(&quot;swiss_reoc_yearly_FA.csv&quot;, show_col_types = FALSE) |&gt;
+fa &lt;- read_csv(&quot;../Dataset 1 excel/swiss_reoc_yearly_FA.csv&quot;, show_col_types = FALSE) |&gt;
   clean_names()
 
-hp &lt;- read_csv(&quot;swiss_reoc_monthly_HP.csv&quot;, show_col_types = FALSE) |&gt;
+
+hp &lt;- read_csv(&quot;../Dataset 1 excel/swiss_reoc_monthly_HP.csv&quot;, show_col_types = FALSE) |&gt;
   clean_names()
 
 fa &lt;- fa |&gt;
@@ -4096,6 +4098,506 @@ always be accompanied by the number of firms observed.</p>
 <p>Missing values should not automatically be converted to zero. In
 particular, a missing dividend is not necessarily equivalent to a zero
 dividend.</p>
+</div>
+<div id="section" class="section level1" number="13">
+<h1><span class="header-section-number">13</span>
+============================================================</h1>
+</div>
+<div id="panel-a-monthly-hp-monthly-macro-market-response" class="section level1" number="14">
+<h1><span class="header-section-number">14</span> 13. Panel A: Monthly
+HP + monthly macro → market response</h1>
+</div>
+<div id="section-1" class="section level1" number="15">
+<h1><span class="header-section-number">15</span>
+============================================================</h1>
+</div>
+<div id="research-question" class="section level1" number="16">
+<h1><span class="header-section-number">16</span> Research
+Question:</h1>
+</div>
+<div id="section-2" class="section level1" number="17">
+<h1><span class="header-section-number">17</span> </h1>
+</div>
+<div id="how-is-the-stock-market-performance-of-swiss-listed" class="section level1" number="18">
+<h1><span class="header-section-number">18</span> How is the
+stock-market performance of Swiss listed</h1>
+</div>
+<div id="real-estate-companies-associated-with-changes-in-the" class="section level1" number="19">
+<h1><span class="header-section-number">19</span> real-estate companies
+associated with changes in the</h1>
+</div>
+<div id="macroeconomic-environment" class="section level1" number="20">
+<h1><span class="header-section-number">20</span> macroeconomic
+environment?</h1>
+</div>
+<div id="section-3" class="section level1" number="21">
+<h1><span class="header-section-number">21</span> </h1>
+</div>
+<div id="the-analysis-is-descriptive-and-exploratory." class="section level1" number="22">
+<h1><span class="header-section-number">22</span> The analysis is
+descriptive and exploratory.</h1>
+</div>
+<div id="it-does-not-make-causal-claims." class="section level1" number="23">
+<h1><span class="header-section-number">23</span> It does not make
+causal claims.</h1>
+</div>
+<div id="section-4" class="section level1" number="24">
+<h1><span class="header-section-number">24</span>
+============================================================</h1>
+</div>
+<div id="prepare-monthly-panel" class="section level1" number="25">
+<h1><span class="header-section-number">25</span> 13.1 Prepare monthly
+panel</h1>
+</div>
+<div id="section-5" class="section level1" number="26">
+<h1><span class="header-section-number">26</span>
+============================================================</h1>
+<p>panel_a &lt;- hp |&gt; mutate( date = as.Date(date), year =
+lubridate::year(date), month = lubridate::month(date) ) |&gt;
+arrange(ticker, date)</p>
+</div>
+<div id="section-6" class="section level1" number="27">
+<h1><span class="header-section-number">27</span>
+============================================================</h1>
+</div>
+<div id="check-the-monthly-dataset" class="section level1" number="28">
+<h1><span class="header-section-number">28</span> 13.2 Check the monthly
+dataset</h1>
+</div>
+<div id="section-7" class="section level1" number="29">
+<h1><span class="header-section-number">29</span>
+============================================================</h1>
+<p>panel_a_overview &lt;- tibble( observations = nrow(panel_a), firms =
+n_distinct(panel_a<span class="math inline">\(ticker),
+  first_date = min(panel_a\)</span>date, na.rm = TRUE), last_date =
+max(panel_a$date, na.rm = TRUE) )</p>
+<p>kable( panel_a_overview, caption = “Overview of the monthly market
+and macroeconomic dataset” )</p>
+</div>
+<div id="section-8" class="section level1" number="30">
+<h1><span class="header-section-number">30</span>
+============================================================</h1>
+</div>
+<div id="macro-variable-availability" class="section level1" number="31">
+<h1><span class="header-section-number">31</span> 13.3 Macro variable
+availability</h1>
+</div>
+<div id="section-9" class="section level1" number="32">
+<h1><span class="header-section-number">32</span>
+============================================================</h1>
+</div>
+<div id="main-macroeconomic-variables-used-in-panel-a" class="section level1" number="33">
+<h1><span class="header-section-number">33</span> Main macroeconomic
+variables used in Panel A</h1>
+<p>macro_vars &lt;- c( “snb_policy_rate”, “libor_3m_chf”,
+“confederation_5y”, “confederation_10y”,
+“snb_core_inflation_trimmed_mean1”, “sfso_core_inflation_12”,
+“sfso_core_inflation_23”,
+“sfso_inflation_according_to_the_national_consumer_price_index”,
+“jobless_rate_sa”, “job_vacancies_sa”, “gdp” )</p>
+<p>macro_availability &lt;- panel_a |&gt; summarise( across(
+all_of(macro_vars), ~ mean(!is.na(.)) ) ) |&gt; pivot_longer( cols =
+everything(), names_to = “variable”, values_to = “available_share” )
+|&gt; mutate( available_share = scales::percent( available_share,
+accuracy = 0.1 ) )</p>
+<p>kable( macro_availability, caption = “Availability of macroeconomic
+variables” )</p>
+</div>
+<div id="section-10" class="section level1" number="34">
+<h1><span class="header-section-number">34</span>
+============================================================</h1>
+</div>
+<div id="prepare-interest-rate-changes" class="section level1" number="35">
+<h1><span class="header-section-number">35</span> 13.4 Prepare
+interest-rate changes</h1>
+</div>
+<div id="section-11" class="section level1" number="36">
+<h1><span class="header-section-number">36</span>
+============================================================</h1>
+</div>
+<div id="the-research-question-focuses-on-changes-in-the" class="section level1" number="37">
+<h1><span class="header-section-number">37</span> The research question
+focuses on changes in the</h1>
+</div>
+<div id="macroeconomic-environment.-therefore-in-addition-to" class="section level1" number="38">
+<h1><span class="header-section-number">38</span> macroeconomic
+environment. Therefore, in addition to</h1>
+</div>
+<div id="interest-rate-levels-we-calculate-monthly-changes." class="section level1" number="39">
+<h1><span class="header-section-number">39</span> interest-rate levels,
+we calculate monthly changes.</h1>
+<p>panel_a &lt;- panel_a |&gt; arrange(ticker, date) |&gt;
+group_by(ticker) |&gt; mutate( policy_rate_change = snb_policy_rate -
+lag(snb_policy_rate),</p>
+<pre><code>libor_3m_change =
+  libor_3m_chf - lag(libor_3m_chf),
+
+confederation_10y_change =
+  confederation_10y - lag(confederation_10y)</code></pre>
+<p>) |&gt; ungroup()</p>
+</div>
+<div id="section-12" class="section level1" number="40">
+<h1><span class="header-section-number">40</span>
+============================================================</h1>
+</div>
+<div id="interest-rates-and-monthly-returns" class="section level1" number="41">
+<h1><span class="header-section-number">41</span> 13.5 Interest rates
+and monthly returns</h1>
+</div>
+<div id="section-13" class="section level1" number="42">
+<h1><span class="header-section-number">42</span>
+============================================================</h1>
+</div>
+<div id="snb-policy-rate-level" class="section level1" number="43">
+<h1><span class="header-section-number">43</span> 13.5.1 SNB policy rate
+level</h1>
+<p>ggplot( panel_a |&gt; filter( !is.na(monthly_return),
+!is.na(snb_policy_rate) ), aes( x = snb_policy_rate, y = monthly_return
+) ) + geom_point(alpha = 0.4) + geom_smooth( method = “lm”, se = TRUE )
++ scale_y_continuous( labels = scales::percent ) + labs( title = “SNB
+policy rate and monthly REOC returns”, x = “SNB policy rate (%)”, y =
+“Monthly total return” )</p>
+</div>
+<div id="section-14" class="section level1" number="44">
+<h1><span class="header-section-number">44</span>
+============================================================</h1>
+</div>
+<div id="changes-in-interest-rates-and-monthly-returns" class="section level1" number="45">
+<h1><span class="header-section-number">45</span> 13.6 Changes in
+interest rates and monthly returns</h1>
+</div>
+<div id="section-15" class="section level1" number="46">
+<h1><span class="header-section-number">46</span>
+============================================================</h1>
+<p>ggplot( panel_a |&gt; filter( !is.na(monthly_return),
+!is.na(policy_rate_change) ), aes( x = policy_rate_change, y =
+monthly_return ) ) + geom_point(alpha = 0.4) + geom_smooth( method =
+“lm”, se = TRUE ) + scale_y_continuous( labels = scales::percent ) +
+labs( title = “Changes in the SNB policy rate and monthly REOC returns”,
+x = “Monthly change in SNB policy rate (percentage points)”, y =
+“Monthly total return” )</p>
+</div>
+<div id="section-16" class="section level1" number="47">
+<h1><span class="header-section-number">47</span>
+============================================================</h1>
+</div>
+<div id="long-term-interest-rates-and-monthly-returns" class="section level1" number="48">
+<h1><span class="header-section-number">48</span> 13.7 Long-term
+interest rates and monthly returns</h1>
+</div>
+<div id="section-17" class="section level1" number="49">
+<h1><span class="header-section-number">49</span>
+============================================================</h1>
+<p>ggplot( panel_a |&gt; filter( !is.na(monthly_return),
+!is.na(confederation_10y) ), aes( x = confederation_10y, y =
+monthly_return ) ) + geom_point(alpha = 0.4) + geom_smooth( method =
+“lm”, se = TRUE ) + scale_y_continuous( labels = scales::percent ) +
+labs( title = “10-year Confederation yield and monthly REOC returns”, x
+= “10-year Confederation yield (%)”, y = “Monthly total return” )</p>
+</div>
+<div id="section-18" class="section level1" number="50">
+<h1><span class="header-section-number">50</span>
+============================================================</h1>
+</div>
+<div id="inflation-and-monthly-returns" class="section level1" number="51">
+<h1><span class="header-section-number">51</span> 13.8 Inflation and
+monthly returns</h1>
+</div>
+<div id="section-19" class="section level1" number="52">
+<h1><span class="header-section-number">52</span>
+============================================================</h1>
+</div>
+<div id="rename-the-main-cpi-inflation-variable-to-make-the" class="section level1" number="53">
+<h1><span class="header-section-number">53</span> Rename the main CPI
+inflation variable to make the</h1>
+</div>
+<div id="following-analysis-easier-to-read." class="section level1" number="54">
+<h1><span class="header-section-number">54</span> following analysis
+easier to read.</h1>
+<p>panel_a &lt;- panel_a |&gt; rename( inflation =
+sfso_inflation_according_to_the_national_consumer_price_index )</p>
+<p>ggplot( panel_a |&gt; filter( !is.na(monthly_return),
+!is.na(inflation) ), aes( x = inflation, y = monthly_return ) ) +
+geom_point(alpha = 0.4) + geom_smooth( method = “lm”, se = TRUE ) +
+scale_y_continuous( labels = scales::percent ) + labs( title =
+“Inflation and monthly REOC returns”, x = “Inflation (%)”, y = “Monthly
+total return” )</p>
+</div>
+<div id="section-20" class="section level1" number="55">
+<h1><span class="header-section-number">55</span>
+============================================================</h1>
+</div>
+<div id="unemployment-and-monthly-returns" class="section level1" number="56">
+<h1><span class="header-section-number">56</span> 13.9 Unemployment and
+monthly returns</h1>
+</div>
+<div id="section-21" class="section level1" number="57">
+<h1><span class="header-section-number">57</span>
+============================================================</h1>
+<p>ggplot( panel_a |&gt; filter( !is.na(monthly_return),
+!is.na(jobless_rate_sa) ), aes( x = jobless_rate_sa, y = monthly_return
+) ) + geom_point(alpha = 0.4) + geom_smooth( method = “lm”, se = TRUE )
++ scale_y_continuous( labels = scales::percent ) + labs( title =
+“Unemployment and monthly REOC returns”, x = “Seasonally adjusted
+unemployment rate (%)”, y = “Monthly total return” )</p>
+</div>
+<div id="section-22" class="section level1" number="58">
+<h1><span class="header-section-number">58</span>
+============================================================</h1>
+</div>
+<div id="job-vacancies-and-monthly-returns" class="section level1" number="59">
+<h1><span class="header-section-number">59</span> 13.10 Job vacancies
+and monthly returns</h1>
+</div>
+<div id="section-23" class="section level1" number="60">
+<h1><span class="header-section-number">60</span>
+============================================================</h1>
+<p>ggplot( panel_a |&gt; filter( !is.na(monthly_return),
+!is.na(job_vacancies_sa) ), aes( x = job_vacancies_sa, y =
+monthly_return ) ) + geom_point(alpha = 0.4) + geom_smooth( method =
+“lm”, se = TRUE ) + scale_y_continuous( labels = scales::percent ) +
+labs( title = “Job vacancies and monthly REOC returns”, x = “Seasonally
+adjusted job vacancies”, y = “Monthly total return” )</p>
+</div>
+<div id="section-24" class="section level1" number="61">
+<h1><span class="header-section-number">61</span>
+============================================================</h1>
+</div>
+<div id="differences-across-reocs" class="section level1" number="62">
+<h1><span class="header-section-number">62</span> 13.11 Differences
+across REOCs</h1>
+</div>
+<div id="section-25" class="section level1" number="63">
+<h1><span class="header-section-number">63</span>
+============================================================</h1>
+</div>
+<div id="alln-is-treated-separately-because-it-represents-an" class="section level1" number="64">
+<h1><span class="header-section-number">64</span> ALLN is treated
+separately because it represents an</h1>
+</div>
+<div id="aggregate-series-rather-than-an-individual-reoc." class="section level1" number="65">
+<h1><span class="header-section-number">65</span> aggregate series
+rather than an individual REOC.</h1>
+<p>panel_a_firms &lt;- panel_a |&gt; filter(ticker != “ALLN”)</p>
+</div>
+<div id="relationship-between-snb-policy-rate-and-returns" class="section level1" number="66">
+<h1><span class="header-section-number">66</span> Relationship between
+SNB policy rate and returns</h1>
+</div>
+<div id="for-each-individual-reoc." class="section level1" number="67">
+<h1><span class="header-section-number">67</span> for each individual
+REOC.</h1>
+<p>ggplot( panel_a_firms |&gt; filter( !is.na(monthly_return),
+!is.na(snb_policy_rate) ), aes( x = snb_policy_rate, y = monthly_return
+) ) + geom_point(alpha = 0.35) + geom_smooth( method = “lm”, se = FALSE
+) + facet_wrap(~ ticker) + scale_y_continuous( labels = scales::percent
+) + labs( title = “SNB policy rate and monthly returns by REOC”, x =
+“SNB policy rate (%)”, y = “Monthly total return” )</p>
+</div>
+<div id="section-26" class="section level1" number="68">
+<h1><span class="header-section-number">68</span>
+============================================================</h1>
+</div>
+<div id="interest-rate-regimes" class="section level1" number="69">
+<h1><span class="header-section-number">69</span> 13.12 Interest-rate
+regimes</h1>
+</div>
+<div id="section-27" class="section level1" number="70">
+<h1><span class="header-section-number">70</span>
+============================================================</h1>
+</div>
+<div id="we-classify-months-as-low-rate-or-high-rate-according" class="section level1" number="71">
+<h1><span class="header-section-number">71</span> We classify months as
+low-rate or high-rate according</h1>
+</div>
+<div id="to-the-median-snb-policy-rate-in-the-sample." class="section level1" number="72">
+<h1><span class="header-section-number">72</span> to the median SNB
+policy rate in the sample.</h1>
+<p>rate_threshold &lt;- median( panel_a$snb_policy_rate, na.rm = TRUE
+)</p>
+<p>panel_a &lt;- panel_a |&gt; mutate( rate_regime = case_when(
+snb_policy_rate &lt;= rate_threshold ~ “Low-rate regime”,
+snb_policy_rate &gt; rate_threshold ~ “High-rate regime”, TRUE ~
+NA_character_ ) )</p>
+</div>
+<div id="section-28" class="section level1" number="73">
+<h1><span class="header-section-number">73</span>
+============================================================</h1>
+</div>
+<div id="returns-across-interest-rate-regimes" class="section level1" number="74">
+<h1><span class="header-section-number">74</span> 13.13 Returns across
+interest-rate regimes</h1>
+</div>
+<div id="section-29" class="section level1" number="75">
+<h1><span class="header-section-number">75</span>
+============================================================</h1>
+<p>ggplot( panel_a_firms |&gt; filter( !is.na(monthly_return),
+!is.na(rate_regime) ), aes( x = rate_regime, y = monthly_return ) ) +
+geom_boxplot() + scale_y_continuous( labels = scales::percent ) + labs(
+title = “REOC monthly returns across interest-rate regimes”, x = NULL, y
+= “Monthly total return” )</p>
+</div>
+<div id="section-30" class="section level1" number="76">
+<h1><span class="header-section-number">76</span>
+============================================================</h1>
+</div>
+<div id="interest-rate-regimes-by-reoc" class="section level1" number="77">
+<h1><span class="header-section-number">77</span> 13.14 Interest-rate
+regimes by REOC</h1>
+</div>
+<div id="section-31" class="section level1" number="78">
+<h1><span class="header-section-number">78</span>
+============================================================</h1>
+<p>ggplot( panel_a_firms |&gt; filter( !is.na(monthly_return),
+!is.na(rate_regime) ), aes( x = rate_regime, y = monthly_return ) ) +
+geom_boxplot() + facet_wrap(~ ticker) + scale_y_continuous( labels =
+scales::percent ) + labs( title = “Monthly REOC returns across
+interest-rate regimes”, x = NULL, y = “Monthly total return” )</p>
+</div>
+<div id="section-32" class="section level1" number="79">
+<h1><span class="header-section-number">79</span>
+============================================================</h1>
+</div>
+<div id="correlation-analysis" class="section level1" number="80">
+<h1><span class="header-section-number">80</span> 13.15 Correlation
+analysis</h1>
+</div>
+<div id="section-33" class="section level1" number="81">
+<h1><span class="header-section-number">81</span>
+============================================================</h1>
+<p>correlation_data &lt;- panel_a |&gt; select( monthly_return,
+snb_policy_rate, policy_rate_change, libor_3m_chf, confederation_10y,
+inflation, jobless_rate_sa, job_vacancies_sa )</p>
+<p>correlation_matrix &lt;- cor( correlation_data, use =
+“pairwise.complete.obs” )</p>
+<p>kable( round(correlation_matrix, 3), caption = “Correlation between
+monthly REOC returns and macroeconomic variables” )</p>
+</div>
+<div id="section-34" class="section level1" number="82">
+<h1><span class="header-section-number">82</span>
+============================================================</h1>
+</div>
+<div id="average-returns-by-interest-rate-regime" class="section level1" number="83">
+<h1><span class="header-section-number">83</span> 13.16 Average returns
+by interest-rate regime</h1>
+</div>
+<div id="section-35" class="section level1" number="84">
+<h1><span class="header-section-number">84</span>
+============================================================</h1>
+<p>regime_summary &lt;- panel_a_firms |&gt; filter(
+!is.na(monthly_return), !is.na(rate_regime) ) |&gt;
+group_by(rate_regime) |&gt; summarise( n_observations = n(), mean_return
+= mean( monthly_return, na.rm = TRUE ), median_return = median(
+monthly_return, na.rm = TRUE ), sd_return = sd( monthly_return, na.rm =
+TRUE ), .groups = “drop” ) |&gt; mutate( mean_return = scales::percent(
+mean_return, accuracy = 0.1 ), median_return = scales::percent(
+median_return, accuracy = 0.1 ), sd_return = scales::percent( sd_return,
+accuracy = 0.1 ) )</p>
+<p>kable( regime_summary, caption = “REOC monthly returns by
+interest-rate regime” )</p>
+</div>
+<div id="section-36" class="section level1" number="85">
+<h1><span class="header-section-number">85</span>
+============================================================</h1>
+</div>
+<div id="summary-statistics-by-macro-environment" class="section level1" number="86">
+<h1><span class="header-section-number">86</span> 13.17 Summary
+statistics by macro environment</h1>
+</div>
+<div id="section-37" class="section level1" number="87">
+<h1><span class="header-section-number">87</span>
+============================================================</h1>
+<p>macro_return_summary &lt;- panel_a |&gt; summarise( observations =
+sum(!is.na(monthly_return)),</p>
+<pre><code>mean_monthly_return =
+  mean(monthly_return, na.rm = TRUE),
+
+median_monthly_return =
+  median(monthly_return, na.rm = TRUE),
+
+sd_monthly_return =
+  sd(monthly_return, na.rm = TRUE),
+
+mean_policy_rate =
+  mean(snb_policy_rate, na.rm = TRUE),
+
+mean_inflation =
+  mean(inflation, na.rm = TRUE),
+
+mean_unemployment =
+  mean(jobless_rate_sa, na.rm = TRUE)</code></pre>
+<p>)</p>
+<p>kable( macro_return_summary, digits = 3, caption = “Summary
+statistics for monthly REOC returns and the macroeconomic environment”
+)</p>
+</div>
+<div id="section-38" class="section level1" number="88">
+<h1><span class="header-section-number">88</span>
+============================================================</h1>
+</div>
+<div id="interpretation" class="section level1" number="89">
+<h1><span class="header-section-number">89</span> 13.18
+Interpretation</h1>
+</div>
+<div id="section-39" class="section level1" number="90">
+<h1><span class="header-section-number">90</span>
+============================================================</h1>
+</div>
+<div id="the-analysis-above-is-descriptive." class="section level1" number="91">
+<h1><span class="header-section-number">91</span> The analysis above is
+descriptive.</h1>
+</div>
+<div id="section-40" class="section level1" number="92">
+<h1><span class="header-section-number">92</span> </h1>
+</div>
+<div id="the-scatterplots-show-whether-monthly-reoc-returns-tend-to" class="section level1" number="93">
+<h1><span class="header-section-number">93</span> The scatterplots show
+whether monthly REOC returns tend to</h1>
+</div>
+<div id="move-together-with-interest-rates-inflation-unemployment" class="section level1" number="94">
+<h1><span class="header-section-number">94</span> move together with
+interest rates, inflation, unemployment</h1>
+</div>
+<div id="and-other-macroeconomic-indicators." class="section level1" number="95">
+<h1><span class="header-section-number">95</span> and other
+macroeconomic indicators.</h1>
+</div>
+<div id="section-41" class="section level1" number="96">
+<h1><span class="header-section-number">96</span> </h1>
+</div>
+<div id="the-firm-level-plots-show-whether-these-relationships-appear" class="section level1" number="97">
+<h1><span class="header-section-number">97</span> The firm-level plots
+show whether these relationships appear</h1>
+</div>
+<div id="similar-across-reocs-or-differ-substantially-between-firms." class="section level1" number="98">
+<h1><span class="header-section-number">98</span> similar across REOCs
+or differ substantially between firms.</h1>
+</div>
+<div id="section-42" class="section level1" number="99">
+<h1><span class="header-section-number">99</span> </h1>
+</div>
+<div id="the-regime-analysis-compares-reoc-returns-during-relatively" class="section level1" number="100">
+<h1><span class="header-section-number">100</span> The regime analysis
+compares REOC returns during relatively</h1>
+</div>
+<div id="low-rate-and-high-rate-periods." class="section level1" number="101">
+<h1><span class="header-section-number">101</span> low-rate and
+high-rate periods.</h1>
+</div>
+<div id="section-43" class="section level1" number="102">
+<h1><span class="header-section-number">102</span> </h1>
+</div>
+<div id="these-results-describe-associations-and-should-not-be" class="section level1" number="103">
+<h1><span class="header-section-number">103</span> These results
+describe associations and should not be</h1>
+</div>
+<div id="interpreted-as-evidence-of-a-causal-effect-of-macroeconomic" class="section level1" number="104">
+<h1><span class="header-section-number">104</span> interpreted as
+evidence of a causal effect of macroeconomic</h1>
+</div>
+<div id="variables-on-reoc-returns." class="section level1" number="105">
+<h1><span class="header-section-number">105</span> variables on REOC
+returns.</h1>
 </div>
 
 

@@ -20,8 +20,8 @@ The main question is:
 
 The analysis uses the two cleaned input files:
 
--   `swiss_reoc_yearly_FA.csv`: annual fundamental/accounting and valuation variables.
--   `swiss_reoc_monthly_HP.csv`: monthly market variables and returns.
+- `swiss_reoc_yearly_FA.csv`: annual fundamental/accounting and valuation variables.
+- `swiss_reoc_monthly_HP.csv`: monthly market variables and returns.
 
 The first version deliberately focuses on **descriptive analysis**. It does not yet make causal claims.
 
@@ -32,6 +32,7 @@ library(tidyverse)
 library(janitor)
 library(lubridate)
 library(knitr)
+library(scales)
 
 theme_set(theme_minimal())
 
@@ -128,9 +129,9 @@ The total return index is especially important because it captures a broader inv
 
 The annual file also contains:
 
--   `dividend_yield`
--   `pe_ratio`
--   `profit_margin`
+- `dividend_yield`
+- `pe_ratio`
+- `profit_margin`
 
 These are potentially interesting, but they should **not be treated as core variables in the first analysis** because their availability is much more limited in the supplied data. We therefore report their coverage first and use them only where observations are sufficiently available.
 
@@ -339,8 +340,8 @@ The next question is how the typical REOC changed over time.
 
 Because the panel is unbalanced, it is useful to show both:
 
--   the number of firms available in each year;
--   the median value across firms.
+- the number of firms available in each year;
+- the median value across firms.
 
 Medians are preferred to means for the first pass because the firms differ considerably in size.
 
@@ -378,9 +379,9 @@ The monthly file allows us to construct annual market measures.
 
 For each firm-year we calculate:
 
--   annual total return;
--   year-end market capitalization;
--   average monthly return.
+- annual total return;
+- year-end market capitalization;
+- average monthly return.
 
 The annual total return is calculated from the total return index and is therefore preferable to simply using the change in price.
 
@@ -542,3 +543,464 @@ Therefore, this first historical analysis uses **2001–2025** for the main long
 The annual panel is also unbalanced because firms enter the dataset at different dates. This means that aggregate yearly statistics should always be accompanied by the number of firms observed.
 
 Missing values should not automatically be converted to zero. In particular, a missing dividend is not necessarily equivalent to a zero dividend.
+
+# 13. Prepare Panel A: monthly HP + monthly macro -\> market response
+
+RQ2: How is the stock-market performance of Swiss listed real-estate companies associated with changes in the macroeconomic environment?
+
+This section investigates the relationship between monthly returns of Swiss listed real-estate companies and selected monthly macroeconomic indicators, including interest rates, bond yields, and unemployment.
+
+# 14 Objective
+
+This document develops the **market-response panel** for the Swiss REOC project.
+
+The guiding question is:
+
+> RQ2: How is the stock-market performance of Swiss listed real-estate companies associated with changes in the macroeconomic environment?
+
+Concretely, the analysis works through, depending on what is actually available in the macro dataset:
+
+- interest rates vs. monthly returns,
+- inflation vs. returns,
+- other macro indicators (real estate price indices, labour market) vs. returns,
+- volatility of returns,
+- differences across time / macro regimes,
+- differences across firms.
+
+As in the firm-level document, this first pass is **descriptive and exploratory**. It documents associations, not causal effects.
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(knitr)
+library(scales)
+library(broom)
+
+theme_set(theme_minimal())
+
+macro_file <- "../Data cleaning/swiss_reoc_monthly_HP_macro.csv.csv"
+
+hp <- read_csv("../Dataset 1 excel/swiss_reoc_monthly_HP.csv", show_col_types = FALSE) |>
+  clean_names()
+
+hp_macro <- read_csv(macro_file, show_col_types = FALSE) |>
+  clean_names()
+
+hp_macro <- hp_macro |>
+  mutate(
+    date  = as.Date(date),
+    month = floor_date(date, "month")
+  )
+```
+
+# 15 Initial data audit
+
+## 15.1 Panel structure
+
+```{r structure}
+data_overview <- tibble(
+  rows       = nrow(hp_macro),
+  firms      = n_distinct(hp_macro$ticker),
+  months     = n_distinct(hp_macro$month),
+  first_date = min(hp_macro$date, na.rm = TRUE),
+  last_date  = max(hp_macro$date, na.rm = TRUE)
+)
+
+kable(data_overview)
+```
+
+The macro variables are recorded at the month level and are identical across all firms observed in the same month. This means the panel is currently "long" (one row per firm-month), so macro variables must be de-duplicated before any month-level analysis, otherwise firms with more coverage would silently over-weight certain months.
+
+```{r macro-monthly-check}
+hp_macro |>
+  filter(month == as.Date("2010-06-01")) |>
+  distinct(confederation_10y, sfso_inflation_according_to_the_national_consumer_price_index, jobless_rate_total) |>
+  kable(caption = "Sanity check: macro values are constant within a month across firms")
+```
+
+## 15.2 Firm coverage
+
+```{r coverage}
+firm_coverage <- hp_macro |>
+  filter(!is.na(monthly_return)) |>
+  group_by(ticker) |>
+  summarise(
+    first_month = min(month),
+    last_month  = max(month),
+    n_months    = n(),
+    .groups = "drop"
+  ) |>
+  arrange(first_month, ticker)
+
+kable(firm_coverage)
+```
+
+As in the firm-level panel, coverage is unbalanced: firms enter the sample at different points, so portfolio-level statistics in early years rest on fewer firms than in later years.
+
+# 16 Which macro variables are available?
+
+```{r macro-missingness}
+macro_monthly <- hp_macro |>
+  distinct(month, .keep_all = TRUE) |>
+  select(
+    month,
+    snb_target_lower, snb_target_upper, libor_3m_chf, snb_policy_rate,
+    confederation_5y, confederation_8y, confederation_10y, confederation_bonds,
+    mortgage_bond_institutions,
+    jobless_rate_total, jobless_rate_sa, job_vacancies_sa,
+    snb_core_inflation_trimmed_mean1, sfso_core_inflation_12, sfso_core_inflation_23,
+    sfso_inflation_according_to_the_national_consumer_price_index,
+    apartments_fso, apartments_wuest_transaction, apartments_wuest_asking,
+    houses_fso, houses_wuest_transaction, houses_wuest_asking,
+    commercial_office_wuest_asking, commercial_retail_wuest_asking,
+    gdp
+  ) |>
+  arrange(month)
+
+macro_missingness <- macro_monthly |>
+  summarise(across(-month, ~ mean(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "missing_share") |>
+  mutate(missing_share_pct = percent(missing_share, accuracy = 0.1)) |>
+  arrange(missing_share)
+
+kable(macro_missingness |> select(variable, missing_share_pct))
+```
+
+Interpretation:
+
+- Inflation and labour market series are essentially complete over the whole sample.
+- Real-estate price indices (Wuest Partner, Fahrlander, IAZI style series) are almost complete; the FSO indices are considerably sparser and are treated as secondary.
+- Interest rates are complete only in pieces: `libor_3m_chf` / `snb_target_lower` cover 2000 to mid-2019, and `snb_policy_rate` covers mid-2019 onward, matching the actual 2019 change in the SNB's operational target. `confederation_10y` is available almost throughout and is used as the long-rate series.
+- GDP and sector output variables are missing about two-thirds of the time and are treated as secondary/contextual only.
+
+## 16.1 Constructing a continuous short-rate series
+
+```{r splice-rate}
+macro_monthly <- macro_monthly |>
+  mutate(
+    short_rate = coalesce(libor_3m_chf, snb_policy_rate),
+    long_rate  = confederation_10y
+  )
+
+macro_monthly |>
+  filter(month >= as.Date("2019-01-01"), month <= as.Date("2019-12-01")) |>
+  select(month, libor_3m_chf, snb_policy_rate, short_rate) |>
+  kable(caption = "Splice check around the 2019 change in the SNB's reference rate")
+```
+
+## 16.2 Core macro variables and their changes
+
+```{r macro-changes}
+macro_monthly <- macro_monthly |>
+  arrange(month) |>
+  mutate(
+    d_short_rate      = short_rate - lag(short_rate),
+    d_long_rate       = long_rate - lag(long_rate),
+    d_jobless_rate    = jobless_rate_sa - lag(jobless_rate_sa),
+    inflation         = sfso_inflation_according_to_the_national_consumer_price_index,
+    core_inflation    = snb_core_inflation_trimmed_mean1,
+    apartments_growth = apartments_wuest_transaction / lag(apartments_wuest_transaction) - 1,
+    houses_growth     = houses_wuest_transaction / lag(houses_wuest_transaction) - 1
+  )
+```
+
+# 17. Portfolio-level market performance
+
+```{r portfolio}
+portfolio_data <- hp |>
+  mutate(month = floor_date(date, "month")) |>
+  arrange(ticker, month) |>
+  group_by(ticker) |>
+  mutate(lag_market_cap = lag(market_cap)) |>
+  ungroup()
+
+portfolio_ew <- portfolio_data |>
+  filter(!is.na(monthly_return)) |>
+  group_by(month) |>
+  summarise(
+    ew_return = mean(monthly_return, na.rm = TRUE),
+    n_firms   = n_distinct(ticker),
+    .groups = "drop"
+  )
+
+portfolio_vw <- portfolio_data |>
+  filter(!is.na(monthly_return), !is.na(lag_market_cap), lag_market_cap > 0) |>
+  group_by(month) |>
+  summarise(
+    vw_return = weighted.mean(monthly_return, lag_market_cap, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+portfolio <- portfolio_ew |>
+  inner_join(portfolio_vw, by = "month") |>
+  arrange(month) |>
+  filter(is.finite(ew_return), is.finite(vw_return))
+```
+
+## 17.1 Merging portfolio returns with the macro panel
+
+```{r merge-portfolio-macro}
+portfolio_macro <- portfolio |>
+  left_join(macro_monthly, by = "month") |>
+  arrange(month)
+
+glimpse(
+  portfolio_macro |>
+    select(month, ew_return, vw_return, short_rate, long_rate, inflation, jobless_rate_sa)
+)
+```
+
+## 17.2 Return and rate levels over time
+
+```{r returns-rates-plot, fig.height=6, fig.width=10}
+portfolio_macro |>
+  pivot_longer(c(short_rate, long_rate), names_to = "rate_type", values_to = "rate") |>
+  ggplot(aes(x = month)) +
+  geom_line(aes(y = rate, colour = rate_type)) +
+  labs(title = "CHF short- and long-term interest rates", x = NULL, y = "Rate (%)", colour = NULL)
+```
+
+```{r ew-vw-cumulative, fig.height=5, fig.width=9}
+portfolio_macro |>
+  arrange(month) |>
+  mutate(
+    ew_index = 100 * cumprod(1 + ew_return) / first(cumprod(1 + ew_return)),
+    vw_index = 100 * cumprod(1 + vw_return) / first(cumprod(1 + vw_return))
+  ) |>
+  pivot_longer(c(ew_index, vw_index), names_to = "portfolio", values_to = "index") |>
+  ggplot(aes(month, index, colour = portfolio)) +
+  geom_line() +
+  labs(title = "Cumulative REOC portfolio performance (EW vs. VW)", x = NULL, y = "Index (start = 100)", colour = NULL)
+```
+
+# 18. Interest rates vs. returns
+
+## 18.1 Contemporaneous correlation
+
+```{r rates-correlation}
+rate_corr <- portfolio_macro |>
+  filter(!is.na(d_short_rate), !is.na(d_long_rate)) |>
+  summarise(
+    cor_ew_d_short = cor(ew_return, d_short_rate, use = "complete.obs"),
+    cor_ew_d_long  = cor(ew_return, d_long_rate,  use = "complete.obs"),
+    cor_vw_d_short = cor(vw_return, d_short_rate, use = "complete.obs"),
+    cor_vw_d_long  = cor(vw_return, d_long_rate,  use = "complete.obs")
+  )
+
+kable(rate_corr |> mutate(across(everything(), ~ round(.x, 3))))
+```
+
+## 18.2 Scatter: change in long-term rate vs. portfolio return
+
+```{r rates-scatter, fig.height=5, fig.width=9}
+portfolio_macro |>
+  filter(is.finite(d_long_rate), is.finite(vw_return)) |>
+  ggplot(aes(d_long_rate, vw_return)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_continuous(labels = percent) +
+  labs(title = "Change in the 10-year Confederation yield and VW portfolio return",
+       x = "Change in long-term rate (pp)", y = "VW monthly return")
+```
+
+# 19. Inflation vs. returns
+
+```{r inflation-plot, fig.height=5, fig.width=9}
+portfolio_macro |>
+  filter(is.finite(inflation), is.finite(ew_return)) |>
+  ggplot(aes(inflation, ew_return)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_continuous(labels = percent) +
+  labs(title = "Headline CPI inflation and EW portfolio return",
+       x = "Headline inflation (y/y, %)", y = "EW monthly return")
+```
+
+```{r inflation-correlation}
+tibble(
+  measure = c("Headline inflation", "Core inflation (trimmed mean)"),
+  cor_ew  = c(
+    cor(portfolio_macro$ew_return, portfolio_macro$inflation, use = "complete.obs"),
+    cor(portfolio_macro$ew_return, portfolio_macro$core_inflation, use = "complete.obs")
+  ),
+  cor_vw  = c(
+    cor(portfolio_macro$vw_return, portfolio_macro$inflation, use = "complete.obs"),
+    cor(portfolio_macro$vw_return, portfolio_macro$core_inflation, use = "complete.obs")
+  )
+) |>
+  mutate(across(where(is.numeric), ~ round(.x, 3))) |>
+  kable()
+```
+
+# 20. Other macro indicators vs. returns
+
+## 20.1 Real-estate price momentum
+
+```{r re-prices-plot, fig.height=5, fig.width=9}
+portfolio_macro |>
+  filter(is.finite(apartments_growth), is.finite(vw_return)) |>
+  ggplot(aes(apartments_growth, vw_return)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_continuous(labels = percent) +
+  scale_y_continuous(labels = percent) +
+  labs(title = "Apartment transaction-price growth and VW portfolio return",
+       x = "M/M growth in apartment transaction prices", y = "VW monthly return")
+```
+
+## 20.2 Labour market
+
+```{r labour-plot, fig.height=5, fig.width=9}
+portfolio_macro |>
+  filter(is.finite(d_jobless_rate), is.finite(ew_return)) |>
+  ggplot(aes(d_jobless_rate, ew_return)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_continuous(labels = percent) +
+  labs(title = "Change in the (seasonally adjusted) jobless rate and EW portfolio return",
+       x = "Change in jobless rate (pp)", y = "EW monthly return")
+```
+
+# 21. Volatility
+
+## 21.1 Rolling realised volatility
+
+```{r rolling-vol, fig.height=5, fig.width=9}
+portfolio_macro <- portfolio_macro |>
+  arrange(month) |>
+  mutate(
+    ew_vol_12m = slider::slide_dbl(ew_return, sd, .before = 11, .complete = TRUE),
+    vw_vol_12m = slider::slide_dbl(vw_return, sd, .before = 11, .complete = TRUE)
+  )
+
+portfolio_macro |>
+  select(month, ew_vol_12m, vw_vol_12m) |>
+  pivot_longer(-month, names_to = "portfolio", values_to = "vol") |>
+  ggplot(aes(month, vol, colour = portfolio)) +
+  geom_line(na.rm = TRUE) +
+  labs(title = "12-month rolling volatility of REOC portfolio returns",
+       x = NULL, y = "Rolling SD of monthly return", colour = NULL)
+```
+
+## 20.2 Volatility and interest-rate changes
+
+```{r vol-vs-rates, fig.height=5, fig.width=9}
+portfolio_macro |>
+  filter(is.finite(ew_vol_12m), is.finite(d_long_rate)) |>
+  ggplot(aes(month)) +
+  geom_line(aes(y = ew_vol_12m), colour = "steelblue") +
+  geom_line(aes(y = abs(d_long_rate) * 0.2), colour = "firebrick", linetype = "dashed") +
+  labs(title = "EW rolling volatility (blue) vs. scaled absolute change in long rate (red, dashed)",
+       x = NULL, y = "Rolling volatility / scaled rate change")
+```
+
+# 22. Differences across time / macro regimes
+
+```{r regimes}
+portfolio_macro <- portfolio_macro |>
+  mutate(
+    regime = case_when(
+      month <  as.Date("2008-09-01") ~ "Pre-GFC (2000-2008)",
+      month >= as.Date("2008-09-01") & month < as.Date("2015-01-01") ~ "Post-GFC low rates (2008-2014)",
+      month >= as.Date("2015-01-01") & month < as.Date("2022-06-01") ~ "Negative-rate era (2015-2022)",
+      month >= as.Date("2022-06-01") & month < as.Date("2024-01-01") ~ "Hiking cycle (2022-2023)",
+      month >= as.Date("2024-01-01") ~ "Post-hiking / cuts (2024-)",
+      TRUE ~ NA_character_
+    ),
+    regime = factor(regime, levels = c(
+      "Pre-GFC (2000-2008)", "Post-GFC low rates (2008-2014)",
+      "Negative-rate era (2015-2022)", "Hiking cycle (2022-2023)",
+      "Post-hiking / cuts (2024-)"
+    ))
+  )
+
+regime_summary <- portfolio_macro |>
+  filter(!is.na(regime)) |>
+  group_by(regime) |>
+  summarise(
+    n_months        = n(),
+    mean_ew_return  = mean(ew_return, na.rm = TRUE),
+    sd_ew_return    = sd(ew_return, na.rm = TRUE),
+    mean_vw_return  = mean(vw_return, na.rm = TRUE),
+    sd_vw_return    = sd(vw_return, na.rm = TRUE),
+    mean_short_rate = mean(short_rate, na.rm = TRUE),
+    mean_inflation  = mean(inflation, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+kable(regime_summary |> mutate(across(where(is.numeric), ~ round(.x, 4))))
+```
+
+```{r regime-plot, fig.height=5, fig.width=9}
+portfolio_macro |>
+  filter(!is.na(regime)) |>
+  ggplot(aes(regime, ew_return)) +
+  geom_boxplot() +
+  labs(title = "Distribution of EW monthly returns by monetary regime", x = NULL, y = "EW monthly return") +
+  theme(axis.text.x = element_text(angle = 20, hjust = 1))
+```
+
+# 23. Differences across firms
+
+## 23.1 Firm-level sensitivity to interest rates and inflation
+
+```{r firm-level-regressions}
+firm_macro <- hp_macro |>
+  select(ticker, month, monthly_return) |>
+  left_join(
+    macro_monthly |> select(month, d_short_rate, d_long_rate, inflation, d_jobless_rate),
+    by = "month"
+  )
+
+firm_sensitivities <- firm_macro |>
+  filter(!is.na(monthly_return)) |>
+  group_by(ticker) |>
+  filter(n() >= 24) |>
+  nest() |>
+  mutate(
+    model = map(data, ~ lm(monthly_return ~ d_long_rate + inflation, data = .x)),
+    tidy_model = map(model, tidy)
+  ) |>
+  select(ticker, tidy_model) |>
+  unnest(tidy_model) |>
+  filter(term %in% c("d_long_rate", "inflation")) |>
+  select(ticker, term, estimate, std.error, p.value)
+
+kable(firm_sensitivities |> mutate(across(where(is.numeric), ~ round(.x, 4))) |> arrange(term, estimate))
+```
+
+```{r firm-sensitivity-plot, fig.height=6, fig.width=9}
+firm_sensitivities |>
+  filter(term == "d_long_rate") |>
+  ggplot(aes(x = reorder(ticker, estimate), y = estimate)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error), width = 0.2) +
+  coord_flip() +
+  labs(title = "Firm-level sensitivity of monthly return to changes in the long-term rate",
+       x = NULL, y = "Estimated coefficient on change in long-term rate")
+```
+
+## 23.2 A simple pooled multi-predictor regression (portfolio level)
+
+```{r pooled-regression}
+pooled_ew <- lm(ew_return ~ d_short_rate + d_long_rate + inflation + d_jobless_rate + apartments_growth, data = portfolio_macro)
+pooled_vw <- lm(vw_return ~ d_short_rate + d_long_rate + inflation + d_jobless_rate + apartments_growth, data = portfolio_macro)
+
+bind_rows(
+  tidy(pooled_ew) |> mutate(portfolio = "EW"),
+  tidy(pooled_vw) |> mutate(portfolio = "VW")
+) |>
+  select(portfolio, term, estimate, std.error, statistic, p.value) |>
+  mutate(across(where(is.numeric), ~ round(.x, 4))) |>
+  kable()
+```
+
+# 24. Data-quality observations and limitations
+
+- Rate splice: `short_rate` is spliced from `libor_3m_chf` (2000 to mid-2019) and `snb_policy_rate` (mid-2019 onward) around the SNB's 2019 reference-rate change.
+- GDP and sector output: missing roughly two-thirds of the time and excluded from the core specification.
+- Real-estate price indices: FSO series are sparser than Wuest Partner series, hence the latter were used as primary proxies.
+- Unbalanced firm panel: REOCs enter at different dates, so early-period portfolio statistics rest on fewer firms.
+- No causal identification: all associations are descriptive/exploratory; macro variables are endogenous to each other.
+- Regression caveats: plain OLS without fixed effects, clustering, or autocorrelation-robust standard errors.
