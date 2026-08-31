@@ -20,8 +20,8 @@ The main question is:
 
 The analysis uses the two cleaned input files:
 
-- `swiss_reoc_yearly_FA.csv`: annual fundamental/accounting and valuation variables.
-- `swiss_reoc_monthly_HP.csv`: monthly market variables and returns.
+-   `swiss_reoc_yearly_FA.csv`: annual fundamental/accounting and valuation variables.
+-   `swiss_reoc_monthly_HP.csv`: monthly market variables and returns.
 
 The first version deliberately focuses on **descriptive analysis**. It does not yet make causal claims.
 
@@ -129,9 +129,9 @@ The total return index is especially important because it captures a broader inv
 
 The annual file also contains:
 
-- `dividend_yield`
-- `pe_ratio`
-- `profit_margin`
+-   `dividend_yield`
+-   `pe_ratio`
+-   `profit_margin`
 
 These are potentially interesting, but they should **not be treated as core variables in the first analysis** because their availability is much more limited in the supplied data. We therefore report their coverage first and use them only where observations are sufficiently available.
 
@@ -340,8 +340,8 @@ The next question is how the typical REOC changed over time.
 
 Because the panel is unbalanced, it is useful to show both:
 
-- the number of firms available in each year;
-- the median value across firms.
+-   the number of firms available in each year;
+-   the median value across firms.
 
 Medians are preferred to means for the first pass because the firms differ considerably in size.
 
@@ -379,9 +379,9 @@ The monthly file allows us to construct annual market measures.
 
 For each firm-year we calculate:
 
-- annual total return;
-- year-end market capitalization;
-- average monthly return.
+-   annual total return;
+-   year-end market capitalization;
+-   average monthly return.
 
 The annual total return is calculated from the total return index and is therefore preferable to simply using the change in price.
 
@@ -560,12 +560,12 @@ The guiding question is:
 
 Concretely, the analysis works through, depending on what is actually available in the macro dataset:
 
-- interest rates vs. monthly returns,
-- inflation vs. returns,
-- other macro indicators (real estate price indices, labour market) vs. returns,
-- volatility of returns,
-- differences across time / macro regimes,
-- differences across firms.
+-   interest rates vs. monthly returns,
+-   inflation vs. returns,
+-   other macro indicators (real estate price indices, labour market) vs. returns,
+-   volatility of returns,
+-   differences across time / macro regimes,
+-   differences across firms.
 
 As in the firm-level document, this first pass is **descriptive and exploratory**. It documents associations, not causal effects.
 
@@ -669,10 +669,10 @@ kable(macro_missingness |> select(variable, missing_share_pct))
 
 Interpretation:
 
-- Inflation and labour market series are essentially complete over the whole sample.
-- Real-estate price indices (Wuest Partner, Fahrlander, IAZI style series) are almost complete; the FSO indices are considerably sparser and are treated as secondary.
-- Interest rates are complete only in pieces: `libor_3m_chf` / `snb_target_lower` cover 2000 to mid-2019, and `snb_policy_rate` covers mid-2019 onward, matching the actual 2019 change in the SNB's operational target. `confederation_10y` is available almost throughout and is used as the long-rate series.
-- GDP and sector output variables are missing about two-thirds of the time and are treated as secondary/contextual only.
+-   Inflation and labour market series are essentially complete over the whole sample.
+-   Real-estate price indices (Wuest Partner, Fahrlander, IAZI style series) are almost complete; the FSO indices are considerably sparser and are treated as secondary.
+-   Interest rates are complete only in pieces: `libor_3m_chf` / `snb_target_lower` cover 2000 to mid-2019, and `snb_policy_rate` covers mid-2019 onward, matching the actual 2019 change in the SNB's operational target. `confederation_10y` is available almost throughout and is used as the long-rate series.
+-   GDP and sector output variables are missing about two-thirds of the time and are treated as secondary/contextual only.
 
 ## 16.1 Constructing a continuous short-rate series
 
@@ -998,9 +998,9 @@ bind_rows(
 
 # 24. Data-quality observations and limitations
 
-- Rate splice: `short_rate` is spliced from `libor_3m_chf` (2000 to mid-2019) and `snb_policy_rate` (mid-2019 onward) around the SNB's 2019 reference-rate change.
-- GDP and sector output: missing roughly two-thirds of the time and excluded from the core specification.
-- Real-estate price indices: FSO series are sparser than Wuest Partner series, hence the latter were used as primary proxies.
-- Unbalanced firm panel: REOCs enter at different dates, so early-period portfolio statistics rest on fewer firms.
-- No causal identification: all associations are descriptive/exploratory; macro variables are endogenous to each other.
-- Regression caveats: plain OLS without fixed effects, clustering, or autocorrelation-robust standard errors.
+-   Rate splice: `short_rate` is spliced from `libor_3m_chf` (2000 to mid-2019) and `snb_policy_rate` (mid-2019 onward) around the SNB's 2019 reference-rate change.
+-   GDP and sector output: missing roughly two-thirds of the time and excluded from the core specification.
+-   Real-estate price indices: FSO series are sparser than Wuest Partner series, hence the latter were used as primary proxies.
+-   Unbalanced firm panel: REOCs enter at different dates, so early-period portfolio statistics rest on fewer firms.
+-   No causal identification: all associations are descriptive/exploratory; macro variables are endogenous to each other.
+-   Regression caveats: plain OLS without fixed effects, clustering, or autocorrelation-robust standard errors.

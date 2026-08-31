@@ -1,0 +1,26 @@
+---
+title: "Swiss_REOC_FINAL_REPORT"
+output: html_document
+---
+
+# Introduction
+
+# Data and Methodology
+
+# Descriptive Overview of Swiss REOCs
+
+# RQ1 — Firm Development
+
+# RQ2 — Market Performance and the Macroeconomic Environment
+
+# RQ3 — Firm Fundamentals and the Macroeconomic Environment
+
+# Portfolio Structure
+
+# Top-3 Portfolio Deep Dive
+
+# Discussion
+
+# Limitations
+
+# Conclusion

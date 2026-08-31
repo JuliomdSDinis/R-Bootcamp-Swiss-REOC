@@ -1,0 +1,1273 @@
+---
+title: "RQ3 — Firm Fundamentals and the Macroeconomic Environment"
+author: "Group Project"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 9,
+  fig.height = 5
+)
+
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(fixest)
+```
+
+# Research Question
+
+**RQ3: How are the financial characteristics of Swiss listed real-estate companies associated with changes in the macroeconomic environment?**
+
+This analysis combines yearly firm-level financial accounting data with yearly Swiss macroeconomic data.
+
+The objective is to investigate whether firm fundamentals such as leverage, profitability, size, and dividends vary with changes in the macroeconomic environment.
+
+# 1. Data
+
+```{r import-data}
+fa_macro <- read_csv(
+  "../Data cleaning/swiss_reoc_yearly_FA_macro.csv",
+  show_col_types = FALSE
+) |>
+  clean_names()
+
+glimpse(fa_macro)
+```
+
+# 2. Initial Data Audit
+
+```{r data-audit}
+fa_macro |>
+  summarise(
+    observations = n(),
+    firms = n_distinct(ticker),
+    first_year = min(year, na.rm = TRUE),
+    last_year = max(year, na.rm = TRUE)
+  )
+```
+
+## Observations by firm
+
+```{r observations-by-firm}
+fa_macro |>
+  count(ticker, name = "observations") |>
+  arrange(desc(observations))
+```
+
+## Check duplicate firm-year observations
+
+```{r duplicate-check}
+fa_macro |>
+  count(ticker, year) |>
+  filter(n > 1)
+```
+
+# 3. Variable Construction
+
+Before examining the relationships between firm fundamentals and macroeconomic conditions, we construct a smaller set of economically relevant variables for the analysis.
+
+## 3.1 Selected variables
+
+```{r selected-variables}
+
+fa_macro |>
+  select(
+    ticker,
+    year,
+    
+    # Firm fundamentals
+    debt_to_assets,
+    net_debt_ebitda,
+    fa_total_assets,
+    net_income,
+    dividend_per_share,
+    
+    # Macroeconomic variables
+    libor_3m_chf,
+    snb_policy_rate,
+    confederation_10y,
+    sfso_inflation_according_to_the_national_consumer_price_index,
+    jobless_rate_sa,
+    gdp
+  ) |>
+  glimpse()
+```
+## 3.2 Short-term interest-rate series
+
+The dataset covers different Swiss monetary-policy frameworks. We therefore first examine the availability of the 3-month CHF LIBOR and the SNB policy rate before constructing a common short-term interest-rate indicator.
+
+```{r inspect-interest-rates}
+
+fa_macro |>
+  distinct(
+    year,
+    libor_3m_chf,
+    snb_policy_rate
+  ) |>
+  arrange(year) |>
+  print(n = Inf)
+```
+## 3.3 Changes in macroeconomic conditions
+
+Because the research question concerns changes in the macroeconomic environment, we construct annual changes and growth rates rather than relying exclusively on macroeconomic levels.
+
+```{r macro-changes}
+
+macro_changes <- fa_macro |>
+  distinct(
+    year,
+    gdp,
+    confederation_10y,
+    sfso_inflation_according_to_the_national_consumer_price_index,
+    jobless_rate_sa
+  ) |>
+  arrange(year) |>
+  mutate(
+    gdp_growth = 100 * (gdp / lag(gdp) - 1),
+    
+    delta_10y_yield = 
+      confederation_10y - lag(confederation_10y),
+    
+    delta_inflation =
+      sfso_inflation_according_to_the_national_consumer_price_index -
+      lag(sfso_inflation_according_to_the_national_consumer_price_index),
+    
+    delta_unemployment =
+      jobless_rate_sa - lag(jobless_rate_sa)
+  )
+
+macro_changes |>
+  select(
+    year,
+    gdp_growth,
+    delta_10y_yield,
+    delta_inflation,
+    delta_unemployment
+  ) |>
+  print(n = Inf)
+```
+```{r join-macro-changes}
+
+fa_rq3 <- fa_macro |>
+  left_join(
+    macro_changes |>
+      select(
+        year,
+        gdp_growth,
+        delta_10y_yield,
+        delta_inflation,
+        delta_unemployment
+      ),
+    by = "year"
+  )
+
+glimpse(fa_rq3)
+```
+## 3.4 Changes in firm fundamentals
+
+To complement the analysis of financial levels, annual changes and growth rates are calculated separately for each firm.
+
+```{r firm-changes}
+
+fa_rq3 <- fa_rq3 |>
+  arrange(ticker, year) |>
+  group_by(ticker) |>
+  mutate(
+    
+    delta_debt_to_assets =
+      debt_to_assets - lag(debt_to_assets),
+    
+    delta_net_debt_ebitda =
+      net_debt_ebitda - lag(net_debt_ebitda),
+    
+    asset_growth =
+      100 * (fa_total_assets / lag(fa_total_assets) - 1),
+    
+    net_income_growth =
+      100 * (net_income / lag(net_income) - 1)
+    
+  ) |>
+  ungroup()
+```
+
+## 3.5 Validation of constructed variables
+
+```{r constructed-variable-summary}
+
+fa_rq3 |>
+  summarise(
+    across(
+      c(
+        debt_to_assets,
+        net_debt_ebitda,
+        delta_debt_to_assets,
+        delta_net_debt_ebitda,
+        asset_growth,
+        net_income_growth,
+        gdp_growth,
+        delta_10y_yield,
+        delta_inflation,
+        delta_unemployment
+      ),
+      list(
+        n = ~sum(!is.na(.)),
+        mean = ~mean(., na.rm = TRUE),
+        median = ~median(., na.rm = TRUE),
+        min = ~min(., na.rm = TRUE),
+        max = ~max(., na.rm = TRUE)
+      )
+    )
+  )
+```
+## 3.6 Short-term interest rate and analysis period
+
+The sample spans a change in the Swiss monetary-policy framework. The 3-month CHF LIBOR is used as the short-term interest-rate indicator through 2019, while the SNB policy rate is used from 2020 onward.
+
+The yearly analysis is restricted to 2001–2025. The years 2026 and 2027 are excluded because the available macroeconomic data do not represent complete annual observations.
+
+```{r final-rq3-sample}
+
+fa_rq3 <- fa_rq3 |>
+  filter(year <= 2025) |>
+  mutate(
+    short_rate = if_else(
+      year <= 2019,
+      libor_3m_chf,
+      snb_policy_rate
+    )
+  )
+
+```
+
+We then construct the annual change in the short-term interest rate.
+
+```{r short-rate-change}
+
+short_rate_changes <- fa_rq3 |>
+  distinct(year, short_rate) |>
+  arrange(year) |>
+  mutate(
+    delta_short_rate = short_rate - lag(short_rate)
+  )
+
+fa_rq3 <- fa_rq3 |>
+  left_join(
+    short_rate_changes |>
+      select(year, delta_short_rate),
+    by = "year"
+  )
+
+```
+# 4. Descriptive Analysis
+
+We first examine how the financial characteristics of Swiss listed real-estate companies evolved over the sample period. Because the number and composition of firms varies over time, yearly medians are used to summarize the typical firm while reducing the influence of extreme observations.
+
+```{r yearly-fundamentals}
+
+yearly_fundamentals <- fa_rq3 |>
+  group_by(year) |>
+  summarise(
+    n_firms = n_distinct(ticker),
+    
+    median_debt_to_assets =
+      median(debt_to_assets, na.rm = TRUE),
+    
+    median_net_debt_ebitda =
+      median(net_debt_ebitda, na.rm = TRUE),
+    
+    median_total_assets =
+      median(fa_total_assets, na.rm = TRUE),
+    
+    median_net_income =
+      median(net_income, na.rm = TRUE),
+    
+    median_dividend_per_share =
+      median(dividend_per_share, na.rm = TRUE),
+    
+    .groups = "drop"
+  )
+
+yearly_fundamentals
+```
+
+## 4.1 Leverage over time
+
+```{r leverage-over-time}
+
+ggplot(
+  yearly_fundamentals,
+  aes(x = year, y = median_debt_to_assets)
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Leverage of Swiss Listed Real-Estate Companies",
+    subtitle = "Median debt-to-assets ratio by year",
+    x = NULL,
+    y = "Median debt-to-assets (%)"
+  ) +
+  theme_minimal()
+
+```
+## 4.2 Swiss short-term interest-rate environment
+
+```{r short-rate-over-time}
+
+short_rate_changes |>
+  filter(year <= 2025) |>
+  ggplot(
+    aes(x = year, y = short_rate)
+  ) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    alpha = 0.5
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Swiss Short-Term Interest-Rate Environment",
+    subtitle = "3-month CHF LIBOR through 2019; SNB policy rate from 2020",
+    x = NULL,
+    y = "Interest rate (%)"
+  ) +
+  theme_minimal()
+
+```
+
+# 5. Interest Rates and Leverage
+
+Financing costs are particularly relevant for listed real-estate companies because real-estate investment is typically capital intensive. We therefore first examine whether leverage is associated with the Swiss short-term interest-rate environment.
+
+The first analysis considers the relationship between the **level of short-term interest rates** and firms' **debt-to-assets ratios**.
+
+```{r interest-leverage-scatter}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(short_rate),
+      !is.na(debt_to_assets)
+    ),
+  aes(
+    x = short_rate,
+    y = debt_to_assets
+  )
+) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  ) +
+  labs(
+    title = "Interest Rates and Firm Leverage",
+    subtitle = "Firm-year observations, 2001–2025",
+    x = "Short-term interest rate (%)",
+    y = "Debt-to-assets (%)"
+  ) +
+  theme_minimal()
+```
+
+## 5.2 Changes in interest rates and leverage
+
+The level relationship may reflect persistent differences across firms or long-run trends. To focus more directly on changes in the macroeconomic environment, we next compare annual changes in short-term interest rates with annual changes in firms' debt-to-assets ratios.
+
+```{r interest-change-leverage-change}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(delta_short_rate),
+      !is.na(delta_debt_to_assets)
+    ),
+  aes(
+    x = delta_short_rate,
+    y = delta_debt_to_assets
+  )
+) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    alpha = 0.4
+  ) +
+  geom_vline(
+    xintercept = 0,
+    linetype = "dashed",
+    alpha = 0.4
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  ) +
+  labs(
+    title = "Changes in Interest Rates and Changes in Leverage",
+    subtitle = "Annual firm-year observations",
+    x = "Annual change in short-term interest rate (percentage points)",
+    y = "Annual change in debt-to-assets (percentage points)"
+  ) +
+  theme_minimal()
+```
+
+## 5.3 Correlation between interest rates and leverage
+
+```{r interest-leverage-correlations}
+
+cor_level <- fa_rq3 |>
+  summarise(
+    correlation = cor(
+      short_rate,
+      debt_to_assets,
+      use = "complete.obs"
+    )
+  )
+
+cor_change <- fa_rq3 |>
+  summarise(
+    correlation = cor(
+      delta_short_rate,
+      delta_debt_to_assets,
+      use = "complete.obs"
+    )
+  )
+
+cor_level
+cor_change
+```
+
+## 5.4 Leverage across interest-rate environments
+
+To complement the continuous relationship examined above, short-term interest rates are grouped into three descriptive environments: negative rates, low positive rates, and higher positive rates. This allows the distribution of firm leverage to be compared across different monetary environments.
+
+```{r rate-environment}
+
+fa_rq3 <- fa_rq3 |>
+  mutate(
+    rate_environment = case_when(
+      short_rate < 0 ~ "Negative rates",
+      short_rate < 1 ~ "Low rates (0–1%)",
+      short_rate >= 1 ~ "Higher rates (≥1%)",
+      TRUE ~ NA_character_
+    ),
+    rate_environment = factor(
+      rate_environment,
+      levels = c(
+        "Negative rates",
+        "Low rates (0–1%)",
+        "Higher rates (≥1%)"
+      )
+    )
+  )
+```
+
+```{r leverage-rate-boxplot}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(rate_environment),
+      !is.na(debt_to_assets)
+    ),
+  aes(
+    x = rate_environment,
+    y = debt_to_assets
+  )
+) +
+  geom_boxplot(
+    outlier.alpha = 0.5
+  ) +
+  geom_jitter(
+    width = 0.15,
+    alpha = 0.3
+  ) +
+  labs(
+    title = "Firm Leverage Across Interest-Rate Environments",
+    subtitle = "Distribution of debt-to-assets ratios, 2001–2025",
+    x = NULL,
+    y = "Debt-to-assets (%)"
+  ) +
+  theme_minimal()
+```
+## 5.5 Leverage dynamics across firms
+
+The aggregate leverage trend may conceal substantial differences between individual firms. We therefore compare each firm's debt-to-assets ratio with the yearly cross-sectional median of all Swiss listed REOCs.
+
+Using a common y-axis across all panels makes the firms visually comparable, while the dashed benchmark line shows whether a company was more or less leveraged than the typical REOC in a given year.
+
+```{r leverage-benchmark-data}
+
+leverage_benchmark <- fa_rq3 |>
+  group_by(year) |>
+  summarise(
+    median_leverage = median(
+      debt_to_assets,
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  )
+
+leverage_firm_plot <- fa_rq3 |>
+  filter(!is.na(debt_to_assets)) |>
+  left_join(
+    leverage_benchmark,
+    by = "year"
+  )
+```
+
+```{r leverage-by-firm-benchmark}
+
+ggplot(
+  leverage_firm_plot,
+  aes(x = year)
+) +
+  geom_line(
+    aes(y = median_leverage),
+    linetype = "dashed",
+    linewidth = 0.8,
+    alpha = 0.7
+  ) +
+  geom_line(
+    aes(y = debt_to_assets),
+    linewidth = 0.9
+  ) +
+  geom_point(
+    aes(y = debt_to_assets),
+    size = 1.2
+  ) +
+  facet_wrap(
+    ~ ticker,
+    ncol = 4
+  ) +
+  scale_y_continuous(
+    limits = c(0, 75),
+    breaks = seq(0, 75, 15)
+  ) +
+  labs(
+    title = "Firm Leverage Relative to the REOC Benchmark",
+    subtitle = "Solid line: firm debt-to-assets | Dashed line: yearly cross-sectional median",
+    x = NULL,
+    y = "Debt-to-assets (%)"
+  ) +
+  theme_minimal()
+```
+# 6. Macroeconomic Conditions and Profitability
+
+The second part of the analysis examines whether firm profitability is associated with the broader macroeconomic environment.
+
+Because Swiss listed REOCs differ substantially in size, raw net income is not directly comparable across firms. We therefore construct a simple return-on-assets measure (ROA), defined as net income relative to total assets.
+
+## 6.1 Constructing a profitability measure
+
+```{r construct-roa}
+
+fa_rq3 <- fa_rq3 |>
+  mutate(
+    roa = 100 * net_income / fa_total_assets
+  )
+
+fa_rq3 |>
+  summarise(
+    observations = sum(!is.na(roa)),
+    mean_roa = mean(roa, na.rm = TRUE),
+    median_roa = median(roa, na.rm = TRUE),
+    min_roa = min(roa, na.rm = TRUE),
+    max_roa = max(roa, na.rm = TRUE)
+  )
+```
+
+ROA is expressed as a percentage. For example, an ROA of 5 indicates that net income corresponds to approximately 5% of the firm's total assets.
+
+## 6.2 GDP growth over time
+
+We first examine the evolution of Swiss GDP growth over the sample period.
+
+```{r gdp-growth-over-time}
+
+fa_rq3 |>
+  distinct(year, gdp_growth) |>
+  filter(!is.na(gdp_growth)) |>
+  ggplot(
+    aes(x = year, y = gdp_growth)
+  ) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    alpha = 0.5
+  ) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Swiss GDP Growth",
+    subtitle = "Annual GDP growth, 2002–2025",
+    x = NULL,
+    y = "GDP growth (%)"
+  ) +
+  theme_minimal()
+```
+
+## 6.3 GDP growth and firm profitability
+
+To examine the relationship between economic growth and firm profitability, ROA is plotted against annual Swiss GDP growth.
+
+```{r gdp-roa-scatter}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(gdp_growth),
+      !is.na(roa)
+    ),
+  aes(
+    x = gdp_growth,
+    y = roa
+  )
+) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    alpha = 0.4
+  ) +
+  geom_vline(
+    xintercept = 0,
+    linetype = "dashed",
+    alpha = 0.4
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  ) +
+  labs(
+    title = "GDP Growth and REOC Profitability",
+    subtitle = "Firm-year observations",
+    x = "Swiss GDP growth (%)",
+    y = "Return on assets (%)"
+  ) +
+  theme_minimal()
+```
+
+## 6.4 Correlation between GDP growth and profitability
+
+```{r gdp-roa-correlation}
+
+fa_rq3 |>
+  summarise(
+    correlation = cor(
+      gdp_growth,
+      roa,
+      use = "complete.obs"
+    )
+  )
+```
+
+## 6.5 Profitability across economic-growth environments
+
+To examine the distribution of profitability under different macroeconomic conditions, years are classified into three descriptive GDP-growth environments: contraction, moderate growth, and strong growth.
+
+```{r gdp-environments}
+
+fa_rq3 <- fa_rq3 |>
+  mutate(
+    roa = 100 * net_income / fa_total_assets
+  )
+
+fa_rq3 |>
+  summarise(
+    observations = sum(!is.na(roa)),
+    mean_roa = mean(roa, na.rm = TRUE),
+    median_roa = median(roa, na.rm = TRUE),
+    min_roa = min(roa, na.rm = TRUE),
+    max_roa = max(roa, na.rm = TRUE)
+  )
+```
+
+```{r roa-growth-boxplot}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(growth_environment),
+      !is.na(roa)
+    ),
+  aes(
+    x = growth_environment,
+    y = roa
+  )
+) +
+  geom_boxplot(
+    outlier.alpha = 0.5
+  ) +
+  geom_jitter(
+    width = 0.15,
+    alpha = 0.3
+  ) +
+  labs(
+    title = "REOC Profitability Across GDP-Growth Environments",
+    subtitle = "Distribution of return on assets",
+    x = NULL,
+    y = "Return on assets (%)"
+  ) +
+  theme_minimal()
+```
+
+# 7. Correlation Analysis
+
+The previous sections examined selected relationships between macroeconomic conditions and firm fundamentals individually. We now broaden the analysis by calculating correlations between a selected set of macroeconomic indicators and firm-level financial characteristics.
+
+The purpose of this analysis is exploratory: the correlation matrix helps identify relationships that may warrant closer investigation. Correlation measures association rather than causality.
+
+## 7.1 Variables included in the correlation analysis
+
+The macroeconomic variables selected are:
+
+- short-term interest rate,
+- 10-year Swiss Confederation bond yield,
+- GDP growth,
+- inflation,
+- seasonally adjusted unemployment rate.
+
+The firm-level variables are:
+
+- debt-to-assets,
+- net debt-to-EBITDA,
+- return on assets (ROA),
+- total-asset growth.
+
+```{r correlation-variables}
+
+cor_data <- fa_rq3 |>
+  select(
+    # Macroeconomic variables
+    short_rate,
+    confederation_10y,
+    gdp_growth,
+    sfso_inflation_according_to_the_national_consumer_price_index,
+    jobless_rate_sa,
+
+    # Firm fundamentals
+    debt_to_assets,
+    net_debt_ebitda,
+    roa,
+    asset_growth
+  )
+
+glimpse(cor_data)
+```
+
+## 7.2 Macro × firm correlation matrix
+
+Pearson correlations are calculated using all available complete pairs of observations.
+
+```{r calculate-correlations}
+
+macro_vars <- c(
+  "short_rate",
+  "confederation_10y",
+  "gdp_growth",
+  "sfso_inflation_according_to_the_national_consumer_price_index",
+  "jobless_rate_sa"
+)
+
+firm_vars <- c(
+  "debt_to_assets",
+  "net_debt_ebitda",
+  "roa",
+  "asset_growth"
+)
+
+cor_matrix <- cor(
+  cor_data,
+  use = "pairwise.complete.obs",
+  method = "pearson"
+)
+
+macro_firm_cor <- cor_matrix[
+  macro_vars,
+  firm_vars,
+  drop = FALSE
+]
+
+round(macro_firm_cor, 2)
+```
+
+## 7.3 Correlation heatmap
+
+To facilitate visual comparison, the macro-firm correlation matrix is presented as a heatmap. Positive values indicate that the two variables tend to move in the same direction, while negative values indicate that they tend to move in opposite directions. Values closer to zero indicate a weaker linear association.
+
+```{r correlation-heatmap}
+
+cor_heatmap <- as.data.frame(
+  as.table(macro_firm_cor)
+) |>
+  rename(
+    macro_variable = Var1,
+    firm_variable = Var2,
+    correlation = Freq
+  ) |>
+  mutate(
+    macro_variable = recode(
+      macro_variable,
+      "short_rate" = "Short-term rate",
+      "confederation_10y" = "10Y government yield",
+      "gdp_growth" = "GDP growth",
+      "sfso_inflation_according_to_the_national_consumer_price_index" = "Inflation",
+      "jobless_rate_sa" = "Unemployment"
+    ),
+    firm_variable = recode(
+      firm_variable,
+      "debt_to_assets" = "Debt / Assets",
+      "net_debt_ebitda" = "Net Debt / EBITDA",
+      "roa" = "ROA",
+      "asset_growth" = "Asset Growth"
+    )
+  )
+
+ggplot(
+  cor_heatmap,
+  aes(
+    x = firm_variable,
+    y = macro_variable,
+    fill = correlation
+  )
+) +
+  geom_tile() +
+  geom_text(
+    aes(label = sprintf("%.2f", correlation)),
+    size = 4
+  ) +
+  scale_fill_gradient2(
+    midpoint = 0,
+    limits = c(-1, 1),
+    name = "Correlation"
+  ) +
+  labs(
+    title = "Macroeconomic Conditions and REOC Fundamentals",
+    subtitle = "Pearson correlations, firm-year observations",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.x = element_text(
+      angle = 30,
+      hjust = 1
+    )
+  )
+```
+
+## 7.4 Firm size and the interest-rate–leverage relationship
+
+The previous analysis treats each firm-year observation equally. However, Swiss listed REOCs differ substantially in size. A bubble chart is therefore used to examine the relationship between interest rates and leverage while simultaneously representing firm size through total assets.
+
+Each bubble represents one firm-year observation. Its position reflects the interest-rate environment and the firm's leverage, while bubble size represents the firm's total assets.
+
+```{r rate-leverage-bubble}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(short_rate),
+      !is.na(debt_to_assets),
+      !is.na(fa_total_assets)
+    ),
+  aes(
+    x = short_rate,
+    y = debt_to_assets,
+    size = fa_total_assets
+  )
+) +
+  geom_point(
+    alpha = 0.4
+  ) +
+  scale_size_continuous(
+    range = c(2, 10),
+    name = "Total assets"
+  ) +
+  labs(
+    title = "Interest Rates, Leverage and Firm Size",
+    subtitle = "Bubble size represents firm total assets",
+    x = "Short-term interest rate (%)",
+    y = "Debt-to-assets (%)"
+  ) +
+  theme_minimal()
+```
+## 7.5 Long-term interest rates and firm leverage
+
+The correlation analysis identifies the relationship between the 10-year Swiss Confederation bond yield and the debt-to-assets ratio as the strongest macro-fundamental correlation in the selected matrix (`r ≈ 0.32`).
+
+Because long-term government yields provide an important benchmark for financing conditions, this relationship is examined in greater detail. The analysis distinguishes between the pooled relationship in levels and the relationship between annual changes.
+
+### 7.5.1 10-year government yield and leverage
+
+```{r yield-leverage-scatter}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(confederation_10y),
+      !is.na(debt_to_assets)
+    ),
+  aes(
+    x = confederation_10y,
+    y = debt_to_assets
+  )
+) +
+  geom_point(
+    alpha = 0.5,
+    size = 2
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  ) +
+  labs(
+    title = "Long-Term Government Yields and REOC Leverage",
+    subtitle = "Firm-year observations, 2001–2025",
+    x = "10-year Swiss Confederation yield (%)",
+    y = "Debt-to-assets (%)"
+  ) +
+  theme_minimal()
+```
+
+The pooled scatterplot examines whether firms observed during periods of higher long-term interest rates also tend to exhibit higher leverage.
+
+### 7.5.2 Changes in long-term yields and changes in leverage
+
+A positive correlation in levels does not necessarily imply that firms increase leverage when yields rise. Both variables may be influenced by long-term trends or differences in sample composition.
+
+We therefore compare annual changes in the 10-year government yield with annual changes in firm leverage.
+
+```{r yield-change-leverage-change}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(delta_10y_yield),
+      !is.na(delta_debt_to_assets)
+    ),
+  aes(
+    x = delta_10y_yield,
+    y = delta_debt_to_assets
+  )
+) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    alpha = 0.4
+  ) +
+  geom_vline(
+    xintercept = 0,
+    linetype = "dashed",
+    alpha = 0.4
+  ) +
+  geom_point(
+    alpha = 0.5,
+    size = 2
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  ) +
+  labs(
+    title = "Changes in Long-Term Yields and Changes in REOC Leverage",
+    subtitle = "Annual firm-year observations",
+    x = "Annual change in 10-year yield (percentage points)",
+    y = "Annual change in debt-to-assets (percentage points)"
+  ) +
+  theme_minimal()
+```
+
+### 7.5.3 Correlation in levels versus annual changes
+
+```{r yield-leverage-correlations}
+
+yield_leverage_correlations <- tibble(
+  relationship = c(
+    "10Y yield vs. Debt / Assets",
+    "Change in 10Y yield vs. Change in Debt / Assets"
+  ),
+  correlation = c(
+    cor(
+      fa_rq3$confederation_10y,
+      fa_rq3$debt_to_assets,
+      use = "complete.obs"
+    ),
+    cor(
+      fa_rq3$delta_10y_yield,
+      fa_rq3$delta_debt_to_assets,
+      use = "complete.obs"
+    )
+  )
+)
+
+yield_leverage_correlations
+```
+
+### 7.5.4 Firm-level relationship between long-term yields and leverage
+
+The pooled correlation may conceal heterogeneous relationships across firms. The following small-multiple visualization therefore examines the relationship separately for each company.
+
+All panels use the same axes to preserve comparability across firms.
+
+```{r yield-leverage-by-firm}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(confederation_10y),
+      !is.na(debt_to_assets)
+    ),
+  aes(
+    x = confederation_10y,
+    y = debt_to_assets
+  )
+) +
+  geom_point(
+    alpha = 0.6,
+    size = 1.5
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = FALSE,
+    linewidth = 0.7
+  ) +
+  facet_wrap(
+    ~ ticker,
+    ncol = 4
+  ) +
+  scale_y_continuous(
+    limits = c(0, 75),
+    breaks = seq(0, 75, 15)
+  ) +
+  labs(
+    title = "Long-Term Yields and Leverage Across Firms",
+    subtitle = "Firm-specific descriptive relationships",
+    x = "10-year Swiss Confederation yield (%)",
+    y = "Debt-to-assets (%)"
+  ) +
+  theme_minimal()
+```
+The pooled data show a moderate positive correlation between the level of the 10-year Swiss Confederation yield and firm debt-to-assets (r = 0.32). However, the correlation between annual changes in yields and annual changes in leverage is effectively zero (r ≈ 0.00). Firm-specific plots also reveal substantial heterogeneity in the direction of the relationship. These results suggest that the positive pooled correlation should not be interpreted as evidence that increases in long-term yields are systematically associated with increases in firm leverage. Instead, the pooled relationship may reflect persistent differences between firms, changes in sample composition, longer-term trends, or heterogeneous firm responses. This motivates a closer examination of firm heterogeneity.
+
+# 8. Firm Heterogeneity
+
+The previous analysis indicates that the pooled relationship between macroeconomic conditions and firm fundamentals may conceal substantial differences across individual REOCs.
+
+This section therefore examines whether firms appear to respond differently to the same macroeconomic environment. Such heterogeneity may reflect differences in capital structure, portfolio composition, firm size, financing strategy, or other firm-specific characteristics.
+
+## 8.1 Firm-specific yield–leverage relationships
+
+As a first descriptive measure of heterogeneity, the correlation between the 10-year Swiss Confederation yield and debt-to-assets is calculated separately for each firm.
+
+```{r firm-specific-correlations}
+
+firm_yield_correlations <- fa_rq3 |>
+  group_by(ticker) |>
+  summarise(
+    observations = sum(
+      complete.cases(
+        confederation_10y,
+        debt_to_assets
+      )
+    ),
+    correlation = cor(
+      confederation_10y,
+      debt_to_assets,
+      use = "complete.obs"
+    ),
+    .groups = "drop"
+  ) |>
+  arrange(desc(correlation))
+
+firm_yield_correlations
+```
+
+The firm-specific correlations are then visualized to compare the direction and strength of the relationship across companies.
+
+```{r firm-correlation-plot}
+
+ggplot(
+  firm_yield_correlations,
+  aes(
+    x = reorder(ticker, correlation),
+    y = correlation
+  )
+) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed",
+    alpha = 0.5
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Yield–Leverage Relationships Differ Across REOCs",
+    subtitle = "Firm-specific Pearson correlations: 10Y yield and debt-to-assets",
+    x = NULL,
+    y = "Correlation"
+  ) +
+  theme_minimal()
+```
+## 8.2 Firm size and leverage
+
+Firm size may be associated with capital structure because larger REOCs may differ in financing access, diversification, borrowing capacity, and capital-market access.
+
+The relationship between total assets and leverage is therefore examined across firm-year observations.
+
+```{r size-leverage}
+
+ggplot(
+  fa_rq3 |>
+    filter(
+      !is.na(fa_total_assets),
+      !is.na(debt_to_assets)
+    ),
+  aes(
+    x = fa_total_assets,
+    y = debt_to_assets
+  )
+) +
+  geom_point(
+    alpha = 0.45,
+    size = 2
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  ) +
+  labs(
+    title = "Firm Size and REOC Leverage",
+    subtitle = "Firm-year observations",
+    x = "Total assets",
+    y = "Debt-to-assets (%)"
+  ) +
+  theme_minimal()
+```
+
+```{r size-leverage-correlation}
+
+fa_rq3 |>
+  summarise(
+    correlation = cor(
+      fa_total_assets,
+      debt_to_assets,
+      use = "complete.obs"
+    )
+  )
+```
+Firm-specific correlations reveal substantial heterogeneity in the relationship between long-term interest rates and leverage. Among firms with long histories, SPSN (r = 0.79), PSPN (r = 0.74) and ISN (r = 0.69) exhibit strong positive associations, whereas MOBN (r = -0.50) and IREN (r = -0.57) exhibit negative associations. ALLN shows virtually no relationship (r = -0.02). Estimates for firms with short histories, particularly EPIC and CHAM, should be interpreted cautiously because they are based on relatively few observations. Overall, these results suggest that the pooled correlation masks substantial firm-level heterogeneity. By contrast, firm size itself shows little pooled association with leverage (r = 0.07).
+
+
+# 9. Panel Regression Analysis
+
+The descriptive analysis indicates that pooled correlations may conceal substantial differences between firms. Panel regression models are therefore used to examine whether changes in the macroeconomic environment are associated with changes in firm fundamentals while accounting for persistent firm-specific characteristics.
+
+## 9.1 Long-term interest rates and leverage
+
+We begin by comparing a pooled regression with a firm fixed-effects specification.
+
+```{r leverage-panel-models}
+
+model_leverage_pooled <- feols(
+  debt_to_assets ~ confederation_10y,
+  data = fa_rq3
+)
+
+model_leverage_firm_fe <- feols(
+  debt_to_assets ~ confederation_10y | ticker,
+  data = fa_rq3,
+  cluster = ~ ticker
+)
+
+etable(
+  model_leverage_pooled,
+  model_leverage_firm_fe,
+  headers = c(
+    "Pooled OLS",
+    "Firm Fixed Effects"
+  )
+)
+```
+## 9.2 Annual changes in yields and leverage
+
+The previous descriptive analysis showed that the positive relationship observed in levels disappears when annual changes are considered. This relationship is examined formally using a regression in first differences.
+
+```{r leverage-change-regression}
+
+model_leverage_changes <- feols(
+  delta_debt_to_assets ~ delta_10y_yield,
+  data = fa_rq3,
+  cluster = ~ ticker
+)
+
+etable(
+  model_leverage_changes
+)
+```
+# 10. RQ3 Findings
+
+RQ3 examined how the financial characteristics of Swiss listed real-estate companies are associated with the macroeconomic environment. The analysis combined yearly firm-level accounting data with yearly Swiss macroeconomic indicators and considered both aggregate relationships and differences across individual firms.
+
+## 10.1 Leverage and the interest-rate environment
+
+The descriptive analysis indicates that leverage has changed considerably over the sample period. The median debt-to-assets ratio of the sampled REOCs generally declined over the longer run, although the evolution differed substantially across firms.
+
+Comparisons across interest-rate environments showed some differences in the distribution of leverage. However, the relationship is not straightforward. The pooled correlation between the 10-year Swiss Confederation yield and debt-to-assets is approximately 0.32, indicating a moderate positive association when all firm-year observations are considered together.
+
+This pooled relationship should be interpreted cautiously. Firm-specific analysis revealed substantial heterogeneity. Some firms, including SPSN, PSPN and ISN, exhibited relatively strong positive correlations between long-term yields and leverage, whereas others showed negative relationships. ALLN showed almost no correlation over its observed period. This suggests that the pooled relationship does not describe all firms equally well.
+
+## 10.2 Levels versus annual changes
+
+An important distinction emerged between relationships in levels and relationships in annual changes.
+
+Although the level of the 10-year government yield was positively correlated with the level of debt-to-assets, the correlation between annual changes in the 10-year yield and annual changes in debt-to-assets was approximately zero.
+
+The first-difference regression confirmed this result. Changes in the 10-year yield showed virtually no association with contemporaneous annual changes in leverage.
+
+This suggests that the positive relationship observed in levels should not be interpreted as evidence that REOCs mechanically increase leverage when long-term yields rise. Instead, the level relationship may reflect longer-term developments, differences between firms, or other factors that evolve over time.
+
+## 10.3 Evidence from firm fixed effects
+
+The panel regressions reinforce this interpretation.
+
+In the pooled OLS specification, a one-percentage-point higher 10-year Swiss Confederation yield was associated with approximately 2.86 percentage points higher debt-to-assets, and the coefficient was statistically significant.
+
+However, after introducing firm fixed effects, the estimated coefficient declined to approximately 1.74 and was no longer statistically significant. The fixed-effects specification controls for persistent differences between firms and therefore focuses more closely on variation within individual firms over time.
+
+Together with the first-difference results, this indicates that a substantial part of the positive pooled yield–leverage relationship is associated with differences across firms and longer-term patterns rather than a common short-run leverage response to changes in interest rates.
+
+## 10.4 Profitability and the macroeconomic environment
+
+Profitability, measured as return on assets, also varied substantially across firm-year observations. Comparing profitability across GDP-growth environments revealed considerable dispersion within each macroeconomic environment.
+
+The scatterplot of GDP growth and ROA showed only a weak relationship. High and low profitability observations occurred under both moderate and strong GDP growth, suggesting that aggregate GDP growth alone explains relatively little of the observed variation in firm profitability.
+
+This result is consistent with the broader correlation analysis, in which most relationships between macroeconomic indicators and firm fundamentals were weak.
+
+## 10.5 Firm heterogeneity
+
+One of the clearest findings of the analysis is the importance of firm heterogeneity.
+
+The individual REOCs differ substantially in their leverage levels, historical development and relationship with macroeconomic variables. Consequently, relationships that appear meaningful in pooled firm-year data can weaken considerably when persistent differences between companies are taken into account.
+
+This distinction is particularly visible in the relationship between long-term government yields and leverage. The positive pooled association masks strongly positive, approximately neutral and negative firm-specific relationships.
+
+## 10.6 Overall conclusion for RQ3
+
+Overall, the analysis provides limited evidence of a uniform relationship between changes in the Swiss macroeconomic environment and the financial characteristics of listed REOCs.
+
+Some macroeconomic variables are associated with firm fundamentals when observations are pooled, most notably the positive relationship between long-term government yields and leverage. However, these relationships become substantially weaker when within-firm variation and annual changes are considered.
+
+The results therefore suggest that firm-specific characteristics are important for understanding how Swiss listed real-estate companies evolve under different macroeconomic conditions. The macroeconomic environment appears to matter, but its relationship with firm fundamentals is heterogeneous rather than uniform across companies.
+
+A subsequent combined analysis of firm fundamentals, macroeconomic conditions and firm performance may help determine whether these differences in financial structure are also associated with differences in REOC performance.
