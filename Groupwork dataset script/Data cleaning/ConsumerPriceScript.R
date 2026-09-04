@@ -1,22 +1,30 @@
-# Install packages
+# ============================================================
+# CONSUMER PRICE DATA CLEANING & ANALYSIS
+# ============================================================
 
+# Install packages
 install.packages(c("tidyverse", "skimr", "janitor", "corrplot"))
 
 # Load packages 
-
 library(readxl)
 library(skimr)
 library(janitor)
 library(tidyverse)
 library(corrplot)
 
+base_url <- "https://data.snb.ch/en/topics/uvo/cube/plkoprinfla"
 
-# 1. Load the dataset, remove the 17 first rows
+
+# ============================================================
+# 1. LOAD THE DATASET
+# ============================================================
 
 ConsumerPrice <- read_excel("./Dataset 2 excel/Consumer prices – SNB and SFSO core inflation rates.xlsx",
-                   skip=17)
+                            skip=17)
 
-# 2. Preview of the dataset
+# ============================================================
+# 2. PREVIEW OF THE DATASET
+# ============================================================
 
 ConsumerPrice <- ConsumerPrice
 head(ConsumerPrice)
@@ -24,25 +32,31 @@ summary(ConsumerPrice)
 str(ConsumerPrice)
 skim(ConsumerPrice)
 
-
-# 3. Remove duplicate rows
+# ============================================================
+# 3. REMOVE DUPLICATE ROWS
+# ============================================================
 
 ConsumerPrice <- ConsumerPrice %>% distinct()
 sum(duplicated(ConsumerPrice))
 
-# 4. Remove the first row
+# ============================================================
+# 4. REMOVE THE FIRST ROW
+# ============================================================
 
 ConsumerPrice <- ConsumerPrice[-1, ]
 head(ConsumerPrice)
 
-# 5.Clean column names
+# ============================================================
+# 5. CLEAN COLUMN NAMES
+# ============================================================
 
 ConsumerPrice <- ConsumerPrice %>% 
   clean_names()
 colnames(ConsumerPrice)
 
-
-# 6. Convert column to numeric 
+# ============================================================
+# 6. CONVERT COLUMNS TO NUMERIC
+# ============================================================
 
 ConsumerPrice <- ConsumerPrice %>%
   mutate(
@@ -52,10 +66,11 @@ ConsumerPrice <- ConsumerPrice %>%
     sfso_inflation_according_to_the_national_consumer_price_index =
       as.numeric(sfso_inflation_according_to_the_national_consumer_price_index)
   )
-
 str(ConsumerPrice)
 
-# 7. Check missing values
+# ============================================================
+# 7. CHECK MISSING VALUES
+# ============================================================
 
 missing_values <- ConsumerPrice %>%
   summarise(across(everything(), ~ sum(is.na(.)))) %>%
@@ -67,18 +82,23 @@ missing_values <- ConsumerPrice %>%
   mutate(
     missing_percentage = missing_count / nrow(ConsumerPrice) * 100
   )
-
 missing_values
 
-# 8. Check missing value percentage
+# ============================================================
+# 8. CHECK MISSING VALUE PERCENTAGE
+# ============================================================
 
 sapply(ConsumerPrice, function(x) sum(is.na(x)) / length(x) * 100)
 
-# 9. Summary statistics
+# ============================================================
+# 9. SUMMARY STATISTICS
+# ============================================================
 
 summary(ConsumerPrice)
 
-# 10. Check for impossible/unusual values
+# ============================================================
+# 10. CHECK FOR IMPOSSIBLE/UNUSUAL VALUES
+# ============================================================
 
 ConsumerPrice %>%
   summarise(
@@ -92,7 +112,9 @@ ConsumerPrice %>%
     )
   )
 
-# 11. Check whether the dates are continuous
+# ============================================================
+# 11. CHECK WHETHER THE DATES ARE CONTINUOUS
+# ============================================================
 
 ConsumerPrice %>%
   summarise(
@@ -101,11 +123,15 @@ ConsumerPrice %>%
     number_of_months = n()
   )
 
-# 12. Check for duplicated dates
+# ============================================================
+# 12. CHECK FOR DUPLICATED DATES
+# ============================================================
 
 sum(duplicated(ConsumerPrice$overview))
 
-# 13. Check the data visually
+# ============================================================
+# 13. CHECK THE DATA VISUALLY
+# ============================================================
 
 ggplot(
   ConsumerPrice,
@@ -121,4 +147,3 @@ ggplot(
     y = "Inflation (%)"
   ) +
   theme_minimal()
-

@@ -1,24 +1,32 @@
-# Install packages
+# ============================================================
+# SWISS GDP BY TYPE OF PRODUCTION - DATA CLEANING & ANALYSIS
+# ============================================================
 
+# Install packages
 install.packages(c("tidyverse", "skimr", "janitor", "corrplot"))
 install.packages("readxl")   
 
 # Load packages 
-
 library(readxl)
 library(skimr)
 library(janitor)
 library(tidyverse)
 library(corrplot)
 
-# 1. Load the dataset
+base_url <- "https://data.snb.ch/en/topics/uvo/cube/gdppr?fromDate=1990-Q1"
+
+# ============================================================
+# 1. LOAD THE DATASET
+# ============================================================
 
 GDP <- read_excel("./Dataset 2 excel/SNB - Gross domestic product by type of production – real.xlsx",
-              skip = 17,
-              col_names = FALSE
+                  skip = 17,
+                  col_names = FALSE
 )
 
-# 2. Give name to columns
+# ============================================================
+# 2. GIVE NAMES TO COLUMNS
+# ============================================================
 
 colnames(GDP) <- c(
   "quarter",
@@ -50,7 +58,9 @@ colnames(GDP) <- c(
   "gdp"
 )
 
-# 4. Keep only GDP values
+# ============================================================
+# 3. KEEP ONLY GDP VALUES
+# ============================================================
 
 GDP <- GDP %>%
   select(1:27)
@@ -85,7 +95,9 @@ colnames(GDP) <- c(
   "gdp"
 )
 
-# 5. Convert GDP columns to numeric
+# ============================================================
+# 4. CONVERT GDP COLUMNS TO NUMERIC
+# ============================================================
 
 GDP <- GDP %>%
   mutate(
@@ -95,23 +107,27 @@ GDP <- GDP %>%
     )
   )
 
-# Check the structure
-
 str(GDP)
 
-# 6. Remove duplicates
+# ============================================================
+# 5. REMOVE DUPLICATES
+# ============================================================
 
 GDP <- GDP %>%
   distinct()
 
 sum(duplicated(GDP))
 
-# 7. Check the quarterly observations
+# ============================================================
+# 6. CHECK THE QUARTERLY OBSERVATIONS
+# ============================================================
 
 head(GDP$quarter, 10)
 tail(GDP$quarter, 10)
 
-# 8. Convert quarter into a proper date
+# ============================================================
+# 7. CONVERT QUARTER INTO A PROPER DATE
+# ============================================================
 
 GDP <- GDP %>%
   mutate(
@@ -123,13 +139,13 @@ GDP <- GDP %>%
     )
   )
 
-# Check
-
 GDP %>%
   select(quarter, quarter_date) %>%
   head(10)
 
-# 9. Check missing values
+# ============================================================
+# 8. CHECK MISSING VALUES
+# ============================================================
 
 missing_values <- GDP %>%
   summarise(
@@ -149,7 +165,9 @@ missing_values <- GDP %>%
 
 missing_values
 
-# 10. Convert quarterly GDP to monthly
+# ============================================================
+# 9. CONVERT QUARTERLY GDP TO MONTHLY
+# ============================================================
 
 # These monthly observations are estimated values.
 # They are not official monthly SNB observations.
@@ -164,7 +182,11 @@ monthly_dates <- seq(
   by = "month"
 )
 
-# Interpolate
+GDP_monthly <- GDP_monthly %>%
+  complete(
+    quarter_date = monthly_dates
+  ) %>%
+  arrange(quarter_date)
 
 GDP_monthly <- GDP_monthly %>%
   complete(
@@ -172,26 +194,24 @@ GDP_monthly <- GDP_monthly %>%
   ) %>%
   arrange(quarter_date)
 
-# Interpolate all numeric variables
-
-GDP_monthly <- GDP_monthly %>%
-  complete(
-    quarter_date = monthly_dates
-  ) %>%
-  arrange(quarter_date)
-
-# Rename the date
+# ============================================================
+# 10. RENAME THE DATE COLUMN
+# ============================================================
 
 GDP_monthly <- GDP_monthly %>%
   rename(month = quarter_date)
 
-# 11. Check the monthly dataset
+# ============================================================
+# 11. CHECK THE MONTHLY DATASET
+# ============================================================
 
 head(GDP_monthly, 20)
 tail(GDP_monthly, 20)
 str(GDP_monthly)
 
-# 12. Check missing values
+# ============================================================
+# 12. CHECK MISSING VALUES IN MONTHLY DATA
+# ============================================================
 
 GDP_monthly %>%
   summarise(
@@ -201,11 +221,15 @@ GDP_monthly %>%
     )
   )
 
-# 13. Check duplicated months
+# ============================================================
+# 13. CHECK FOR DUPLICATED MONTHS
+# ============================================================
 
 sum(duplicated(GDP_monthly$month))
 
-# 14. Plot
+# ============================================================
+# 14. PLOT MONTHLY GDP
+# ============================================================
 
 ggplot(
   GDP_monthly,
@@ -222,7 +246,9 @@ ggplot(
   ) +
   theme_minimal()
 
-# 15. Compare quarterly vs monthly
+# ============================================================
+# 15. COMPARE QUARTERLY VS MONTHLY
+# ============================================================
 
 ggplot() +
   

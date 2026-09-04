@@ -1,11 +1,17 @@
-# 1. Load packages
+# ============================================================
+# LOAD SWISS BOND YIELDS DATA FROM SNB API
+# ============================================================
 
 library(readxl)
 library(tidyverse)
 library(skimr)
 library(janitor)
 
-# 2. Load the dataset
+base_url <- "https://data.snb.ch/en/topics/ziredev/cube/rendoblid?fromDate=2000-01-01&dimSel=D0(5J,8J,10J0,E,K,P,GK,IKH,AAA,AA,A)"
+
+# ============================================================
+# 1. LOAD THE DATASET
+# ============================================================
 
 Yields <- read_excel(
   "./Dataset 2 excel/SNB - Yields on bond issues.xlsx",
@@ -13,17 +19,18 @@ Yields <- read_excel(
   col_names = FALSE
 )
 
-# 3. Preview the dataset
+# ============================================================
+# 2. PREVIEW THE DATASET
+# ============================================================
 
 head(Yields)
-
 summary(Yields)
-
 str(Yields)
-
 skim(Yields)
 
-# 4. Rename the columns
+# ============================================================
+# 3. RENAME THE COLUMNS
+# ============================================================
 
 colnames(Yields) <- c(
   "date",
@@ -40,41 +47,37 @@ colnames(Yields) <- c(
   "A"
 )
 
-# Check column names
-
 colnames(Yields)
 
-# 5. Remove duplicate rows
+# ============================================================
+# 4. REMOVE DUPLICATE ROWS
+# ============================================================
 
 Yields <- Yields %>%
   distinct()
 
-
-# Check for duplicates
-
 sum(duplicated(Yields))
 
-# 6. Check the dimensions
+# ============================================================
+# 5. CHECK THE DIMENSIONS
+# ============================================================
 
 dim(Yields)
 
-# 7. Check the dates
+# ============================================================
+# 6. CHECK THE DATES
+# ============================================================
 
 Yields %>%
   select(date) %>%
   head(20)
 
-
-# First observation
-
 head(Yields$date)
-
-
-# Last observation
-
 tail(Yields$date)
 
-# 8. Convert yield variables to numeric
+# ============================================================
+# 7. CONVERT YIELD VARIABLES TO NUMERIC
+# ============================================================
 
 Yields <- Yields %>%
   mutate(
@@ -84,12 +87,11 @@ Yields <- Yields %>%
     )
   )
 
-
-# Check structure
-
 str(Yields)
 
-# 9. Check missing values
+# ============================================================
+# 8. CHECK MISSING VALUES
+# ============================================================
 
 missing_values <- Yields %>%
   summarise(
@@ -108,38 +110,36 @@ missing_values <- Yields %>%
       missing_count / nrow(Yields) * 100
   )
 
-
 missing_values
 
-# 10. Convert date to a proper date
+# ============================================================
+# 9. CONVERT DATE TO A PROPER DATE
+# ============================================================
 
 Yields <- Yields %>%
   mutate(
     date = as.Date(date)
   )
 
-
-# Check
-
 Yields %>%
   select(date) %>%
   head(10)
 
-
-# Check structure
-
 str(Yields)
 
-# 11. Check for duplicated dates
+# ============================================================
+# 10. CHECK FOR DUPLICATED DATES
+# ============================================================
 
 Yields %>%
   count(date) %>%
   filter(n > 1)
 
-
 sum(duplicated(Yields$date))
 
-# 12. Check continuity of the daily data
+# ============================================================
+# 11. CHECK CONTINUITY OF THE DAILY DATA
+# ============================================================
 
 Yields %>%
   arrange(date) %>%
@@ -153,7 +153,9 @@ Yields %>%
     difference > 7
   )
 
-# 13. Create monthly dates
+# ============================================================
+# 12. CREATE MONTHLY DATES
+# ============================================================
 
 Yields <- Yields %>%
   mutate(
@@ -163,20 +165,17 @@ Yields <- Yields %>%
     )
   )
 
-
-# Check
-
 Yields %>%
   select(date, month) %>%
   head(20)
 
-# 14. Convert daily data to monthly data
+# ============================================================
+# 13. CONVERT DAILY DATA TO MONTHLY AVERAGES
+# ============================================================
 
 # We calculate the monthly average of the daily yields.
-
 # na.rm = TRUE means that missing daily observations
 # are ignored when calculating the monthly average.
-
 
 Yields <- Yields %>%
   group_by(month) %>%
@@ -188,15 +187,17 @@ Yields <- Yields %>%
     .groups = "drop"
   )
 
-# 15. Preview the monthly dataset
+# ============================================================
+# 14. PREVIEW THE MONTHLY DATASET
+# ============================================================
 
 head(Yields, 20)
-
 tail(Yields, 20)
-
 str(Yields)
 
-# 16. Check missing values again
+# ============================================================
+# 15. CHECK MISSING VALUES AGAIN
+# ============================================================
 
 missing_monthly <- Yields %>%
   summarise(
@@ -215,14 +216,17 @@ missing_monthly <- Yields %>%
       missing_count / nrow(Yields) * 100
   )
 
-
 missing_monthly
 
-# 17. Check duplicated months
+# ============================================================
+# 16. CHECK FOR DUPLICATED MONTHS
+# ============================================================
 
 sum(duplicated(Yields$month))
 
-# 18. Check monthly continuity
+# ============================================================
+# 17. CHECK MONTHLY CONTINUITY
+# ============================================================
 
 Yields %>%
   arrange(month) %>%
@@ -242,13 +246,14 @@ Yields %>%
     )
   )
 
-# 19. Check for missing months
+# ============================================================
+# 18. CHECK FOR MISSING MONTHS
+# ============================================================
 
 Yields <- Yields %>%
   mutate(
     month = as.Date(month)
   )
-
 
 expected_months <- seq.Date(
   from = min(Yields$month, na.rm = TRUE),
@@ -256,39 +261,35 @@ expected_months <- seq.Date(
   by = "month"
 )
 
-
 missing_months <- setdiff(
   expected_months,
   Yields$month
 )
 
-
 missing_months
-
-
-# Number of missing months
 
 length(missing_months)
 
-# 20. Check the date range
+# ============================================================
+# 19. CHECK THE DATE RANGE
+# ============================================================
 
 min(Yields$month)
-
 max(Yields$month)
 
-# 21. Final structure
+# ============================================================
+# 20. FINAL STRUCTURE
+# ============================================================
 
 head(Yields)
-
 tail(Yields)
-
 str(Yields)
-
 summary(Yields)
-
 skim(Yields)
 
-# 22. Plot the 10-year Confederation bond yield
+# ============================================================
+# 21. PLOT THE 10-YEAR CONFEDERATION BOND YIELD
+# ============================================================
 
 ggplot(
   Yields,
@@ -306,7 +307,9 @@ ggplot(
   ) +
   theme_minimal()
 
-# 23. Plot different Confederation bond maturities
+# ============================================================
+# 22. PLOT DIFFERENT CONFEDERATION BOND MATURITIES
+# ============================================================
 
 ggplot(
   Yields,

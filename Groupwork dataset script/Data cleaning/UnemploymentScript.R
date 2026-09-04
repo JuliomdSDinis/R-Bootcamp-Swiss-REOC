@@ -1,12 +1,17 @@
-
-# 1. Load packages
+# ============================================================
+# LOAD SWISS LABOUR MARKET DATA FROM SNB API
+# ============================================================
 
 library(readxl)
 library(tidyverse)
 library(skimr)
 library(janitor)
 
-# 2. Load the dataset
+base_url <- "https://data.snb.ch/en/topics/uvo/cube/amarbma?fromDate=2000-01"
+
+# ============================================================
+# 1. LOAD THE DATASET
+# ============================================================
 
 Unemployment <- read_excel(
   "./Dataset 2 excel/SNB - Unemployment.xlsx",
@@ -14,17 +19,18 @@ Unemployment <- read_excel(
   col_names = FALSE
 )
 
-# 3. Preview the dataset
+# ============================================================
+# 2. PREVIEW THE DATASET
+# ============================================================
 
 head(Unemployment)
-
 summary(Unemployment)
-
 str(Unemployment)
-
 skim(Unemployment)
 
-# 4. Rename the columns
+# ============================================================
+# 3. RENAME THE COLUMNS
+# ============================================================
 
 colnames(Unemployment) <- c(
   "month",
@@ -39,42 +45,37 @@ colnames(Unemployment) <- c(
   "labour_force"
 )
 
-
-# Check column names
-
 colnames(Unemployment)
 
-# 5. Remove duplicate rows
+# ============================================================
+# 4. REMOVE DUPLICATE ROWS
+# ============================================================
 
 Unemployment <- Unemployment %>%
   distinct()
 
-
-# Check for duplicates
-
 sum(duplicated(Unemployment))
 
-# 6. Check the dimensions
+# ============================================================
+# 5. CHECK THE DIMENSIONS
+# ============================================================
 
 dim(Unemployment)
 
-# 7. Check the monthly dates
+# ============================================================
+# 6. CHECK THE MONTHLY DATES
+# ============================================================
 
 Unemployment %>%
   select(month) %>%
   head(20)
 
-
-# First observations
-
 head(Unemployment$month)
-
-
-# Last observations
-
 tail(Unemployment$month)
 
-# 8. Convert unemployment variables to numeric
+# ============================================================
+# 7. CONVERT UNEMPLOYMENT VARIABLES TO NUMERIC
+# ============================================================
 
 Unemployment <- Unemployment %>%
   mutate(
@@ -84,12 +85,11 @@ Unemployment <- Unemployment %>%
     )
   )
 
-
-# Check structure
-
 str(Unemployment)
 
-# 9. Check missing values
+# ============================================================
+# 8. CHECK MISSING VALUES
+# ============================================================
 
 missing_values <- Unemployment %>%
   summarise(
@@ -108,10 +108,11 @@ missing_values <- Unemployment %>%
       missing_count / nrow(Unemployment) * 100
   )
 
-
 missing_values
 
-# 10. Convert month to a proper date
+# ============================================================
+# 9. CONVERT MONTH TO A PROPER DATE
+# ============================================================
 
 Unemployment <- Unemployment %>%
   mutate(
@@ -120,23 +121,23 @@ Unemployment <- Unemployment %>%
     )
   )
 
-
-# Check
-
 Unemployment %>%
   select(month, month_date) %>%
   head(10)
 
-# 11. Check for duplicated months
+# ============================================================
+# 10. CHECK FOR DUPLICATED MONTHS
+# ============================================================
 
 Unemployment %>%
   count(month) %>%
   filter(n > 1)
 
-
 sum(duplicated(Unemployment$month))
 
-# 12. Check the continuity of the monthly data
+# ============================================================
+# 11. CHECK THE CONTINUITY OF THE MONTHLY DATA
+# ============================================================
 
 Unemployment %>%
   arrange(month_date) %>%
@@ -150,7 +151,9 @@ Unemployment %>%
     difference > 31
   )
 
-# 13. Check the complete monthly sequence
+# ============================================================
+# 12. CHECK THE COMPLETE MONTHLY SEQUENCE
+# ============================================================
 
 expected_months <- seq(
   from = min(Unemployment$month_date),
@@ -158,28 +161,26 @@ expected_months <- seq(
   by = "month"
 )
 
-
 missing_months <- setdiff(
   expected_months,
   Unemployment$month_date
 )
 
-
 missing_months
-
-
-# Number of missing months
 
 length(missing_months)
 
-# 14. Check the date range
+# ============================================================
+# 13. CHECK THE DATE RANGE
+# ============================================================
 
 min(Unemployment$month_date)
-
 max(Unemployment$month_date)
 
-# 15. Check whether the monthly dataset contains
-#     one observation per month
+# ============================================================
+# 14. CHECK WHETHER THE MONTHLY DATASET CONTAINS
+#     ONE OBSERVATION PER MONTH
+# ============================================================
 
 Unemployment %>%
   summarise(
@@ -187,7 +188,9 @@ Unemployment %>%
     number_of_unique_months = n_distinct(month_date)
   )
 
-# 16. Check missing values by month
+# ============================================================
+# 15. CHECK MISSING VALUES BY MONTH
+# ============================================================
 
 Unemployment %>%
   filter(
@@ -197,7 +200,9 @@ Unemployment %>%
     )
   )
 
-# 17. Final cleaned dataset
+# ============================================================
+# 16. SELECT FINAL COLUMNS
+# ============================================================
 
 Unemployment <- Unemployment %>%
   select(
@@ -212,25 +217,18 @@ Unemployment <- Unemployment %>%
     registered_job_seekers,
     labour_force
   )
-# 18. Final checks
+
+# ============================================================
+# 17. FINAL CHECKS
+# ============================================================
 
 head(Unemployment)
-
 tail(Unemployment)
-
 str(Unemployment)
-
 summary(Unemployment)
-
 skim(Unemployment)
 
-
-# Check duplicates
-
 sum(duplicated(Unemployment$month_date))
-
-
-# Check missing values
 
 Unemployment %>%
   summarise(
@@ -239,7 +237,10 @@ Unemployment %>%
       ~ sum(is.na(.))
     )
   )
-# 19. Plot registered unemployment
+
+# ============================================================
+# 18. PLOT REGISTERED UNEMPLOYMENT
+# ============================================================
 
 ggplot(
   Unemployment,
@@ -257,7 +258,9 @@ ggplot(
   ) +
   theme_minimal()
 
-# 20. Plot jobless rate
+# ============================================================
+# 19. PLOT JOBLESS RATE
+# ============================================================
 
 ggplot(
   Unemployment,
@@ -275,7 +278,9 @@ ggplot(
   ) +
   theme_minimal()
 
-# 21. Compare total and seasonally adjusted unemployment
+# ============================================================
+# 20. COMPARE TOTAL AND SEASONALLY ADJUSTED UNEMPLOYMENT
+# ============================================================
 
 ggplot() +
   

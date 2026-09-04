@@ -1,36 +1,50 @@
-# 1. Load packages
+# ============================================================
+# LOAD SWISS PROPERTY PRICING INDEX FROM SNB API
+# ============================================================
 
 library(readxl)
 library(tidyverse)
 library(skimr)
 library(janitor)
 
-# 2. Load the dataset
+base_url <- "https://data.snb.ch/en/topics/uvo/cube/plimoinchq?fromDate=2000-Q1"
+
+# ============================================================
+# 1. LOAD THE DATASET
+# ============================================================
 
 Property <- read_excel(
   "./Dataset 2 excel/SNB - Property princing index.xlsx",
   skip = 21
 )
 
-# 3. Preview the dataset
+# ============================================================
+# 2. PREVIEW THE DATASET
+# ============================================================
 
 head(Property)
 summary(Property)
 str(Property)
 skim(Property)
 
-# 4. Remove duplicate rows
+# ============================================================
+# 3. REMOVE DUPLICATE ROWS
+# ============================================================
 
 Property <- Property %>%
   distinct()
 
 sum(duplicated(Property))
 
-# 5. Check the dimensions
+# ============================================================
+# 4. CHECK THE DIMENSIONS
+# ============================================================
 
 dim(Property)
 
-# 6. Rename the columns
+# ============================================================
+# 5. RENAME THE COLUMNS
+# ============================================================
 
 colnames(Property) <- c(
   "quarter",
@@ -53,24 +67,22 @@ colnames(Property) <- c(
   "commercial_industrial_wuest_asking"
 )
 
-
-# Check column names
-
 colnames(Property)
 
-# 7. Check the quarterly dates
+# ============================================================
+# 6. CHECK THE QUARTERLY DATES
+# ============================================================
 
 Property %>%
   select(quarter) %>%
   head(20)
 
-
-# First and last observation
-
 head(Property$quarter)
 tail(Property$quarter)
 
-# 8. Convert property price variables to numeric
+# ============================================================
+# 7. CONVERT PROPERTY PRICE VARIABLES TO NUMERIC
+# ============================================================
 
 Property <- Property %>%
   mutate(
@@ -80,12 +92,11 @@ Property <- Property %>%
     )
   )
 
-
-# Check structure
-
 str(Property)
 
-# 9. Check missing values
+# ============================================================
+# 8. CHECK MISSING VALUES
+# ============================================================
 
 missing_values <- Property %>%
   summarise(
@@ -106,7 +117,9 @@ missing_values <- Property %>%
 
 missing_values
 
-# 10 Convert quarter to a proper date
+# ============================================================
+# 9. CONVERT QUARTER TO A PROPER DATE
+# ============================================================
 
 Property <- Property %>%
   mutate(
@@ -125,14 +138,13 @@ Property <- Property %>%
     )
   )
 
-
-# Check
-
 Property %>%
   select(quarter, quarter_date) %>%
   head(10)
 
-# 11 Check for duplicated quarters
+# ============================================================
+# 10. CHECK FOR DUPLICATED QUARTERS
+# ============================================================
 
 Property %>%
   count(quarter) %>%
@@ -140,7 +152,9 @@ Property %>%
 
 sum(duplicated(Property$quarter))
 
-# 12 Check the continuity of the quarterly data
+# ============================================================
+# 11. CHECK THE CONTINUITY OF THE QUARTERLY DATA
+# ============================================================
 
 Property %>%
   arrange(quarter_date) %>%
@@ -154,7 +168,9 @@ Property %>%
     difference > 100
   )
 
-# 13 Create monthly dates
+# ============================================================
+# 12. CREATE MONTHLY DATES
+# ============================================================
 
 monthly_dates <- seq(
   from = min(Property$quarter_date),
@@ -167,12 +183,13 @@ tail(monthly_dates)
 
 length(monthly_dates)
 
-# 14 Interpolate quarterly data to monthly data
+# ============================================================
+# 13. INTERPOLATE QUARTERLY DATA TO MONTHLY DATA
+# ============================================================
 
 Property_monthly <- data.frame(
   month = monthly_dates
 )
-
 
 for (variable in names(Property)[2:18]) {
   
@@ -188,13 +205,17 @@ for (variable in names(Property)[2:18]) {
   )$y
 }
 
-# 15 Preview the monthly dataset
+# ============================================================
+# 14. PREVIEW THE MONTHLY DATASET
+# ============================================================
 
 head(Property_monthly, 20)
 tail(Property_monthly, 20)
 str(Property_monthly)
 
-# 16 Check missing values again
+# ============================================================
+# 15. CHECK MISSING VALUES AGAIN
+# ============================================================
 
 missing_monthly <- Property_monthly %>%
   summarise(
@@ -215,11 +236,15 @@ missing_monthly <- Property_monthly %>%
 
 missing_monthly
 
-# 17 Check duplicated months
+# ============================================================
+# 16. CHECK DUPLICATED MONTHS
+# ============================================================
 
 sum(duplicated(Property_monthly$month))
 
-# 18 Check monthly continuity
+# ============================================================
+# 17. CHECK MONTHLY CONTINUITY
+# ============================================================
 
 Property_monthly %>%
   arrange(month) %>%
@@ -239,7 +264,9 @@ Property_monthly %>%
     )
   )
 
-# 19 Plot one property-price index
+# ============================================================
+# 18. PLOT ONE PROPERTY-PRICE INDEX
+# ============================================================
 
 ggplot(
   Property_monthly,
@@ -257,7 +284,9 @@ ggplot(
   ) +
   theme_minimal()
 
-# 20 Compare quarterly and monthlty data
+# ============================================================
+# 19. COMPARE QUARTERLY AND MONTHLY DATA
+# ============================================================
 
 ggplot() +
   
