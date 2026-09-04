@@ -8,9 +8,12 @@ output:
     toc: true
     toc_float: true
     number_sections: true
+<<<<<<< HEAD
 editor_options: 
   markdown: 
     wrap: 72
+=======
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 ---
 
 ```{r setup, include=FALSE}
@@ -40,7 +43,29 @@ knitr::opts_chunk$set(
 )
 
 ```
+<<<<<<< HEAD
 
+```{r data-import, message=FALSE, warning=FALSE}
+
+fa <- read_csv(
+  "../Dataset 1 excel/swiss_reoc_yearly_FA.csv",
+  show_col_types = FALSE
+) |>
+  clean_names()
+
+hp <- read_csv(
+  "../Dataset 1 excel/swiss_reoc_monthly_HP.csv",
+  show_col_types = FALSE
+) |>
+  clean_names() |>
+  mutate(
+    date = as.Date(date),
+    year = year(date)
+  )
+
+spi_raw <- read_csv(
+  "../Benchmarks/swiss_spi_tr.csv",
+=======
 ```{r data-import, message=FALSE, warning=FALSE}
 
 fa <- read_csv(
@@ -67,6 +92,14 @@ spi_raw <- read_csv(
 
 real_raw <- read_csv(
   "../Benchmarks/swiss_re_benchmark.csv",
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
+  show_col_types = FALSE
+) |>
+  clean_names()
+
+<<<<<<< HEAD
+real_raw <- read_csv(
+  "../Benchmarks/swiss_re_benchmark.csv",
   show_col_types = FALSE
 ) |>
   clean_names()
@@ -81,6 +114,18 @@ hp_macro <- read_csv(
     month = floor_date(date, "month")
   )
 
+=======
+hp_macro <- read_csv(
+  "../Data cleaning/swiss_reoc_monthly_HP_macro.csv.csv",
+  show_col_types = FALSE
+) |>
+  clean_names() |>
+  mutate(
+    date = as.Date(date),
+    month = floor_date(date, "month")
+  )
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 fa_macro <- read_csv(
   "../Data cleaning/swiss_reoc_yearly_FA_macro.csv",
   show_col_types = FALSE
@@ -92,6 +137,7 @@ fa_macro <- read_csv(
 
 ## 1.1 Motivation
 
+<<<<<<< HEAD
 Swiss listed real-estate operating companies (REOCs) occupy a
 distinctive position at the intersection of public equity markets,
 corporate finance, real-estate assets and the broader macroeconomic
@@ -114,6 +160,15 @@ The report concludes with a deeper examination of the three largest
 firms in the sample by market capitalization, linking their financial
 and market characteristics to the structure of their underlying property
 portfolios.
+=======
+Swiss listed real-estate operating companies (REOCs) occupy a distinctive position at the intersection of public equity markets, corporate finance, real-estate assets and the broader macroeconomic environment.
+
+Their market performance is influenced not only by company-specific factors, but also by interest rates, economic growth, inflation and conditions in the property market. At the same time, REOCs differ substantially in size, leverage, profitability and portfolio composition.
+
+This report therefore examines Swiss listed REOCs from several complementary perspectives. First, it studies how the firms and their market performance have developed over time. Second, it investigates how stock-market performance is associated with changes in the Swiss macroeconomic environment. Third, it analyses whether firm-level financial characteristics are also related to macroeconomic conditions.
+
+The report concludes with a deeper examination of the three largest firms in the sample by market capitalization, linking their financial and market characteristics to the structure of their underlying property portfolios.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ## 1.2 Research Questions
 
@@ -121,6 +176,7 @@ The analysis is organised around three research questions.
 
 **RQ1 — Firm Development**
 
+<<<<<<< HEAD
 How have the financial characteristics and market performance of Swiss
 listed real-estate companies developed over time?
 
@@ -175,6 +231,35 @@ The selection criterion nevertheless introduces a deliberate large-cap
 bias. The empirical results should therefore primarily be interpreted as
 representative of the larger Swiss listed real-estate companies rather
 than of every company in the initial screening universe.
+=======
+How have the financial characteristics and market performance of Swiss listed real-estate companies developed over time?
+
+**RQ2 — Market Performance and the Macroeconomic Environment**
+
+How is the stock-market performance of Swiss listed real-estate companies associated with changes in the macroeconomic environment?
+
+**RQ3 — Firm Fundamentals and the Macroeconomic Environment**
+
+How are the financial characteristics of Swiss listed real-estate companies associated with changes in the macroeconomic environment?
+
+After addressing these questions, the report conducts a detailed property-portfolio analysis of Swiss Prime Site, PSP Swiss Property and Allreal. These firms are selected based on their importance within the Swiss listed REOC market and are examined in greater detail using property-level data.
+
+## 1.3 Data and Methodology
+
+The analysis combines firm-level financial data, stock-market data, Swiss macroeconomic indicators, market benchmarks and property-level information. Because these datasets are observed at different frequencies, the analysis uses separate monthly and annual panels depending on the research question.
+
+### 1.3.1 Sample Selection
+
+The initial screening universe contains 40 Swiss listed real-estate companies with a combined market capitalization of approximately CHF 40.25 billion.
+
+For the empirical analysis, the sample is restricted to companies with a market capitalization above CHF 1 billion. This screening criterion results in 11 Swiss listed real-estate companies.
+
+Although these 11 companies represent only 28% of the firms in the initial screening universe, they account for approximately CHF 34.59 billion, or 86% of total market capitalization. The selected sample therefore captures the large majority of the Swiss listed real-estate market by value while excluding a relatively large number of small-cap companies.
+
+The market-capitalization threshold was chosen to focus the analysis on companies with substantial market representation. This is particularly relevant for the construction of sector-level portfolios and the analysis of aggregate listed real-estate market performance, where very small firms have limited influence on the value of the overall market.
+
+The selection criterion nevertheless introduces a deliberate large-cap bias. The empirical results should therefore primarily be interpreted as representative of the larger Swiss listed real-estate companies rather than of every company in the initial screening universe.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r sample-selection-table}
 
@@ -196,6 +281,7 @@ knitr::kable(
 )
 ```
 
+<<<<<<< HEAD
 The high share of market capitalization represented by the selected
 companies also motivates the later analysis of market concentration and
 the detailed examination of the largest firms in the sample.
@@ -236,6 +322,23 @@ separately in the **Chapter of Choice**.
 The datasets operate at different frequencies and units of observation.
 Rather than forcing all information into a single dataset, separate
 monthly and annual panels are used according to the analytical question.
+=======
+The high share of market capitalization represented by the selected companies also motivates the later analysis of market concentration and the detailed examination of the largest firms in the sample.
+
+### 1.3.2 Data Sources
+
+The firm-level financial and stock-market data were obtained from the **Bloomberg Terminal**. The data include annual accounting variables such as total assets, leverage, net income and dividend information, as well as monthly market information used to calculate firm and portfolio returns.
+
+The macroeconomic data are sourced primarily from the **Swiss National Bank (SNB)** and contain information on the Swiss interest-rate environment, government bond yields, inflation, labour-market conditions, economic activity and property-market indicators. Some macroeconomic series originate from other official or external data providers, including inflation measures from the Swiss Federal Statistical Office (SFSO). The original source of each series is retained where applicable.
+
+Benchmark data are used to place the performance of the selected REOCs in the context of the broader listed real-estate market. Market-capitalization information is additionally used to construct value-weighted portfolios and to analyse the concentration of the Swiss listed REOC market.
+
+Finally, a separate property-level dataset is constructed for the three largest companies identified through the market-concentration analysis: **Swiss Prime Site, PSP Swiss Property and Allreal**. Property information is obtained from company disclosures and subsequently cleaned and standardised. The construction of this dataset, including the extraction and geolocation of individual properties, is described separately in the **Chapter of Choice**.
+
+### 1.3.3 Data Structure and Coverage
+
+The datasets operate at different frequencies and units of observation. Rather than forcing all information into a single dataset, separate monthly and annual panels are used according to the analytical question.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r data-overview-table}
 
@@ -276,6 +379,7 @@ knitr::kable(
 )
 ```
 
+<<<<<<< HEAD
 The annual firm-level dataset forms an **unbalanced panel**, as
 companies enter the available sample at different points in time and
 some financial variables are not available for every firm-year
@@ -372,6 +476,46 @@ firms and changes in the composition of the observed sample.
 The analysis focuses on two central dimensions of firm development:
 **company scale**, measured by total assets, and **financial
 structure**, measured by debt relative to total assets.
+=======
+The annual firm-level dataset forms an **unbalanced panel**, as companies enter the available sample at different points in time and some financial variables are not available for every firm-year observation. The main historical annual analysis therefore focuses on the period **2001–2025**, for which the relevant firm and macroeconomic information is substantially more complete.
+
+Monthly stock-market data are retained at monthly frequency for the analysis of market performance in RQ2. Annual firm accounting data are not artificially expanded to monthly frequency. Instead, annual macroeconomic data are matched to annual firm fundamentals for RQ3.
+
+Swiss macroeconomic variables are common to all firms in a given period. They are therefore joined to the firm data by **month or year**, depending on the frequency of the analysis, rather than by company identifier.
+
+Observations beyond 2025 are treated cautiously in the annual analysis because several accounting and macroeconomic series are incomplete. In particular, 2026 represents only partial annual macroeconomic information for some variables. These observations are therefore excluded from the main historical annual comparisons where appropriate.
+
+### 1.3.4 Analytical Approach
+
+The empirical analysis is primarily descriptive and exploratory and proceeds from market-level patterns to firm-level relationships.
+
+For **RQ1**, annual accounting information and monthly market data are used to examine how the financial characteristics and market performance of the selected Swiss listed real-estate companies have developed over time. Equal-weighted and value-weighted REOC portfolios are constructed to provide aggregate measures of sector performance, while market-capitalization weights are used to examine changes in market concentration.
+
+For **RQ2**, monthly REOC market returns are combined with monthly Swiss macroeconomic indicators. The analysis examines how market performance varies with changes in the interest-rate environment, inflation, labour-market conditions and other macroeconomic variables. Correlations, graphical comparisons and regression models are used to describe these relationships.
+
+For **RQ3**, annual firm fundamentals are combined with annual macroeconomic indicators. The analysis focuses on financial characteristics such as leverage, profitability and firm size. Correlation analysis and panel regression models are used to examine whether these characteristics are associated with changes in the macroeconomic environment and whether the observed relationships differ across firms.
+
+The distinction between monthly and annual analyses is important. Monthly data provide substantially more observations for analysing market returns, while accounting fundamentals are naturally observed at annual frequency. Maintaining these separate frequencies avoids creating artificial monthly variation in annual financial variables.
+
+Finally, the market-concentration analysis is used to identify the three dominant companies in the selected sample. Their underlying real-estate portfolios are then examined at property level to determine whether companies that dominate the listed market also differ in terms of portfolio scale, geographic concentration, property age and other physical characteristics.
+
+Throughout the report, the empirical relationships are interpreted as **associations rather than causal effects**. Particular attention is given to data availability, the unbalanced nature of the firm panel, differences between firms and the distinction between pooled market relationships and within-firm variation.
+
+# 2. The Swiss Listed Real-Estate Market
+
+This chapter establishes the main characteristics of the Swiss listed real-estate market represented by the selected 11 REOCs. We first examine the development of the underlying companies and their stock-market performance. We then construct aggregate measures of sector performance, compare them with Swiss market benchmarks, and examine the concentration of market capitalization across companies.
+
+Together, these results answer RQ1 and provide the empirical foundation for the macroeconomic analysis in the following chapters and for the later property-level analysis of the three largest REOCs.
+
+
+## 2.1 Firm Development
+
+Before examining stock-market performance, we first consider how the underlying companies developed financially over the sample period.
+
+The annual dataset forms an unbalanced panel because several firms enter the available sample later than others. Consequently, changes in market-wide statistics may reflect both developments within existing firms and changes in the composition of the observed sample.
+
+The analysis focuses on two central dimensions of firm development: **company scale**, measured by total assets, and **financial structure**, measured by debt relative to total assets.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-firm-year-data}
 
@@ -395,6 +539,7 @@ firm_year <- fa |>
 
 ```
 
+<<<<<<< HEAD
 ### 2.1.1 Development of Firm Size
 
 Total assets provide a balance-sheet measure of company scale. The
@@ -402,6 +547,12 @@ figure shows the development of each REOC using a common vertical scale.
 The dashed line represents the average total assets of all companies
 observed in the respective year and therefore provides a common
 reference point across the 11 panels.
+=======
+
+### 2.1.1 Development of Firm Size
+
+Total assets provide a balance-sheet measure of company scale. The figure shows the development of each REOC using a common vertical scale. The dashed line represents the average total assets of all companies observed in the respective year and therefore provides a common reference point across the 11 panels.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-total-assets, fig.width=11, fig.height=8}
 
@@ -464,6 +615,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The common scale highlights the substantial differences in company size
 within the Swiss listed REOC market. The largest established companies
 operate with considerably larger balance sheets than many of the smaller
@@ -487,6 +639,20 @@ Leverage is measured using the debt-to-assets ratio.
 As with total assets, all firms are displayed using the same scale. The
 dashed line represents the cross-sectional median debt-to-assets ratio
 among all REOCs observed in each year.
+=======
+The common scale highlights the substantial differences in company size within the Swiss listed REOC market. The largest established companies operate with considerably larger balance sheets than many of the smaller firms in the sample.
+
+At the same time, several established REOCs expanded their asset base considerably over the observation period. The annual market average provides a common benchmark and shows how individual firms developed relative to the broader sample.
+
+Because the dataset is unbalanced, movements in the annual average should not be interpreted solely as within-firm growth. Changes in the set of companies observed in each year can also affect the market-wide benchmark.
+
+
+### 2.1.2 Development of Leverage
+
+A second important dimension of firm development is capital structure. Leverage is measured using the debt-to-assets ratio.
+
+As with total assets, all firms are displayed using the same scale. The dashed line represents the cross-sectional median debt-to-assets ratio among all REOCs observed in each year.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-leverage-benchmark, fig.width=11, fig.height=8}
 
@@ -547,6 +713,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The leverage trajectories indicate a broad decline in debt relative to
 assets over the historical period. At the market level, the median
 debt-to-assets ratio moved toward the mid-30% range by 2025.
@@ -566,6 +733,20 @@ consider their development as publicly traded securities.
 
 Monthly total-return data are used because they incorporate both price
 appreciation and distributions to shareholders.
+=======
+The leverage trajectories indicate a broad decline in debt relative to assets over the historical period. At the market level, the median debt-to-assets ratio moved toward the mid-30% range by 2025.
+
+The firm-level panels nevertheless demonstrate substantial heterogeneity. Some companies operated persistently above the market median, while others maintained materially lower leverage.
+
+These differences in financial structure become particularly relevant in Chapter 4, where firm fundamentals are related to changes in the macroeconomic environment.
+
+
+## 2.2 Market Performance
+
+The previous section examined the REOCs as operating companies. We now consider their development as publicly traded securities.
+
+Monthly total-return data are used because they incorporate both price appreciation and distributions to shareholders.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-market-data}
 
@@ -584,11 +765,18 @@ hp_ch2 <- hp |>
 
 ```
 
+<<<<<<< HEAD
 ### 2.2.1 Individual REOC Performance
 
 To make companies with different index levels and listing histories
 comparable, each firm's total-return index is rebased to 100 at its
 first available observation.
+=======
+
+### 2.2.1 Individual REOC Performance
+
+To make companies with different index levels and listing histories comparable, each firm's total-return index is rebased to 100 at its first available observation.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-individual-performance, fig.width=10, fig.height=6}
 
@@ -636,6 +824,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 Long-run market performance differs substantially across the individual
 REOCs. Some companies generated considerably stronger cumulative total
 returns than others, while several firms have shorter histories because
@@ -650,6 +839,16 @@ construction of diversified sector portfolios.
 Cumulative performance alone does not capture the volatility associated
 with those returns. We therefore compare annualised returns with
 annualised volatility using monthly return observations.
+=======
+Long-run market performance differs substantially across the individual REOCs. Some companies generated considerably stronger cumulative total returns than others, while several firms have shorter histories because of later listings or more limited data availability.
+
+The dispersion demonstrates why aggregate Swiss listed real-estate performance cannot be inferred from a single company and motivates the construction of diversified sector portfolios.
+
+
+### 2.2.2 Risk-Return Characteristics
+
+Cumulative performance alone does not capture the volatility associated with those returns. We therefore compare annualised returns with annualised volatility using monthly return observations.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-risk-return, fig.width=9, fig.height=6}
 
@@ -720,6 +919,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The risk-return comparison confirms that the firms differ not only in
 cumulative performance but also in the volatility associated with their
 returns.
@@ -760,6 +960,43 @@ capitalization based on the preceding observation.
 To assess whether these constructed portfolios capture broader listed
 real-estate market dynamics, they are compared with two external
 Bloomberg total-return benchmarks:
+=======
+The risk-return comparison confirms that the firms differ not only in cumulative performance but also in the volatility associated with their returns.
+
+Because companies with shorter histories are evaluated over different market environments, these values should be interpreted descriptively rather than as perfectly comparable long-run performance estimates.
+
+
+## 2.3 Aggregate Sector Performance and Benchmark Comparison
+
+The substantial differences between individual firms motivate the construction of aggregate measures of Swiss listed REOC performance.
+
+Two portfolios are used. The **equal-weighted portfolio (EW)** assigns the same weight to each company with an available return in a given month. The **value-weighted portfolio (VW)** weights companies according to lagged market capitalization, giving greater influence to the largest firms.
+
+For month $begin:math:text$t$end:math:text$, the equal-weighted portfolio return is
+
+$begin:math:display$
+R\_\{EW\,t\}
+\=
+\\frac\{1\}\{N\_t\}
+\\sum\_\{i\=1\}\^\{N\_t\}
+R\_\{i\,t\}\,
+$end:math:display$
+
+where $begin:math:text$N\_t$end:math:text$ is the number of companies with an available return in month $begin:math:text$t$end:math:text$.
+
+The value-weighted portfolio return is
+
+$begin:math:display$
+R\_\{VW\,t\}
+\=
+\\sum\_\{i\=1\}\^\{N\_t\}
+w\_\{i\,t\-1\}R\_\{i\,t\}\,
+$end:math:display$
+
+where $begin:math:text$w\_\{i\,t\-1\}$end:math:text$ represents company $begin:math:text$i$end:math:text$'s share of sample market capitalization based on the preceding observation.
+
+To assess whether these constructed portfolios capture broader listed real-estate market dynamics, they are compared with two external Bloomberg total-return benchmarks:
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 - the **SXI Real Estate Shares Broad Total Return Index (REAL)**; and
 - the **Swiss Performance Index Total Return (SPI TR)**.
@@ -850,6 +1087,10 @@ portfolio <- portfolio_ew |>
 
 ```
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 ```{r ch2-benchmark-preparation}
 
 spi_daily <- spi_raw |>
@@ -971,11 +1212,18 @@ portfolio_benchmarks <- portfolio |>
 
 ```
 
+<<<<<<< HEAD
 ### 2.3.1 Portfolio and Benchmark Performance
 
 For direct comparison, the two constructed portfolios and the two market
 benchmarks are rebased to 100 at the beginning of their common
 observation period.
+=======
+
+### 2.3.1 Portfolio and Benchmark Performance
+
+For direct comparison, the two constructed portfolios and the two market benchmarks are rebased to 100 at the beginning of their common observation period.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-benchmark-index-preparation}
 
@@ -1069,6 +1317,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The equal-weighted and value-weighted portfolios display broadly similar
 long-run trajectories, despite the substantial differences in company
 size within the sample. This indicates that aggregate sector performance
@@ -1083,6 +1332,16 @@ Swiss listed real-estate market or the broader Swiss equity market.
 The cumulative performance comparison is complemented by Pearson
 correlations between monthly REOC returns and the two external
 benchmarks.
+=======
+The equal-weighted and value-weighted portfolios display broadly similar long-run trajectories, despite the substantial differences in company size within the sample. This indicates that aggregate sector performance is not exclusively determined by the largest firms.
+
+Comparison with the external benchmarks additionally provides evidence on whether the constructed portfolios behave more like the dedicated Swiss listed real-estate market or the broader Swiss equity market.
+
+
+### 2.3.2 Correlation with Swiss Market Benchmarks
+
+The cumulative performance comparison is complemented by Pearson correlations between monthly REOC returns and the two external benchmarks.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-benchmark-correlations}
 
@@ -1280,6 +1539,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The correlation analysis provides a more direct assessment of
 co-movement with the two benchmarks. The constructed REOC portfolios and
 several individual companies display substantially stronger
@@ -1303,6 +1563,23 @@ weights and aggregate concentration over time.
 
 Monthly company weights are calculated as each firm's share of the total
 market capitalization represented by the sample.
+=======
+The correlation analysis provides a more direct assessment of co-movement with the two benchmarks. The constructed REOC portfolios and several individual companies display substantially stronger relationships with the dedicated listed real-estate benchmark than with the broader Swiss equity index.
+
+This provides external support for using the constructed EW and VW portfolios as aggregate measures of Swiss listed REOC market performance in the macroeconomic analysis that follows.
+
+
+## 2.4 Market Concentration
+
+The use of a value-weighted portfolio raises an important structural question: **how concentrated is the Swiss listed REOC market?**
+
+Market capitalization is distributed unevenly across the selected companies. We therefore examine both the evolution of company market weights and aggregate concentration over time.
+
+
+### 2.4.1 Evolution of Market Weights
+
+Monthly company weights are calculated as each firm's share of the total market capitalization represented by the sample.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-market-weights}
 
@@ -1387,6 +1664,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The evolution of market weights reveals persistent differences in
 company size. Swiss Prime Site, PSP Swiss Property and Allreal account
 for particularly large shares of the selected market in recent years.
@@ -1394,11 +1672,18 @@ for particularly large shares of the selected market in recent years.
 The concentration of market capitalization is therefore important when
 interpreting the value-weighted portfolio, because the returns of the
 largest firms receive substantially greater weights.
+=======
+The evolution of market weights reveals persistent differences in company size. Swiss Prime Site, PSP Swiss Property and Allreal account for particularly large shares of the selected market in recent years.
+
+The concentration of market capitalization is therefore important when interpreting the value-weighted portfolio, because the returns of the largest firms receive substantially greater weights.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ### 2.4.2 Evolution of Market Concentration
 
 Two complementary measures are used to examine concentration over time.
 
+<<<<<<< HEAD
 The **Top-3 share** measures the proportion of sample market
 capitalization represented by the three largest firms in each year.
 
@@ -1408,6 +1693,13 @@ capitalization is more concentrated among a small number of companies.
 
 For each year, the final available monthly market-capitalization
 observation is used.
+=======
+The **Top-3 share** measures the proportion of sample market capitalization represented by the three largest firms in each year.
+
+The **Herfindahl-Hirschman Index (HHI)** is calculated as the sum of squared market shares. Higher HHI values indicate that market capitalization is more concentrated among a small number of companies.
+
+For each year, the final available monthly market-capitalization observation is used.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-yearly-concentration}
 
@@ -1471,6 +1763,10 @@ concentration_yearly <-
 
 ```
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 ```{r ch2-concentration-plot, fig.width=10, fig.height=7}
 
 concentration_plot_data <-
@@ -1530,10 +1826,17 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 ### 2.4.3 The Three Largest REOCs
 
 The latest complete historical year is used to identify the dominant
 companies within the selected market.
+=======
+
+### 2.4.3 The Three Largest REOCs
+
+The latest complete historical year is used to identify the dominant companies within the selected market.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch2-top3-table}
 
@@ -1579,6 +1882,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The 2025 market structure is dominated by **Swiss Prime Site (SPSN)**,
 **PSP Swiss Property (PSPN)** and **Allreal (ALLN)**.
 
@@ -1663,6 +1967,53 @@ securities compete with other income-producing assets.
 The analysis therefore focuses primarily on Swiss short- and long-term
 interest rates, while inflation and labour-market conditions are
 included as additional macroeconomic indicators.
+=======
+The 2025 market structure is dominated by **Swiss Prime Site (SPSN)**, **PSP Swiss Property (PSPN)** and **Allreal (ALLN)**.
+
+Their approximate shares of total sample market capitalization are 31.3%, 20.9% and 10.7%, respectively. Together, these three companies represent approximately **62.9% of total sample market capitalization**.
+
+The 2025 HHI is approximately **0.173**, further illustrating that market capitalization is distributed unevenly across the 11 companies.
+
+This result is particularly relevant because the selected 11-company sample itself represents approximately **86% of the market capitalization** of the original Swiss listed real-estate screening universe.
+
+The concentration analysis therefore provides an empirical basis for examining Swiss Prime Site, PSP Swiss Property and Allreal in substantially greater detail in the later property-level analysis.
+
+
+## 2.5 RQ1 — Interim Findings
+
+**RQ1: How have the financial characteristics and market performance of Swiss listed real-estate companies developed over time?**
+
+The results identify a Swiss listed REOC sector characterised by substantial long-run development but considerable heterogeneity between companies.
+
+Several established REOCs expanded their balance sheets markedly over the historical period. At the same time, leverage generally declined at the market level, although individual firms followed distinctly different capital-structure trajectories.
+
+Stock-market performance also varies materially between REOCs, both in terms of cumulative returns and return volatility. Equal-weighted and value-weighted portfolios were therefore constructed to provide aggregate measures of sector performance.
+
+Despite the concentration of market capitalization, the EW and VW portfolios exhibit broadly similar long-run trajectories. Their comparison with external benchmarks further indicates that the listed REOC portfolios behave more closely like the dedicated Swiss listed real-estate market than the broader Swiss equity market.
+
+Finally, market capitalization is highly concentrated. By 2025, Swiss Prime Site, PSP Swiss Property and Allreal together account for approximately 62.9% of the selected sample's market capitalization. This concentration provides the basis for the later property-level examination of these three companies.
+
+Having established the development, market performance and structure of the Swiss listed REOC sector, the next chapter examines whether its stock-market performance is systematically associated with changes in the Swiss macroeconomic environment.
+
+
+# 3. REOCs and the Macroeconomic Environment
+
+Having established the development and market structure of Swiss listed real-estate companies, this chapter examines how the sector relates to the Swiss macroeconomic environment.
+
+Two complementary perspectives are considered. First, **RQ2** examines whether monthly stock-market performance is associated with changes in macroeconomic conditions. Second, **RQ3** examines whether annual firm fundamentals, particularly leverage and profitability, are associated with the macroeconomic environment.
+
+The analysis is primarily associational. Correlations and regressions identify statistical relationships in the historical data but should not be interpreted as establishing causal effects.
+
+
+## 3.1 Market Performance and Macroeconomic Conditions — RQ2
+
+**RQ2: How is the stock-market performance of Swiss listed real-estate companies associated with changes in the macroeconomic environment?**
+
+Listed real-estate companies may be particularly exposed to interest-rate conditions because real estate is capital intensive, property valuations depend partly on discount rates, and listed securities compete with other income-producing assets.
+
+The analysis therefore focuses primarily on Swiss short- and long-term interest rates, while inflation and labour-market conditions are included as additional macroeconomic indicators.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-rq2-data}
 
@@ -1712,6 +2063,7 @@ portfolio_macro <- portfolio |>
 
 ```
 
+<<<<<<< HEAD
 ### 3.1.1 Swiss Macroeconomic Environment
 
 The observation period covers markedly different Swiss macroeconomic
@@ -1724,6 +2076,14 @@ Because the monetary-policy framework changed during the sample, the
 short-term interest-rate indicator combines the 3-month CHF LIBOR with
 the SNB policy rate. The 10-year Swiss Confederation bond yield is used
 as the long-term interest-rate indicator.
+=======
+
+### 3.1.1 Swiss Macroeconomic Environment
+
+The observation period covers markedly different Swiss macroeconomic environments, including the higher interest-rate environment of the early 2000s, the post-global-financial-crisis low-rate period, the subsequent negative-rate era, and the monetary-policy tightening beginning in 2022.
+
+Because the monetary-policy framework changed during the sample, the short-term interest-rate indicator combines the 3-month CHF LIBOR with the SNB policy rate. The 10-year Swiss Confederation bond yield is used as the long-term interest-rate indicator.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-macro-environment, fig.width=10, fig.height=7}
 
@@ -1791,6 +2151,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The macroeconomic environment changed substantially over the observation
 period. Both short- and long-term interest rates declined markedly from
 the levels observed in the early 2000s, while Switzerland subsequently
@@ -1813,6 +2174,20 @@ environments, the sample is divided into five broad historical regimes.
 These regimes are descriptive rather than estimated statistical states.
 Their purpose is to summarize how REOC returns were distributed during
 economically distinct periods.
+=======
+The macroeconomic environment changed substantially over the observation period. Both short- and long-term interest rates declined markedly from the levels observed in the early 2000s, while Switzerland subsequently experienced an extended period of exceptionally low and negative short-term rates.
+
+The post-2022 period represents a clear reversal of this environment, with monetary tightening and higher market interest rates. Inflation also increased during this period before subsequently moderating.
+
+These large changes provide substantial variation with which to examine whether listed REOC performance differs across macroeconomic environments.
+
+
+### 3.1.2 REOC Returns Across Monetary Regimes
+
+To provide an intuitive comparison across different macroeconomic environments, the sample is divided into five broad historical regimes.
+
+These regimes are descriptive rather than estimated statistical states. Their purpose is to summarize how REOC returns were distributed during economically distinct periods.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-macro-regimes}
 
@@ -1937,6 +2312,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The regime comparison shows that REOC returns vary considerably within
 each macroeconomic environment. The distributions overlap substantially,
 indicating that monetary regimes alone do not determine monthly listed
@@ -1955,6 +2331,18 @@ discount rates and financing conditions.
 We first calculate contemporaneous correlations between monthly changes
 in short- and long-term interest rates and the EW and VW portfolio
 returns.
+=======
+The regime comparison shows that REOC returns vary considerably within each macroeconomic environment. The distributions overlap substantially, indicating that monetary regimes alone do not determine monthly listed real-estate returns.
+
+Nevertheless, differences between periods suggest that market performance should be examined more directly against changes in interest rates rather than relying only on broad historical classifications.
+
+
+### 3.1.3 Portfolio Sensitivity to Macroeconomic Changes
+
+Interest-rate **changes** are particularly relevant for monthly market returns because financial markets can react quickly to changes in discount rates and financing conditions.
+
+We first calculate contemporaneous correlations between monthly changes in short- and long-term interest rates and the EW and VW portfolio returns.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-rq2-rate-correlations}
 
@@ -2025,10 +2413,14 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The correlations are negative for both portfolios. The relationship is
 particularly visible for changes in the 10-year Confederation yield,
 suggesting that increases in long-term interest rates tend to coincide
 with weaker monthly REOC returns.
+=======
+The correlations are negative for both portfolios. The relationship is particularly visible for changes in the 10-year Confederation yield, suggesting that increases in long-term interest rates tend to coincide with weaker monthly REOC returns.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 The relationship is illustrated below for the value-weighted portfolio.
 
@@ -2082,6 +2474,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The downward-sloping fitted relationship is consistent with the negative
 correlation. Months in which long-term Swiss government yields increased
 tended, on average, to coincide with weaker REOC portfolio returns.
@@ -2093,6 +2486,14 @@ expectations.
 A multivariable regression provides a broader check by considering
 changes in short- and long-term rates, inflation and changes in
 unemployment simultaneously.
+=======
+The downward-sloping fitted relationship is consistent with the negative correlation. Months in which long-term Swiss government yields increased tended, on average, to coincide with weaker REOC portfolio returns.
+
+This relationship remains associational: both interest rates and equity returns may respond simultaneously to broader economic news and expectations.
+
+
+A multivariable regression provides a broader check by considering changes in short- and long-term rates, inflation and changes in unemployment simultaneously.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-rq2-regression}
 
@@ -2183,6 +2584,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The multivariable regressions provide a compact assessment of whether
 the interest-rate relationships remain visible when several
 macroeconomic indicators are considered simultaneously.
@@ -2201,6 +2603,18 @@ each REOC.
 
 Inflation is included as an additional control, following the
 exploratory firm-level analysis.
+=======
+The multivariable regressions provide a compact assessment of whether the interest-rate relationships remain visible when several macroeconomic indicators are considered simultaneously.
+
+The coefficients should be interpreted as conditional associations rather than causal effects. In particular, monthly macroeconomic variables may be correlated with one another and may respond jointly to economic developments not explicitly included in the model.
+
+
+### 3.1.4 Firm Heterogeneity
+
+Aggregate portfolio results can conceal differences between individual companies. We therefore estimate the relationship between monthly returns and changes in the long-term government yield separately for each REOC.
+
+Inflation is included as an additional control, following the exploratory firm-level analysis.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-rq2-firm-sensitivity}
 
@@ -2325,6 +2739,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The firm-level estimates indicate that interest-rate sensitivity is not
 identical across REOCs. The magnitude of the estimated relationship
 differs across companies, although the general direction of the
@@ -2374,6 +2789,36 @@ assets (ROA).
 
 The annual analysis is restricted to 2001–2025 because later
 observations do not represent complete historical years.
+=======
+The firm-level estimates indicate that interest-rate sensitivity is not identical across REOCs. The magnitude of the estimated relationship differs across companies, although the general direction of the long-rate effect is predominantly negative.
+
+This heterogeneity suggests that company-specific characteristics may influence how changes in financing and discount-rate conditions are transmitted into listed REOC returns.
+
+
+### 3.1.5 RQ2 Findings
+
+**RQ2: How is the stock-market performance of Swiss listed real-estate companies associated with changes in the macroeconomic environment?**
+
+The results provide evidence that Swiss listed REOC market performance is associated with changes in the macroeconomic environment, with the clearest relationship appearing for long-term interest rates.
+
+Both the equal-weighted and value-weighted portfolios exhibit negative correlations with changes in the 10-year Swiss Confederation yield. The value-weighted scatterplot similarly indicates that months of rising long-term yields tend to coincide with weaker REOC returns.
+
+At the same time, return distributions overlap substantially across broad monetary regimes, and the magnitude of estimated interest-rate sensitivity differs across firms. The macroeconomic environment therefore appears relevant for REOC market performance, but the relationship is neither deterministic nor identical across companies.
+
+These findings motivate the second part of the chapter, which examines whether macroeconomic conditions are also associated with changes in the underlying financial characteristics of REOCs.
+
+
+## 3.2 Firm Fundamentals and Macroeconomic Conditions — RQ3
+
+**RQ3: How are the financial characteristics of Swiss listed real-estate companies associated with changes in the macroeconomic environment?**
+
+While RQ2 examines how financial markets respond to macroeconomic conditions at monthly frequency, RQ3 shifts the focus to the underlying companies.
+
+The annual firm-level analysis focuses particularly on leverage because financing is central to the operation of real-estate companies. Profitability is considered as a second dimension through return on assets (ROA).
+
+The annual analysis is restricted to 2001–2025 because later observations do not represent complete historical years.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-rq3-data}
 
@@ -2494,11 +2939,18 @@ fa_rq3 <- fa_rq3 |>
 
 ```
 
+<<<<<<< HEAD
 ### 3.2.1 Long-Term Interest Rates and Leverage
 
 The exploratory correlation analysis identified the 10-year Swiss
 Confederation yield as the macroeconomic variable with the strongest
 pooled association with debt-to-assets.
+=======
+
+### 3.2.1 Long-Term Interest Rates and Leverage
+
+The exploratory correlation analysis identified the 10-year Swiss Confederation yield as the macroeconomic variable with the strongest pooled association with debt-to-assets.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 We therefore examine this relationship in greater detail.
 
@@ -2537,6 +2989,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The pooled relationship is positive: firm-year observations recorded
 during periods of higher long-term Swiss government yields also tend to
 exhibit higher debt-to-assets ratios.
@@ -2555,6 +3008,18 @@ association.
 To distinguish the pooled level relationship from shorter-run
 adjustments, we compare annual changes in the 10-year Confederation
 yield with annual changes in debt-to-assets.
+=======
+The pooled relationship is positive: firm-year observations recorded during periods of higher long-term Swiss government yields also tend to exhibit higher debt-to-assets ratios.
+
+The pooled Pearson correlation is approximately **0.32**. This is the strongest relationship between leverage and the core macroeconomic indicators considered in the exploratory correlation analysis.
+
+However, a relationship between the **levels** of two variables does not necessarily imply that firms increase leverage when interest rates rise. Persistent firm differences and long-run trends may generate such an association.
+
+
+### 3.2.2 Levels Versus Changes
+
+To distinguish the pooled level relationship from shorter-run adjustments, we compare annual changes in the 10-year Confederation yield with annual changes in debt-to-assets.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-yield-leverage-changes, fig.width=9, fig.height=6}
 
@@ -2601,6 +3066,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The relationship changes substantially when annual differences are
 considered. While the correlation between the **levels** of the 10-year
 yield and debt-to-assets is approximately **0.32**, the correlation
@@ -2623,6 +3089,20 @@ We compare a pooled OLS regression with a firm fixed-effects model. The
 fixed-effects specification controls for persistent characteristics of
 each REOC and therefore asks whether leverage tends to vary with the
 long-term yield **within the same firm over time**.
+=======
+The relationship changes substantially when annual differences are considered. While the correlation between the **levels** of the 10-year yield and debt-to-assets is approximately **0.32**, the correlation between their annual changes is approximately zero.
+
+This distinction is important. The pooled level relationship therefore does not provide evidence that REOCs systematically increase leverage in years when long-term interest rates rise.
+
+Instead, the positive level relationship may reflect persistent differences between firms, longer-term historical developments, or other factors evolving alongside interest rates.
+
+
+### 3.2.3 Firm Fixed-Effects Evidence
+
+Panel regression provides a more formal way to distinguish pooled relationships from variation within individual firms.
+
+We compare a pooled OLS regression with a firm fixed-effects model. The fixed-effects specification controls for persistent characteristics of each REOC and therefore asks whether leverage tends to vary with the long-term yield **within the same firm over time**.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-rq3-fixed-effects}
 
@@ -2663,6 +3143,7 @@ fixest::etable(
 
 ```
 
+<<<<<<< HEAD
 The pooled OLS model indicates a positive and statistically significant
 relationship between the 10-year yield and leverage. A
 one-percentage-point higher long-term yield is associated with
@@ -2690,6 +3171,22 @@ yield–leverage relationships.
 
 We therefore calculate the correlation between the 10-year Confederation
 yield and debt-to-assets separately for each company.
+=======
+The pooled OLS model indicates a positive and statistically significant relationship between the 10-year yield and leverage. A one-percentage-point higher long-term yield is associated with approximately **2.86 percentage points higher debt-to-assets** in the pooled sample.
+
+Once firm fixed effects are introduced, however, the estimated coefficient declines to approximately **1.74** and is no longer statistically significant.
+
+The first-difference specification similarly provides little evidence that annual increases in long-term yields are systematically accompanied by annual increases in leverage.
+
+Together, these results indicate that a substantial part of the positive pooled relationship reflects persistent differences between firms and longer-term historical patterns rather than a uniform short-run leverage response to changing interest rates.
+
+
+### 3.2.4 Heterogeneity Across REOCs
+
+The weakening of the pooled relationship after controlling for firm effects suggests that REOCs may differ substantially in their individual yield–leverage relationships.
+
+We therefore calculate the correlation between the 10-year Confederation yield and debt-to-assets separately for each company.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-rq3-firm-heterogeneity}
 
@@ -2767,6 +3264,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The firm-specific correlations reveal substantial heterogeneity. Some
 companies exhibit strongly positive historical relationships between
 long-term yields and leverage, while others display weak or negative
@@ -2793,6 +3291,22 @@ related to Swiss economic growth.
 Because raw net income is not directly comparable across companies of
 different sizes, profitability is measured using **return on assets
 (ROA)**, defined as net income relative to total assets.
+=======
+The firm-specific correlations reveal substantial heterogeneity. Some companies exhibit strongly positive historical relationships between long-term yields and leverage, while others display weak or negative relationships.
+
+Among firms with long histories, Swiss Prime Site and PSP Swiss Property exhibit strong positive associations, whereas several other REOCs show materially different patterns.
+
+Estimates for companies with short histories should be interpreted cautiously because they are based on substantially fewer annual observations.
+
+Overall, the heterogeneity helps explain why the pooled relationship weakens after persistent firm-specific characteristics are taken into account.
+
+
+### 3.2.5 Profitability and Economic Growth
+
+Leverage is not the only financial characteristic that may respond to macroeconomic conditions. We also examine whether firm profitability is related to Swiss economic growth.
+
+Because raw net income is not directly comparable across companies of different sizes, profitability is measured using **return on assets (ROA)**, defined as net income relative to total assets.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch3-gdp-roa, fig.width=9, fig.height=6}
 
@@ -2838,6 +3352,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The relationship between Swiss GDP growth and REOC profitability is
 weak. High and low ROA observations occur under a range of GDP-growth
 environments, and the pooled correlation is close to zero.
@@ -2929,6 +3444,52 @@ This chapter constitutes the **Chapter of Choice** because it applies
 methods beyond the standard data-manipulation and visualization
 techniques used elsewhere in the report. In particular, the workflow
 combines:
+=======
+The relationship between Swiss GDP growth and REOC profitability is weak. High and low ROA observations occur under a range of GDP-growth environments, and the pooled correlation is close to zero.
+
+Aggregate GDP growth therefore appears to explain relatively little of the variation in firm profitability observed in the sample.
+
+This result is consistent with the broader analysis of firm fundamentals, which suggests that company-specific characteristics are often more important than a single common macroeconomic variable for explaining differences across REOCs.
+
+
+### 3.2.6 RQ3 Findings
+
+**RQ3: How are the financial characteristics of Swiss listed real-estate companies associated with changes in the macroeconomic environment?**
+
+The analysis provides limited evidence of a uniform relationship between macroeconomic conditions and the financial characteristics of Swiss listed REOCs.
+
+The clearest pooled relationship is between the 10-year Swiss Confederation yield and debt-to-assets. Higher long-term yields are associated with higher leverage when firm-year observations are pooled.
+
+However, this relationship becomes substantially weaker when the analysis focuses on annual changes or controls for persistent differences between firms. The firm fixed-effects estimate is smaller and no longer statistically significant, while changes in long-term yields exhibit almost no correlation with annual changes in leverage.
+
+Firm-specific relationships also differ considerably in both magnitude and direction. Similarly, Swiss GDP growth shows little pooled relationship with firm profitability.
+
+The results therefore suggest that the macroeconomic environment is related to some REOC financial characteristics, but these relationships are heterogeneous and should not be interpreted as common causal responses across firms.
+
+
+## 3.3 Overall Chapter Findings
+
+RQ2 and RQ3 provide complementary perspectives on the relationship between Swiss listed real estate and the macroeconomic environment.
+
+At the **market level**, REOC returns appear relatively responsive to changes in interest rates. In particular, increases in long-term Swiss government yields tend to coincide with weaker monthly returns for both the equal-weighted and value-weighted portfolios. The effect is also visible across individual companies, although its magnitude differs between REOCs.
+
+At the **firm-fundamental level**, the evidence is less uniform. A positive pooled relationship exists between long-term yields and leverage, but this relationship weakens substantially once persistent firm differences and annual changes are considered. GDP growth likewise explains relatively little of the observed variation in profitability.
+
+Taken together, the findings suggest that macroeconomic conditions are reflected more immediately in **market valuations and returns** than in uniform short-run changes in **corporate financial structure**.
+
+Firm heterogeneity remains important in both parts of the analysis. Swiss listed REOCs differ in their market sensitivity, leverage dynamics and historical relationships with macroeconomic variables. This heterogeneity provides an additional reason to complement the market-wide analysis with a closer examination of individual companies and their underlying property portfolios.
+
+
+# 4. Chapter of Choice — Building a Property-Level Dataset
+
+The financial and market analyses in the previous chapters describe listed real-estate companies primarily through accounting variables, market capitalization and stock returns. However, these companies ultimately derive their value from portfolios of physical real-estate assets.
+
+To complement the financial analysis, this chapter develops a property-level dataset for the three largest companies in the selected REOC sample: **Swiss Prime Site (SPSN), PSP Swiss Property (PSPN), and Allreal (ALLN)**.
+
+Unlike the firm-level Bloomberg dataset, no single standardized source contained comparable property-level observations for all three companies. The dataset therefore had to be constructed from company webpages and annual-report disclosures.
+
+This chapter constitutes the **Chapter of Choice** because it applies methods beyond the standard data-manipulation and visualization techniques used elsewhere in the report. In particular, the workflow combines:
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 - web scraping with `rvest`;
 - PDF text and coordinate extraction with `pdftools`;
@@ -2936,6 +3497,7 @@ combines:
 - geocoding with `tidygeocoder` and OpenStreetMap/Nominatim; and
 - interactive spatial visualization with `leaflet`.
 
+<<<<<<< HEAD
 The result is a combined geocoded dataset that connects the financial
 characteristics of the largest Swiss listed REOCs to the physical assets
 underlying their portfolios.
@@ -2968,6 +3530,24 @@ different extraction and cleaning approaches.
 The objective of the data-engineering workflow was to convert these
 heterogeneous disclosures into a comparable structure containing, where
 available:
+=======
+The result is a combined geocoded dataset that connects the financial characteristics of the largest Swiss listed REOCs to the physical assets underlying their portfolios.
+
+
+## 4.1 Motivation
+
+Chapter 2 showed that the Swiss listed REOC market is highly concentrated. In 2025, Swiss Prime Site, PSP Swiss Property and Allreal together represented approximately 62.9% of the market capitalization of the selected sample.
+
+This makes the three companies particularly relevant for a more detailed examination.
+
+Financial statements can show how large these companies are, how much debt they use and how their shares perform. They do not, however, directly show **where the underlying properties are located, how old they are, or how the physical portfolios differ across companies**.
+
+A property-level dataset therefore allows the analysis to move from financial securities to the underlying real-estate assets.
+
+The main challenge was that the three companies disclose their portfolios differently. PSP and Swiss Prime Site provide information through company webpages, while detailed variables are also available in company reports. Allreal similarly publishes property information in report format. These sources differ in structure and therefore require different extraction and cleaning approaches.
+
+The objective of the data-engineering workflow was to convert these heterogeneous disclosures into a comparable structure containing, where available:
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 - company and property identifiers;
 - address and city;
@@ -2977,10 +3557,15 @@ available:
 - latitude; and
 - longitude.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 ## 4.2 Extracting Property Information
 
 ### 4.2.1 PSP Swiss Property — Web Scraping and Report Matching
 
+<<<<<<< HEAD
 For PSP Swiss Property, the current property portfolio was first
 extracted from the company's online property portfolio.
 
@@ -2988,6 +3573,11 @@ The `rvest` package was used to read the webpage and identify links and
 images corresponding to individual property objects. Address information
 was obtained from the property labels associated with the portfolio
 images.
+=======
+For PSP Swiss Property, the current property portfolio was first extracted from the company's online property portfolio.
+
+The `rvest` package was used to read the webpage and identify links and images corresponding to individual property objects. Address information was obtained from the property labels associated with the portfolio images.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 The essential structure of the web-scraping step was:
 
@@ -3008,10 +3598,14 @@ property_labels <- property_images |>
 
 ```
 
+<<<<<<< HEAD
 Only image elements that represented identifiable properties were
 retained. The associated hyperlink was then extracted from the
 surrounding HTML element, creating one observation per property with a
 source URL.
+=======
+Only image elements that represented identifiable properties were retained. The associated hyperlink was then extracted from the surrounding HTML element, creating one observation per property with a source URL.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch4-psp-property-links-example, eval=FALSE, echo=TRUE}
 
@@ -3032,6 +3626,7 @@ PSPN_properties <- tibble(
 
 ```
 
+<<<<<<< HEAD
 The resulting property labels were separated into address and city
 fields and standardized before geocoding.
 
@@ -3043,6 +3638,13 @@ report data. Since addresses were formatted differently across the
 website and report, an address-normalization function was used to remove
 accents, punctuation differences and inconsistent whitespace before
 constructing matching keys.
+=======
+The resulting property labels were separated into address and city fields and standardized before geocoding.
+
+A stable property identifier was also created for every observation, for example `PSPN_001`, `PSPN_002`, and so forth.
+
+The scraped geographic dataset was subsequently matched with PSP's 2025 report data. Since addresses were formatted differently across the website and report, an address-normalization function was used to remove accents, punctuation differences and inconsistent whitespace before constructing matching keys.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch4-psp-matching-example, eval=FALSE, echo=TRUE}
 
@@ -3066,6 +3668,7 @@ normalize_address <- function(x) {
 
 ```
 
+<<<<<<< HEAD
 This step combined the location information obtained online with
 property characteristics from the annual report, including variables
 such as construction year and rentable area.
@@ -3079,6 +3682,16 @@ Simply extracting plain text from a PDF often destroys the table
 structure. To overcome this problem, the workflow used
 `pdftools::pdf_data()`, which returns individual words together with
 their positions on each PDF page.
+=======
+This step combined the location information obtained online with property characteristics from the annual report, including variables such as construction year and rentable area.
+
+
+### 4.2.2 Swiss Prime Site — Extracting Structured Tables from PDF Coordinates
+
+Swiss Prime Site required a different approach because important property-level variables were contained in structured PDF tables.
+
+Simply extracting plain text from a PDF often destroys the table structure. To overcome this problem, the workflow used `pdftools::pdf_data()`, which returns individual words together with their positions on each PDF page.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch4-sps-pdf-example, eval=FALSE, echo=TRUE}
 
@@ -3091,12 +3704,18 @@ SPSN_pdf_data <-
 
 ```
 
+<<<<<<< HEAD
 The horizontal position of each word was then used to reconstruct the
 original table columns.
 
 For example, words located within particular x-coordinate intervals were
 interpreted as belonging to fields such as property name, rental income,
 ownership status, construction year, site area and commercial area.
+=======
+The horizontal position of each word was then used to reconstruct the original table columns.
+
+For example, words located within particular x-coordinate intervals were interpreted as belonging to fields such as property name, rental income, ownership status, construction year, site area and commercial area.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 A simplified version of the column-extraction logic is:
 
@@ -3123,9 +3742,13 @@ get_col <- function(
 
 ```
 
+<<<<<<< HEAD
 This technique enabled the PDF disclosure to be converted into a
 structured property table rather than treating each page as unstructured
 text.
+=======
+This technique enabled the PDF disclosure to be converted into a structured property table rather than treating each page as unstructured text.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 The resulting dataset included variables such as:
 
@@ -3138,6 +3761,7 @@ The resulting dataset included variables such as:
 - rental-income information; and
 - property-use shares.
 
+<<<<<<< HEAD
 Additional cleaning was required to remove report totals, building land,
 development projects and properties that had been sold during the
 reporting period.
@@ -3146,14 +3770,24 @@ This highlights an important feature of data extraction from corporate
 disclosures: **successful parsing does not automatically imply a valid
 analytical dataset**. The extracted records still had to be checked
 against the economic definition of the portfolio being analysed.
+=======
+Additional cleaning was required to remove report totals, building land, development projects and properties that had been sold during the reporting period.
+
+This highlights an important feature of data extraction from corporate disclosures: **successful parsing does not automatically imply a valid analytical dataset**. The extracted records still had to be checked against the economic definition of the portfolio being analysed.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ### 4.2.3 Allreal — PDF Text Extraction and Regular-Expression Parsing
 
 Allreal's property information required a third extraction strategy.
 
+<<<<<<< HEAD
 The report was read using `pdftools::pdf_text()`. Unlike the
 coordinate-based Swiss Prime Site extraction, the Allreal tables could
 be parsed from the textual structure of the relevant report pages.
+=======
+The report was read using `pdftools::pdf_text()`. Unlike the coordinate-based Swiss Prime Site extraction, the Allreal tables could be parsed from the textual structure of the relevant report pages.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch4-allreal-pdf-example, eval=FALSE, echo=TRUE}
 
@@ -3177,8 +3811,12 @@ residential_lines <-
 
 ```
 
+<<<<<<< HEAD
 Rows corresponding to actual properties were identified using recurring
 ownership codes in the report.
+=======
+Rows corresponding to actual properties were identified using recurring ownership codes in the report.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 Regular expressions were then used to separate fields such as:
 
@@ -3192,6 +3830,7 @@ Regular expressions were then used to separate fields such as:
 - target rental income; and
 - vacancy information.
 
+<<<<<<< HEAD
 Residential and commercial properties were parsed separately and
 subsequently combined into a single Allreal property dataset.
 
@@ -3199,13 +3838,23 @@ The different extraction methods used across the three companies reflect
 the lack of a standardized reporting format. Rather than forcing all
 sources through the same extraction method, the workflow adapted the
 method to the structure of each source.
+=======
+Residential and commercial properties were parsed separately and subsequently combined into a single Allreal property dataset.
+
+The different extraction methods used across the three companies reflect the lack of a standardized reporting format. Rather than forcing all sources through the same extraction method, the workflow adapted the method to the structure of each source.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ## 4.3 Cleaning and Standardizing Addresses
 
 Property addresses were not immediately suitable for spatial analysis.
 
+<<<<<<< HEAD
 Corporate disclosures frequently contain multi-building addresses such
 as:
+=======
+Corporate disclosures frequently contain multi-building addresses such as:
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 `Bahnhofplatz 1, 2 / Bahnhofquai 9, 11, 15`
 
@@ -3213,11 +3862,17 @@ or address ranges such as:
 
 `Grabenstrasse 17, 19`.
 
+<<<<<<< HEAD
 These formats are informative for a human reader but can reduce the
 success rate of automated geocoding services.
 
 The cleaning process therefore created simplified versions of complex
 addresses while retaining the original reported address in the dataset.
+=======
+These formats are informative for a human reader but can reduce the success rate of automated geocoding services.
+
+The cleaning process therefore created simplified versions of complex addresses while retaining the original reported address in the dataset.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 Typical transformations included:
 
@@ -3257,6 +3912,7 @@ properties <- properties |>
 
 ```
 
+<<<<<<< HEAD
 The objective was not to replace the official property address. The
 original disclosure remained available, while the simplified field acted
 only as a technical input for geocoding.
@@ -3268,6 +3924,16 @@ geographic coordinates.
 
 The `tidygeocoder` package was used with the OpenStreetMap/Nominatim
 geocoding service.
+=======
+The objective was not to replace the official property address. The original disclosure remained available, while the simplified field acted only as a technical input for geocoding.
+
+
+## 4.4 Geocoding the Property Portfolios
+
+Once addresses had been standardized, they were converted into geographic coordinates.
+
+The `tidygeocoder` package was used with the OpenStreetMap/Nominatim geocoding service.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 A typical geocoding call was:
 
@@ -3286,6 +3952,7 @@ properties_geo <- properties |>
 
 This converts a textual address into two spatial variables:
 
+<<<<<<< HEAD
 $begin:math:display$ $latitude\,\\ longitude$ $end:math:display$
 
 which provide the geographic position required for mapping.
@@ -3308,6 +3975,26 @@ representative address.
 Finally, a small number of problematic observations were assigned
 manually cleaned geocoding strings and submitted again to the same
 geocoding service.
+=======
+$begin:math:display$
+\(latitude\,\\ longitude\)
+$end:math:display$
+
+which provide the geographic position required for mapping.
+
+
+### 4.4.1 Multi-Pass Geocoding
+
+Not every corporate address could be geocoded successfully on the first attempt.
+
+The workflow therefore used a **multi-pass geocoding strategy**.
+
+First, the original or automatically simplified address was submitted to the geocoder.
+
+Second, addresses with missing coordinates were simplified further. For example, building names were removed, ranges were reduced to a single house number and multi-address properties were reduced to one representative address.
+
+Finally, a small number of problematic observations were assigned manually cleaned geocoding strings and submitted again to the same geocoding service.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 The logic used to combine successive attempts was:
 
@@ -3333,6 +4020,7 @@ properties_geo <- properties_geo |>
 
 ```
 
+<<<<<<< HEAD
 This process is important because a failed geocoding request does not
 necessarily imply that the reported property is invalid. It often
 reflects formatting differences between corporate disclosures and the
@@ -3345,6 +4033,16 @@ geocoding processes are separated from the final report.
 
 The final cleaned datasets are saved as CSV files and loaded directly
 when the report is knitted.
+=======
+This process is important because a failed geocoding request does not necessarily imply that the reported property is invalid. It often reflects formatting differences between corporate disclosures and the address representation expected by the geocoding service.
+
+
+## 4.5 Final Property-Level Dataset
+
+For reproducibility, the time-consuming web-scraping, PDF extraction and geocoding processes are separated from the final report.
+
+The final cleaned datasets are saved as CSV files and loaded directly when the report is knitted.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch4-property-import}
 
@@ -3365,6 +4063,10 @@ ALLN_properties_geo <- read_csv(
 
 ```
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 The final property datasets contain approximately:
 
 ```{r ch4-property-count-table}
@@ -3404,6 +4106,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The final datasets contain approximately **150 PSP observations, 122
 Swiss Prime Site observations and 74 Allreal observations**.
 
@@ -3421,6 +4124,18 @@ analysis.
 
 Before using coordinates for mapping, the final datasets are checked for
 missing latitude or longitude values.
+=======
+The final datasets contain approximately **150 PSP observations, 122 Swiss Prime Site observations and 74 Allreal observations**.
+
+The term *property observation* is preferable to assuming that every reporting row necessarily corresponds to one physically separate building. A reported property can contain several addresses or buildings within a single investment property.
+
+The precise variable set differs somewhat across companies because the underlying corporate disclosures differ. However, all three datasets contain the common geographic information required for combined spatial analysis.
+
+
+### 4.5.1 Geocoding Completeness
+
+Before using coordinates for mapping, the final datasets are checked for missing latitude or longitude values.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch4-geocoding-summary}
 
@@ -3493,6 +4208,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 ## 4.6 Interactive Mapping with Leaflet
 
 The addition of latitude and longitude coordinates allows the property
@@ -3501,6 +4217,14 @@ portfolios to be analysed spatially.
 The `leaflet` package is used because it creates an interactive map
 directly within the HTML report. Unlike a static `ggplot2` figure, the
 reader can:
+=======
+
+## 4.6 Interactive Mapping with Leaflet
+
+The addition of latitude and longitude coordinates allows the property portfolios to be analysed spatially.
+
+The `leaflet` package is used because it creates an interactive map directly within the HTML report. Unlike a static `ggplot2` figure, the reader can:
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 - zoom and pan across Switzerland;
 - click individual properties;
@@ -3701,6 +4425,7 @@ leaflet() |>
 
 ```
 
+<<<<<<< HEAD
 The map reveals the geographic footprint underlying the three largest
 listed REOCs. Rather than representing an abstract financial index, the
 companies consist of portfolios of physical assets concentrated in
@@ -3793,6 +4518,69 @@ regimes, and interest-rate sensitivity.
 The purpose is not to rank the companies, but to examine whether three
 firms that dominate the same listed real-estate market nevertheless
 represent materially different underlying exposures.
+=======
+The map reveals the geographic footprint underlying the three largest listed REOCs. Rather than representing an abstract financial index, the companies consist of portfolios of physical assets concentrated in particular Swiss urban and economic regions.
+
+The interactive layer control also makes it possible to compare the geographic footprint of the three portfolios directly.
+
+
+
+## 4.8 Methodological Limitations
+
+The property-level dataset should be interpreted with several limitations in mind.
+
+First, the three companies do not disclose their portfolios using identical definitions or variables. Consequently, not every property characteristic is directly comparable across all three firms.
+
+Second, a reporting row does not necessarily correspond to a single physical building. Some observations contain multiple addresses, adjoining buildings or larger property complexes.
+
+Third, geocoding complex property addresses requires simplification. The coordinates should therefore be interpreted primarily as representative property locations rather than cadastral-level geographic precision.
+
+Fourth, web-based information can change over time. The final CSV datasets preserve a reproducible snapshot of the information used for this project, while the original source URLs and report disclosures document where the information originated.
+
+Finally, the property-level dataset focuses on the three largest companies and is therefore not intended to represent the full Swiss listed real-estate universe.
+
+
+## 4.9 Chapter of Choice — Conclusion
+
+This chapter demonstrates how heterogeneous corporate disclosures can be transformed into a structured and spatially analysable dataset.
+
+The workflow moves through several stages:
+
+$begin:math:display$
+\\text\{Corporate disclosures\}
+\\rightarrow
+\\text\{data extraction\}
+\\rightarrow
+\\text\{cleaning and matching\}
+\\rightarrow
+\\text\{address standardization\}
+\\rightarrow
+\\text\{geocoding\}
+\\rightarrow
+\\text\{interactive mapping\}\.
+$end:math:display$
+
+Different source formats required different extraction techniques. PSP's online portfolio was accessed through web scraping with `rvest`; Swiss Prime Site's structured PDF tables were reconstructed using positional information from `pdftools`; and Allreal's report was parsed from extracted PDF text.
+
+After cleaning and harmonization, property addresses were geocoded with `tidygeocoder` and OpenStreetMap/Nominatim. The resulting coordinates enabled the construction of an interactive `leaflet` map containing the three largest REOC property portfolios.
+
+The final datasets comprise approximately **150 PSP, 122 Swiss Prime Site and 74 Allreal property observations** and connect the financial analysis of listed companies to the physical real-estate assets underlying them.
+
+This workflow extends the project beyond conventional financial-data analysis and demonstrates how web data, PDF disclosures and spatial information can be combined within R to create a new dataset for further empirical analysis.
+
+# 5. Top-3 REOC Deep Dive and Conclusion
+
+The previous chapters examined Swiss listed real-estate companies from three perspectives: their long-run financial development, their market performance, and their relationship with the macroeconomic environment.
+
+This final chapter brings these perspectives together by focusing on the three largest companies in the selected sample: **Swiss Prime Site (SPSN), PSP Swiss Property (PSPN), and Allreal (ALLN)**.
+
+Together, these firms represented approximately **62.9% of the selected sample's market capitalization in 2025**. Their importance to the listed sector therefore makes them suitable for a more detailed comparison.
+
+The property-level dataset constructed in Chapter 4 makes it possible to complement financial and stock-market information with characteristics of the physical portfolios underlying the companies. The analysis considers portfolio scale, use composition, property age, geographic concentration, physical scale, market performance across macroeconomic regimes, and interest-rate sensitivity.
+
+The purpose is not to rank the companies, but to examine whether three firms that dominate the same listed real-estate market nevertheless represent materially different underlying exposures.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-setup}
 
@@ -3816,6 +4604,7 @@ COMPANY_COLORS <- c(
 
 ```
 
+<<<<<<< HEAD
 ## 5.1 The Top 3 in Financial and Physical Context
 
 We begin by combining selected financial and physical characteristics
@@ -3824,6 +4613,14 @@ into a single company profile.
 The table reports the firms' 2025 market-capitalization weight within
 the selected REOC sample, total assets, leverage and number of reported
 property observations.
+=======
+
+## 5.1 The Top 3 in Financial and Physical Context
+
+We begin by combining selected financial and physical characteristics into a single company profile.
+
+The table reports the firms' 2025 market-capitalization weight within the selected REOC sample, total assets, leverage and number of reported property observations.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-top3-profile-data}
 
@@ -3976,6 +4773,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The comparison immediately illustrates an important distinction. The
 three companies dominate the selected listed REOC market in financial
 terms, but the number of underlying property observations differs
@@ -3996,6 +4794,18 @@ rentable area is distributed across broad property-use categories.
 
 Because the three companies use different reporting classifications, the
 original categories are harmonized into five broad groups:
+=======
+The comparison immediately illustrates an important distinction. The three companies dominate the selected listed REOC market in financial terms, but the number of underlying property observations differs substantially.
+
+PSP reports approximately 150 property observations, Swiss Prime Site 122 and Allreal 74. Property counts should not be interpreted as measures of portfolio value because individual assets differ greatly in size, location and use. They nevertheless provide a first indication that similar market importance does not imply identical physical portfolio structures.
+
+
+## 5.2 Portfolio Use Composition
+
+Property count alone says little about the economic function of the underlying real estate. We therefore compare how reported floor or rentable area is distributed across broad property-use categories.
+
+Because the three companies use different reporting classifications, the original categories are harmonized into five broad groups:
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 - **Office**
 - **Retail**
@@ -4003,6 +4813,7 @@ original categories are harmonized into five broad groups:
 - **Hospitality**
 - **Other**
 
+<<<<<<< HEAD
 The harmonization is necessarily approximate. It is intended to provide
 a broad comparison rather than imply perfectly identical reporting
 definitions across companies.
@@ -4020,6 +4831,18 @@ For Allreal's commercial properties, use-specific areas are similarly
 estimated from floor space and reported use percentages. Allreal
 properties classified as residential are assigned their reported
 residential floor space to the residential category.
+=======
+The harmonization is necessarily approximate. It is intended to provide a broad comparison rather than imply perfectly identical reporting definitions across companies.
+
+
+### 5.2.1 Constructing Comparable Use Categories
+
+For PSP Swiss Property, reported square metres are directly available for office, retail, gastronomy and other uses.
+
+For Swiss Prime Site, use-specific areas are estimated by multiplying reported commercial area by the reported percentage allocated to each use.
+
+For Allreal's commercial properties, use-specific areas are similarly estimated from floor space and reported use percentages. Allreal properties classified as residential are assigned their reported residential floor space to the residential category.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-use-composition-data}
 
@@ -4282,6 +5105,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The 100% stacked bars reveal differences in the economic composition of
 the portfolios that are not visible from company size alone.
 
@@ -4303,6 +5127,20 @@ which the three companies differ.
 Construction years are extracted from each company's property-level
 data. Where a disclosure contains more than one construction year, the
 first reported four-digit year is used as a simplified reference point.
+=======
+The 100% stacked bars reveal differences in the economic composition of the portfolios that are not visible from company size alone.
+
+The chart should be interpreted as a comparison of **reported and harmonized area categories**, rather than as a perfectly standardized property classification. Nevertheless, it illustrates that the three listed firms provide different combinations of office, retail, residential and other real-estate exposure.
+
+This is important from an investor perspective because property-use composition can influence rental-income stability, tenant structure and exposure to different parts of the economic cycle.
+
+
+## 5.3 Portfolio Age
+
+The age distribution of the portfolios provides a second dimension along which the three companies differ.
+
+Construction years are extracted from each company's property-level data. Where a disclosure contains more than one construction year, the first reported four-digit year is used as a simplified reference point.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-construction-data}
 
@@ -4415,6 +5253,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The distributions demonstrate that portfolio age is not uniform across
 the three firms.
 
@@ -4435,6 +5274,20 @@ the three portfolios to be compared directly.
 City names are first harmonized so that alternative language versions
 such as Zürich and Zurich or Genève and Geneva are treated as the same
 location.
+=======
+The distributions demonstrate that portfolio age is not uniform across the three firms.
+
+Rather than relying only on an average construction year, the histogram shows both the central concentration and the historical tails of each portfolio. PSP in particular contains properties spanning a broad range of construction periods, while the Allreal dataset is more concentrated in comparatively recent construction periods.
+
+These differences may reflect distinct acquisition histories, redevelopment strategies and geographic specializations.
+
+
+## 5.4 Geographic Concentration
+
+The property-level dataset also allows the geographic concentration of the three portfolios to be compared directly.
+
+City names are first harmonized so that alternative language versions such as Zürich and Zurich or Genève and Geneva are treated as the same location.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-city-data}
 
@@ -4583,6 +5436,7 @@ city_counts |>
 
 ```
 
+<<<<<<< HEAD
 The firms have materially different geographic footprints. PSP has
 particularly substantial exposure to Zurich, while the relative
 importance of Basel, Geneva, Lausanne and other locations differs across
@@ -4603,6 +5457,20 @@ scale of individual properties.
 
 For this comparison, the reported site or land area is plotted against
 the corresponding rentable, commercial or floor area.
+=======
+The firms have materially different geographic footprints. PSP has particularly substantial exposure to Zurich, while the relative importance of Basel, Geneva, Lausanne and other locations differs across the three portfolios.
+
+The interactive map in **Chapter 4.6** provides the complementary spatial view and allows individual property locations to be inspected directly.
+
+Together, the city comparison and interactive map indicate that concentration in the same listed market does not translate into identical geographic real-estate exposure.
+
+
+## 5.5 Physical Scale and Development Intensity
+
+Portfolio composition and location can be complemented by the physical scale of individual properties.
+
+For this comparison, the reported site or land area is plotted against the corresponding rentable, commercial or floor area.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 The source terminology differs across firms:
 
@@ -4610,9 +5478,13 @@ The source terminology differs across firms:
 - Swiss Prime Site reports site area and commercial area;
 - Allreal reports site area and floor space.
 
+<<<<<<< HEAD
 The variables are therefore treated as approximately comparable
 indicators of **land footprint** and **usable property area**, rather
 than as perfectly identical accounting definitions.
+=======
+The variables are therefore treated as approximately comparable indicators of **land footprint** and **usable property area**, rather than as perfectly identical accounting definitions.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-property-area-data}
 
@@ -4740,6 +5612,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The diagonal reference line represents properties for which reported
 usable area equals the reported site or land area.
 
@@ -4766,6 +5639,22 @@ particularly relevant for listed real-estate returns.
 We therefore return to the five macroeconomic regimes defined in Chapter
 3 and compare the **average monthly return of each Top-3 firm** within
 each period.
+=======
+The diagonal reference line represents properties for which reported usable area equals the reported site or land area.
+
+Observations above the line have more reported usable floor area than land area, which can be consistent with more intensive or multi-storey development. Observations below the line have a larger land footprint relative to their reported usable area.
+
+Because the underlying companies use different reporting definitions, the figure should be interpreted as a broad physical comparison rather than a precise measure of development density. Even with this limitation, the dispersion illustrates substantial heterogeneity in the scale and physical structure of individual assets.
+
+
+## 5.6 Top-3 Performance Across Macroeconomic Regimes
+
+The physical portfolios differ, but the three firms also operate in the same financial and macroeconomic environment.
+
+Chapter 3 showed that aggregate REOC returns vary across monetary regimes and that changes in long-term Swiss government yields are particularly relevant for listed real-estate returns.
+
+We therefore return to the five macroeconomic regimes defined in Chapter 3 and compare the **average monthly return of each Top-3 firm** within each period.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-regime-performance-data}
 
@@ -4946,6 +5835,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The heatmap allows the same macroeconomic environments to be compared
 across firms without reducing each company's experience to one
 full-sample return measure.
@@ -4970,6 +5860,22 @@ for the three dominant companies.
 
 Inflation is retained as an additional control to make the estimates
 consistent with the firm-level specification used in Chapter 3.
+=======
+The heatmap allows the same macroeconomic environments to be compared across firms without reducing each company's experience to one full-sample return measure.
+
+Differences across rows indicate that companies exposed to the same Swiss interest-rate environment did not necessarily generate identical market outcomes. This is consistent with the firm-level heterogeneity identified in Chapter 3.
+
+The comparison is descriptive: the regime averages combine many influences beyond monetary policy, including market-wide shocks, changes in portfolio composition and company-specific developments.
+
+
+## 5.7 Interest-Rate Sensitivity of the Top 3
+
+The regime analysis can be complemented by a more direct measure of interest-rate sensitivity.
+
+Chapter 3 examined monthly stock returns against changes in the 10-year Swiss Confederation yield. Here, the same relationship is estimated only for the three dominant companies.
+
+Inflation is retained as an additional control to make the estimates consistent with the firm-level specification used in Chapter 3.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-top3-rate-sensitivity}
 
@@ -5127,6 +6033,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The estimates make the distinction between **sector exposure** and
 **company-specific exposure** explicit. All three companies operate
 within the same listed real-estate market, but the magnitude of the
@@ -5141,6 +6048,16 @@ sensitivities.
 
 The market-response analysis can be compared with the leverage
 relationships identified in RQ3.
+=======
+The estimates make the distinction between **sector exposure** and **company-specific exposure** explicit. All three companies operate within the same listed real-estate market, but the magnitude of the historical relationship between their returns and changes in long-term yields is not identical.
+
+The confidence intervals also provide an indication of estimation uncertainty rather than presenting the individual coefficients as exact sensitivities.
+
+
+### 5.7.1 Interest Rates and Financial Structure
+
+The market-response analysis can be compared with the leverage relationships identified in RQ3.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r ch5-top3-yield-leverage}
 
@@ -5201,6 +6118,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 This comparison reinforces the broader finding from Chapter 3: the same
 macroeconomic variable can be associated differently with different
 companies.
@@ -5211,17 +6129,31 @@ whereas Allreal's relationship is substantially weaker.
 
 The combination of market-return and balance-sheet evidence therefore
 argues against treating the Top-3 firms as interchangeable exposures.
+=======
+This comparison reinforces the broader finding from Chapter 3: the same macroeconomic variable can be associated differently with different companies.
+
+Swiss Prime Site and PSP Swiss Property display relatively strong positive historical relationships between long-term yields and leverage, whereas Allreal's relationship is substantially weaker.
+
+The combination of market-return and balance-sheet evidence therefore argues against treating the Top-3 firms as interchangeable exposures.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ## 5.8 Bringing Financial and Physical Portfolios Together
 
 The Top-3 analysis brings together the main strands of the report.
 
+<<<<<<< HEAD
 At the **market level**, Swiss Prime Site, PSP Swiss Property and
 Allreal account for a substantial majority of the market capitalization
 of the selected listed REOC sample.
 
 At the **property level**, however, their portfolios differ along
 several dimensions:
+=======
+At the **market level**, Swiss Prime Site, PSP Swiss Property and Allreal account for a substantial majority of the market capitalization of the selected listed REOC sample.
+
+At the **property level**, however, their portfolios differ along several dimensions:
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 - the number of reported properties;
 - geographic concentration;
@@ -5229,6 +6161,7 @@ several dimensions:
 - construction-year distribution; and
 - the relationship between land footprint and usable property area.
 
+<<<<<<< HEAD
 At the **financial level**, the firms also differ in leverage and in the
 historical relationship between their balance sheets and long-term
 government yields.
@@ -5308,11 +6241,45 @@ companies. Understanding the sector therefore requires looking beyond
 aggregate indices and considering both the financial characteristics of
 individual firms and the physical property portfolios that ultimately
 underpin them.
+=======
+At the **financial level**, the firms also differ in leverage and in the historical relationship between their balance sheets and long-term government yields.
+
+Finally, at the **equity-market level**, their returns do not behave identically across macroeconomic regimes or exhibit exactly the same estimated sensitivity to long-term interest-rate changes.
+
+The combined evidence therefore suggests that **market concentration does not imply portfolio homogeneity**.
+
+A listed Swiss REOC index may appear to represent a single sector, but much of its market value is concentrated in a small number of companies with materially different physical portfolios and company-specific financial characteristics.
+
+This heterogeneity is economically important. Exposure to office, retail or residential assets, concentration in particular cities, property age and physical intensity may influence how an individual company reacts to changes in occupier demand, financing costs and capital-market conditions.
+
+The present analysis does not establish that any one physical portfolio characteristic causes a particular stock-market response. Rather, it demonstrates why aggregate sector relationships should be interpreted alongside the composition of the firms underlying them.
+
+
+## 5.9 Overall Conclusion
+
+This report examined Swiss listed real-estate operating companies through a combination of financial, market, macroeconomic and property-level data.
+
+**RQ1** asked how the financial characteristics and market performance of Swiss listed REOCs developed over time. The results showed a sector dominated by a relatively small number of large companies, with Swiss Prime Site, PSP Swiss Property and Allreal accounting for approximately 62.9% of the selected sample's market capitalization in 2025. The sector nevertheless contains meaningful differences in firm size, leverage and market performance.
+
+**RQ2** examined how stock-market performance is associated with changes in the macroeconomic environment. The clearest relationship appears for long-term interest rates: increases in the 10-year Swiss Confederation yield tend to coincide with weaker monthly REOC returns. However, performance differs across monetary regimes and the estimated degree of interest-rate sensitivity varies across firms.
+
+**RQ3** examined the relationship between macroeconomic conditions and firm fundamentals. A positive pooled association exists between long-term government yields and leverage, but this relationship becomes substantially weaker when annual changes and persistent firm-specific differences are considered. This suggests that the pooled association partly reflects longer-term and cross-firm patterns rather than a uniform short-run leverage response.
+
+The **Chapter of Choice** extended the project from standardized financial datasets to the physical portfolios underlying the companies. Corporate webpages and PDF disclosures were transformed into a geocoded property-level dataset using web scraping, PDF extraction, text cleaning, address matching and geocoding. The resulting interactive map provides a spatial representation of the assets underlying the three dominant listed REOCs.
+
+The final Top-3 comparison demonstrates why these perspectives are complementary. The three firms dominate the same listed sector but differ in property count, use composition, geographic concentration, property age, physical characteristics, financial structure and historical macroeconomic sensitivity.
+
+The central conclusion of the report is therefore that the Swiss listed real-estate market is **concentrated but heterogeneous**.
+
+Macroeconomic conditions, particularly interest rates, are relevant for listed real-estate performance, but their effects are not uniform across companies. Understanding the sector therefore requires looking beyond aggregate indices and considering both the financial characteristics of individual firms and the physical property portfolios that ultimately underpin them.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ## 5.10 Limitations and Further Research
 
 Several limitations should be considered when interpreting the results.
 
+<<<<<<< HEAD
 First, the selected sample deliberately focuses on economically
 significant listed REOCs and therefore does not represent every listed
 Swiss real-estate company equally.
@@ -5344,6 +6311,19 @@ and redevelopment histories became available, future research could
 examine whether changes in physical portfolio composition are associated
 with subsequent changes in financial performance and macroeconomic
 sensitivity.
+=======
+First, the selected sample deliberately focuses on economically significant listed REOCs and therefore does not represent every listed Swiss real-estate company equally.
+
+Second, both the monthly and annual datasets form unbalanced panels because companies enter the available historical data at different dates.
+
+Third, the statistical analyses are primarily descriptive and associational. Correlations, regime comparisons and regressions do not establish causal effects of macroeconomic variables on company performance or financial policy.
+
+Fourth, the number of independent macroeconomic time periods is considerably smaller than the number of firm-level observations because the same Swiss macroeconomic conditions apply to all firms in a given month or year.
+
+Fifth, the property-level dataset combines corporate disclosures that differ in structure and definitions. Variables such as rentable area, commercial area and floor space are economically related but are not necessarily defined identically by each company.
+
+Finally, the property-level deep dive covers only the three dominant firms and largely represents a 2025 snapshot. A particularly valuable extension would be to construct comparable historical property portfolios for all three companies. If consistent acquisition, disposal and redevelopment histories became available, future research could examine whether changes in physical portfolio composition are associated with subsequent changes in financial performance and macroeconomic sensitivity.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 # Appendix
 
@@ -5351,9 +6331,13 @@ sensitivity.
 
 ### A.1 Current Market-Capitalization Weights
 
+<<<<<<< HEAD
 The following figure provides a cross-sectional view of the most
 recently available market-capitalization weights. The main report
 focuses instead on the evolution of these weights over time.
+=======
+The following figure provides a cross-sectional view of the most recently available market-capitalization weights. The main report focuses instead on the evolution of these weights over time.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-current-market-weights, fig.width=9, fig.height=6}
 
@@ -5412,10 +6396,14 @@ ggplot(
 
 ### A.2 Rolling Correlations with Market Benchmarks
 
+<<<<<<< HEAD
 The main analysis reports full-sample return correlations. As an
 additional robustness check, the following figure shows how the
 correlation between the constructed REOC portfolios and the Swiss market
 benchmarks varies over time.
+=======
+The main analysis reports full-sample return correlations. As an additional robustness check, the following figure shows how the correlation between the constructed REOC portfolios and the Swiss market benchmarks varies over time.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 A 36-month rolling window is used.
 
@@ -5529,6 +6517,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The rolling correlations show that benchmark relationships are not
 constant through time. The portfolios generally remain more closely
 related to the listed real-estate benchmark than to the broader equity
@@ -5552,6 +6541,20 @@ The monthly macroeconomic dataset is structured as a firm-month panel.
 Because macroeconomic variables are common to all firms observed in a
 given month, the data are reduced to one observation per month before
 evaluating macroeconomic coverage.
+=======
+The rolling correlations show that benchmark relationships are not constant through time. The portfolios generally remain more closely related to the listed real-estate benchmark than to the broader equity market, while periods of market stress and structural change produce substantial variation in correlation
+
+## B. Additional Analysis for RQ2
+
+This section contains supplementary analyses supporting the investigation of the relationship between REOC market performance and the Swiss macroeconomic environment.
+
+The main report focuses on the most economically relevant results. The additional tables and figures below document data coverage, alternative macroeconomic relationships, volatility, and more detailed regression results.
+
+
+### B.1 Monthly Macroeconomic Data Coverage
+
+The monthly macroeconomic dataset is structured as a firm-month panel. Because macroeconomic variables are common to all firms observed in a given month, the data are reduced to one observation per month before evaluating macroeconomic coverage.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-rq2-macro-coverage}
 
@@ -5643,6 +6646,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The coverage differs substantially across variables. Inflation and
 labour-market series provide relatively broad coverage, while some
 interest-rate measures apply only to particular monetary-policy periods.
@@ -5656,6 +6660,14 @@ The sample spans a change in the Swiss monetary-policy framework. The
 3-month CHF LIBOR provides the short-term interest-rate indicator during
 the earlier part of the sample, while the SNB policy rate becomes
 available around the 2019 framework transition.
+=======
+The coverage differs substantially across variables. Inflation and labour-market series provide relatively broad coverage, while some interest-rate measures apply only to particular monetary-policy periods. GDP and selected alternative property-price series are substantially sparser and are therefore treated primarily as secondary or contextual variables.
+
+
+### B.2 Construction of the Continuous Short-Term Interest Rate
+
+The sample spans a change in the Swiss monetary-policy framework. The 3-month CHF LIBOR provides the short-term interest-rate indicator during the earlier part of the sample, while the SNB policy rate becomes available around the 2019 framework transition.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 The following table documents the splice around that transition.
 
@@ -5698,6 +6710,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The constructed series uses the available LIBOR observation during the
 earlier period and the SNB policy rate thereafter. This creates a
 continuous indicator suitable for the long historical analysis while
@@ -5713,6 +6726,16 @@ unemployment.
 As an additional robustness analysis, the earlier exploratory
 specification also includes monthly growth in apartment transaction
 prices.
+=======
+The constructed series uses the available LIBOR observation during the earlier period and the SNB policy rate thereafter. This creates a continuous indicator suitable for the long historical analysis while acknowledging that the underlying monetary-policy reference changed over time.
+
+
+### B.3 Full RQ2 Multivariable Regression Results
+
+The main chapter presents a compact regression specification using changes in short- and long-term interest rates, inflation and changes in unemployment.
+
+As an additional robustness analysis, the earlier exploratory specification also includes monthly growth in apartment transaction prices.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-rq2-full-regression-data}
 
@@ -5822,6 +6845,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The extended specification should be interpreted as a robustness and
 exploratory exercise rather than as a causal model. The inclusion of
 several contemporaneous macroeconomic variables may introduce
@@ -5834,6 +6858,14 @@ Inflation is examined separately as an additional macroeconomic
 indicator. The original exploratory analysis found relatively weak
 full-sample correlations between inflation and both aggregate REOC
 portfolios.
+=======
+The extended specification should be interpreted as a robustness and exploratory exercise rather than as a causal model. The inclusion of several contemporaneous macroeconomic variables may introduce correlation among explanatory variables, and the estimated coefficients should therefore be interpreted cautiously.
+
+
+### B.4 Inflation and REOC Returns
+
+Inflation is examined separately as an additional macroeconomic indicator. The original exploratory analysis found relatively weak full-sample correlations between inflation and both aggregate REOC portfolios.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-inflation-returns, fig.width=10, fig.height=5.5}
 
@@ -5902,6 +6934,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The scatterplots show substantial dispersion around the fitted
 relationships. Inflation alone therefore explains relatively little of
 the month-to-month variation in REOC returns.
@@ -5910,6 +6943,14 @@ the month-to-month variation in REOC returns.
 
 Changes in seasonally adjusted unemployment provide an additional
 measure of changes in the economic environment.
+=======
+The scatterplots show substantial dispersion around the fitted relationships. Inflation alone therefore explains relatively little of the month-to-month variation in REOC returns.
+
+
+### B.5 Labour-Market Conditions and REOC Returns
+
+Changes in seasonally adjusted unemployment provide an additional measure of changes in the economic environment.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-unemployment-returns, fig.width=10, fig.height=5.5}
 
@@ -5988,6 +7029,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 As with inflation, the large dispersion of monthly observations
 indicates that changes in unemployment are not a dominant standalone
 explanation of REOC return variation.
@@ -6000,6 +7042,16 @@ Swiss residential transaction-price indices.
 
 The apartment and house price indices are converted into month-to-month
 growth rates.
+=======
+As with inflation, the large dispersion of monthly observations indicates that changes in unemployment are not a dominant standalone explanation of REOC return variation.
+
+
+### B.6 Property-Market Momentum and REOC Returns
+
+Because listed REOCs hold direct real-estate assets, an additional exploratory analysis compares listed market returns with changes in Swiss residential transaction-price indices.
+
+The apartment and house price indices are converted into month-to-month growth rates.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-property-price-returns, fig.width=10, fig.height=6}
 
@@ -6073,6 +7125,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 These comparisons are exploratory. Direct property markets and listed
 securities operate at different frequencies and may incorporate
 information at different speeds, so a weak contemporaneous monthly
@@ -6084,6 +7137,14 @@ are irrelevant to REOC values.
 The main report focuses on return levels and macroeconomic associations.
 As an additional market-risk measure, the following figure presents
 rolling realised volatility.
+=======
+These comparisons are exploratory. Direct property markets and listed securities operate at different frequencies and may incorporate information at different speeds, so a weak contemporaneous monthly relationship does not imply that underlying property-market conditions are irrelevant to REOC values.
+
+
+### B.7 Rolling REOC Portfolio Volatility
+
+The main report focuses on return levels and macroeconomic associations. As an additional market-risk measure, the following figure presents rolling realised volatility.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 A 12-month rolling standard deviation of monthly returns is used.
 
@@ -6165,6 +7226,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The rolling measure shows that REOC return volatility varies
 considerably over time. Periods of heightened market uncertainty
 therefore affect not only realised returns but also the dispersion of
@@ -6180,6 +7242,27 @@ Each firm-level regression takes the form
 
 $begin:math:display$ R\_{i,t} = \\alpha_i + \\beta\_{1,i}\\Delta
 Yield_t + \\beta\_{2,i}Inflation_t + \\varepsilon\_{i,t}.
+=======
+The rolling measure shows that REOC return volatility varies considerably over time. Periods of heightened market uncertainty therefore affect not only realised returns but also the dispersion of monthly performance.
+
+
+### B.8 Full Firm-Level RQ2 Sensitivity Estimates
+
+Section 3.1.4 visualises firm-specific sensitivity to changes in long-term interest rates. The complete regression estimates are reported below.
+
+Each firm-level regression takes the form
+
+$begin:math:display$
+R\_\{i\,t\}
+\=
+\\alpha\_i
+\+
+\\beta\_\{1\,i\}\\Delta Yield\_t
+\+
+\\beta\_\{2\,i\}Inflation\_t
+\+
+\\varepsilon\_\{i\,t\}\.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 $end:math:display$
 
 ```{r appendix-rq2-firm-sensitivity-table}
@@ -6270,6 +7353,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The detailed estimates reinforce the main finding that REOCs differ in
 the magnitude of their exposure to macroeconomic conditions. These
 coefficients remain descriptive associations rather than causal
@@ -6290,6 +7374,21 @@ choice.
 
 The annual accounting panel is unbalanced because the number of
 historical observations differs across firms.
+=======
+The detailed estimates reinforce the main finding that REOCs differ in the magnitude of their exposure to macroeconomic conditions. These coefficients remain descriptive associations rather than causal estimates.
+
+
+## C. Additional Analysis for RQ3
+
+This section reports additional descriptive and statistical results concerning the relationship between firm fundamentals and the macroeconomic environment.
+
+The main report focuses on the long-term yield–leverage relationship and the contrast between pooled and within-firm evidence. The following material documents the broader exploratory analysis supporting that choice.
+
+
+### C.1 Annual Firm-Level Data Coverage
+
+The annual accounting panel is unbalanced because the number of historical observations differs across firms.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-rq3-firm-coverage}
 
@@ -6333,10 +7432,15 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 Companies entering the dataset later have shorter historical series.
 Firm-specific correlations and regressions based on these firms should
 therefore be interpreted more cautiously than estimates for REOCs with
 long histories.
+=======
+Companies entering the dataset later have shorter historical series. Firm-specific correlations and regressions based on these firms should therefore be interpreted more cautiously than estimates for REOCs with long histories.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ### C.2 Missingness in Core Annual Firm Variables
 
@@ -6402,6 +7506,10 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 ### C.3 Descriptive Statistics for Annual Firm Fundamentals
 
 ```{r appendix-rq3-descriptive-statistics}
@@ -6500,10 +7608,17 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 ### C.4 Full Macro × Firm Fundamentals Correlation Matrix
 
 The following matrix extends the main RQ3 discussion by comparing five
 macroeconomic variables with four firm-level financial characteristics.
+=======
+
+### C.4 Full Macro × Firm Fundamentals Correlation Matrix
+
+The following matrix extends the main RQ3 discussion by comparing five macroeconomic variables with four firm-level financial characteristics.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-rq3-correlation-matrix}
 
@@ -6602,9 +7717,14 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The correlation matrix confirms that most macro-fundamental
 relationships are relatively weak. The most notable pooled relationship
 is between the 10-year government yield and debt-to-assets.
+=======
+The correlation matrix confirms that most macro-fundamental relationships are relatively weak. The most notable pooled relationship is between the 10-year government yield and debt-to-assets.
+
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ### C.5 Macro × Firm Fundamentals Correlation Heatmap
 
@@ -6697,6 +7817,7 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 Positive values indicate that the variables tend to move in the same
 direction, while negative values indicate opposite co-movement. Values
 close to zero indicate little linear association.
@@ -6706,6 +7827,14 @@ close to zero indicate little linear association.
 The main report visualises the heterogeneous relationship between the
 10-year Confederation yield and leverage. The complete numerical results
 are reported below.
+=======
+Positive values indicate that the variables tend to move in the same direction, while negative values indicate opposite co-movement. Values close to zero indicate little linear association.
+
+
+### C.6 Full Firm-Specific Yield–Leverage Correlation Table
+
+The main report visualises the heterogeneous relationship between the 10-year Confederation yield and leverage. The complete numerical results are reported below.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-rq3-yield-leverage-table}
 
@@ -6758,6 +7887,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The full table demonstrates that the pooled positive correlation masks
 considerable heterogeneity across firms. Firms with shorter histories
 should be interpreted cautiously because their correlations are based on
@@ -6769,6 +7899,14 @@ The main report focuses on the long-term government yield because it
 produced the strongest pooled relationship with debt-to-assets. For
 completeness, the short-term interest-rate relationship is also
 reported.
+=======
+The full table demonstrates that the pooled positive correlation masks considerable heterogeneity across firms. Firms with shorter histories should be interpreted cautiously because their correlations are based on substantially fewer annual observations.
+
+
+### C.7 Short-Term Interest Rates and Leverage
+
+The main report focuses on the long-term government yield because it produced the strongest pooled relationship with debt-to-assets. For completeness, the short-term interest-rate relationship is also reported.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-rq3-short-rate-leverage, fig.width=9, fig.height=6}
 
@@ -6860,6 +7998,7 @@ knitr::kable(
 
 ```
 
+<<<<<<< HEAD
 The short-rate results are weaker than the long-term yield relationship
 and therefore remain supplementary to the main RQ3 analysis.
 
@@ -6867,6 +8006,14 @@ and therefore remain supplementary to the main RQ3 analysis.
 
 Firm size may itself be associated with capital structure. The following
 analysis compares total assets with debt-to-assets.
+=======
+The short-rate results are weaker than the long-term yield relationship and therefore remain supplementary to the main RQ3 analysis.
+
+
+### C.8 Firm Size and Leverage
+
+Firm size may itself be associated with capital structure. The following analysis compares total assets with debt-to-assets.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
 
 ```{r appendix-rq3-size-leverage, fig.width=9, fig.height=6}
 
@@ -6921,6 +8068,10 @@ ggplot(
 
 ```
 
+<<<<<<< HEAD
 The pooled relationship between total assets and leverage is weak. Firm
 size alone therefore does not appear to explain much of the
 cross-sectional variation in debt-to-assets within the sample.
+=======
+The pooled relationship between total assets and leverage is weak. Firm size alone therefore does not appear to explain much of the cross-sectional variation in debt-to-assets within the sample.
+>>>>>>> f5cbc75200e8dd62fe6c0551ea56b414401b910b
