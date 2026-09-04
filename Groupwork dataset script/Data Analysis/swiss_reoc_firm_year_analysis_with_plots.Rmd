@@ -569,7 +569,7 @@ Concretely, the analysis works through, depending on what is actually available 
 
 As in the firm-level document, this first pass is **descriptive and exploratory**. It documents associations, not causal effects.
 
-```{r setup, message=FALSE, warning=FALSE}
+```{r rq2-setup, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(janitor)
 library(lubridate)
@@ -598,7 +598,7 @@ hp_macro <- hp_macro |>
 
 ## 15.1 Panel structure
 
-```{r structure}
+```{r rq2-structure}
 data_overview <- tibble(
   rows       = nrow(hp_macro),
   firms      = n_distinct(hp_macro$ticker),
@@ -621,7 +621,7 @@ hp_macro |>
 
 ## 15.2 Firm coverage
 
-```{r coverage}
+```{r rq2-coverage}
 firm_coverage <- hp_macro |>
   filter(!is.na(monthly_return)) |>
   group_by(ticker) |>

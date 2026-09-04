@@ -677,16 +677,20 @@ To examine the distribution of profitability under different macroeconomic condi
 
 fa_rq3 <- fa_rq3 |>
   mutate(
-    roa = 100 * net_income / fa_total_assets
-  )
-
-fa_rq3 |>
-  summarise(
-    observations = sum(!is.na(roa)),
-    mean_roa = mean(roa, na.rm = TRUE),
-    median_roa = median(roa, na.rm = TRUE),
-    min_roa = min(roa, na.rm = TRUE),
-    max_roa = max(roa, na.rm = TRUE)
+    growth_environment = case_when(
+      gdp_growth < 0 ~ "Economic contraction",
+      gdp_growth < 2 ~ "Moderate growth (0–2%)",
+      gdp_growth >= 2 ~ "Strong growth (≥2%)",
+      TRUE ~ NA_character_
+    ),
+    growth_environment = factor(
+      growth_environment,
+      levels = c(
+        "Economic contraction",
+        "Moderate growth (0–2%)",
+        "Strong growth (≥2%)"
+      )
+    )
   )
 ```
 
@@ -903,7 +907,7 @@ ggplot(
 ```
 ## 7.5 Long-term interest rates and firm leverage
 
-The correlation analysis identifies the relationship between the 10-year Swiss Confederation bond yield and the debt-to-assets ratio as the strongest macro-fundamental correlation in the selected matrix (`r ≈ 0.32`).
+The correlation analysis identifies the relationship between the 10-year Swiss Confederation bond yield and the debt-to-assets ratio as the strongest macro-fundamental correlation in the selected matrix (*r* ≈ 0.32).
 
 Because long-term government yields provide an important benchmark for financing conditions, this relationship is examined in greater detail. The analysis distinguishes between the pooled relationship in levels and the relationship between annual changes.
 
