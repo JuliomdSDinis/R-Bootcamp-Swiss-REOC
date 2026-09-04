@@ -1,0 +1,974 @@
+/* ---------- Overall page ---------- */
+
+:root {
+  --navy: #244F8F;
+  --navy-dark: #173B6C;
+  --green: #67E58A;
+  --green-light: #B8F3C8;
+  --grey: #6F7378;
+  --light-grey: #E5E8EB;
+  --very-light-grey: #F5F6F7;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--navy-dark);
+  background-color: #ffffff;
+}
+
+div.main-container {
+  max-width: 1250px;
+}
+
+.toc-content {
+  padding-left: 45px;
+  padding-right: 60px;
+}
+
+
+/* ---------- Report title ---------- */
+
+#header {
+  margin-top: 20px;
+  margin-bottom: 80px;
+  padding-top: 15px;
+  border-top: 8px solid var(--green);
+}
+
+h1.title {
+  color: var(--navy);
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -1.5px;
+}
+
+h3.subtitle {
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--navy-dark);
+  max-width: 900px;
+  margin-bottom: 35px;
+}
+
+h4.author {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+
+h4.date {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--navy);
+}
+
+
+/* ---------- Chapters ---------- */
+
+h1:not(.title) {
+  color: var(--navy);
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-top: 8px;
+  border-top: 4px solid var(--green);
+}
+
+h2 {
+  color: var(--navy);
+  font-size: 27px;
+  font-weight: 800;
+}
+
+h3:not(.subtitle) {
+  color: var(--navy);
+  font-size: 21px;
+  font-weight: 800;
+  margin-top: 38px;
+  margin-bottom: 12px;
+}
+
+/* ---------- Text ---------- */
+
+.lead-text {
+  font-size: 21px;
+  line-height: 1.5;
+  font-weight: 400;
+  max-width: 900px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+.two-column {
+  column-count: 2;
+  column-gap: 48px;
+  column-rule: 1px solid var(--green-light);
+  font-size: 16px;
+  line-height: 1.65;
+  hyphens: auto;
+}
+
+p {
+  max-width: 850px;
+  margin-bottom: 18px;
+}
+
+
+/* ---------- Figures ---------- */
+
+img {
+  max-width: 100%;
+}
+
+.figure {
+  margin-top: 35px;
+  margin-bottom: 50px;
+}
+
+
+/* ---------- Tables ---------- */
+
+table {
+  font-size: 15px;
+  margin-top: 25px;
+  margin-bottom: 40px;
+}
+
+
+/* ---------- Sidebar / TOC ---------- */
+
+div.tocify {
+  font-size: 14px;
+}
+
+.tocify .list-group-item {
+  border: none;
+  padding: 7px 10px;
+}
+
+.tocify .list-group-item.active {
+  background-color: #222222;
+  color: white;
+}
+
+/* ---------- Research questions ---------- */
+
+.rq-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  column-gap: 42px;
+  row-gap: 0;
+  max-width: 1050px;
+  margin: 35px 0 20px 0;
+}
+
+.rq-number {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--navy);
+  padding: 28px 0;
+  border-top: 3px solid var(--green);
+}
+
+.rq-content {
+  padding: 27px 0 32px 0;
+  border-top: 1px solid var(--green-light);
+}
+
+.rq-label {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+
+.rq-question {
+  font-size: 22px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--navy-dark);
+  max-width: 800px;
+}
+
+.rq-after {
+  max-width: 850px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--navy-dark);
+  margin-top: 0;
+  margin-bottom: 35px;
+}
+
+@media (max-width: 800px) {
+  .rq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rq-number {
+    padding-bottom: 10px;
+  }
+
+  .rq-content {
+    padding-top: 10px;
+  }
+}
+
+/* ---------- Key statistics ---------- */
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+  max-width: 1000px;
+  margin: 15px 0 35px 0;
+  padding: 28px 0;
+  border-top: 4px solid var(--green);
+  border-bottom: 1px solid var(--green-light);
+}
+
+.stat-number {
+  font-size: 54px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.stat-label {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--navy-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-item.highlight .stat-number {
+  color: var(--green);
+}
+
+/* ---------- Editorial tables ---------- */
+
+/* Table wrapper */
+.reoc-table-wrap {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+/* Table title / kable caption */
+.reoc-table-wrap caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--navy);
+  padding: 0 0 8px 0;
+}
+
+/* Main table */
+.reoc-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid var(--navy);
+  border-bottom: 2px solid var(--navy);
+  font-size: 15px;
+  color: var(--navy-dark);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Remove unwanted Bootstrap borders */
+.reoc-table-wrap thead,
+.reoc-table-wrap thead tr,
+.reoc-table-wrap thead th {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Column headings:
+   left aligned and NO left indentation */
+.reoc-table-wrap thead th {
+  text-align: left !important;
+  font-weight: 800;
+  color: var(--navy);
+  padding: 10px 14px 10px 0 !important;
+  border-bottom: 1px solid var(--green-light) !important;
+}
+
+/* Body rows:
+   all values left aligned */
+.reoc-table-wrap tbody td {
+  text-align: left !important;
+  padding: 9px 14px 9px 0 !important;
+  border: none;
+}
+
+/* Only the FIRST BODY COLUMN is indented */
+.reoc-table-wrap tbody td:first-child {
+  padding-left: 24px !important;
+}
+
+/* Other body columns align directly
+   underneath their column headings */
+.reoc-table-wrap tbody td:not(:first-child) {
+  padding-left: 0 !important;
+}
+
+/* Fine light-green separator between body rows */
+.reoc-table-wrap tbody tr + tr td {
+  border-top: 1px solid var(--green-light);
+}
+
+/* Table note */
+.reoc-table-note {
+  margin-top: 5px;
+  padding: 0;
+  max-width: 1000px;
+  font-size: 11px;
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--navy-dark);
+}
+
+.reoc-table-note p {
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: none;
+}
+
+.reoc-table-note strong {
+  font-weight: 800;
+  font-style: italic;
+}
+
+
+/* ---------- Data source grid ---------- */
+
+.source-grid {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  column-gap: 42px;
+  max-width: 1050px;
+  margin: 30px 0 55px 0;
+}
+
+.source-label {
+  padding: 30px 0;
+  border-top: 2px solid var(--green);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  color: var(--navy);
+}
+
+.source-content {
+  padding: 21px 0 25px 0;
+  border-top: 1px solid var(--green-light);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--navy-dark);
+}
+
+.source-content p {
+  margin: 0;
+  max-width: 800px;
+}
+
+/* ---------- Analytical workflow ---------- */
+
+.method-flow {
+  display: grid;
+  grid-template-columns: 1fr 36px 1fr 36px 1fr 36px 1fr;
+  align-items: start;
+  gap: 10px;
+  max-width: 1100px;
+  margin: 15px 0 25px 0;
+  padding-top: 22px;
+  border-top: 4px solid var(--green);
+}
+
+.method-step {
+  min-height: 185px;
+}
+
+.method-num {
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 15px;
+}
+
+.method-label {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+
+.method-text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--navy-dark);
+}
+
+.method-arrow {
+  font-size: 31px;
+  font-weight: 400;
+  color: var(--green);
+  padding-top: 52px;
+  text-align: center;
+}
+
+.method-note {
+  max-width: 950px;
+  margin-top: 5px;
+  margin-bottom: 45px;
+  padding-top: 10px;
+  border-top: 1px solid var(--green-light);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--navy-dark);
+}
+
+.method-note p {
+  margin: 0;
+  max-width: none;
+}
+
+@media (max-width: 900px) {
+  .method-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .method-arrow {
+    display: none;
+  }
+
+  .method-step {
+    min-height: auto;
+    padding-bottom: 25px;
+  }
+}
+
+
+/* ---------- Fixed two-column layout ---------- */
+.two-column-fixed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0;
+}
+
+.two-column-fixed > div {
+  padding-right: 32px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.two-column-fixed > div + div {
+  border-left: 1px solid var(--green-light);
+  padding-left: 32px;
+  padding-right: 0;
+}
+
+.two-column-fixed p:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .two-column-fixed {
+    grid-template-columns: 1fr;
+  }
+
+  .two-column-fixed > div,
+  .two-column-fixed > div + div {
+    border-left: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ---------- Chapter pathway ---------- */
+
+.chapter-path {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr 40px 1fr;
+  align-items: center;
+  max-width: 950px;
+  margin: 25px 0 45px 0;
+  padding: 18px 0;
+  border-top: 3px solid var(--green);
+  border-bottom: 1px solid var(--green-light);
+}
+
+.chapter-path span {
+  display: block;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+
+.chapter-path strong {
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--navy);
+}
+
+.chapter-path p {
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 5px 0 0 0;
+}
+
+.chapter-path-arrow {
+  color: var(--green);
+  font-size: 25px;
+  text-align: center;
+}
+
+/* ---------- Chapter opening ---------- */
+
+.chapter-opening {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 55px;
+  max-width: 1050px;
+  margin: 25px 0 50px 0;
+  align-items: start;
+}
+
+/* Left side: current analytical section */
+.chapter-opening-main {
+  padding-right: 10px;
+}
+
+.chapter-opening-main h2 {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.chapter-opening-main p {
+  font-size: 16px;
+  line-height: 1.65;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Right side: compact chapter roadmap */
+.chapter-opening-map {
+  padding-left: 35px;
+  border-left: 1px solid var(--green-light);
+}
+
+.chapter-map-mini {
+  display: grid;
+  grid-template-columns: 55px 1fr;
+  column-gap: 18px;
+  row-gap: 0;
+}
+
+.chapter-map-mini-number {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--green);
+  padding: 5px 0 14px 0;
+}
+
+.chapter-map-mini-content {
+  padding: 3px 0 14px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--green-light);
+}
+
+.chapter-map-mini-label {
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.chapter-map-mini-text {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--navy-dark);
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+
+  .chapter-opening {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+
+  .chapter-opening-map {
+    padding-left: 0;
+    border-left: none;
+    padding-top: 20px;
+    border-top: 1px solid var(--green-light);
+  }
+}
+
+/* ---------- Top-3 concentration strip ---------- */
+
+.top3-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin: 25px 0 45px 0;
+  padding: 22px 0;
+  border-top: 4px solid var(--green);
+  border-bottom: 1px solid var(--green-light);
+}
+
+.top3-strip span {
+  display: block;
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 9px;
+}
+
+.top3-strip strong {
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.8px;
+  color: var(--navy-dark);
+}
+
+.top3-strip .top3-total span {
+  color: var(--green);
+}
+
+
+/* ---------- Chapter findings ---------- */
+
+.finding-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+  margin: 20px 0 25px 0;
+  padding-top: 20px;
+  border-top: 4px solid var(--green);
+}
+
+.finding-grid span {
+  display: block;
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 14px;
+}
+
+.finding-grid strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0.8px;
+  color: var(--navy);
+  margin-bottom: 9px;
+}
+
+.finding-grid p {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+
+  .top3-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .finding-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Wide concentration table ---------- */
+
+.reoc-table-wrap.wide-table {
+  max-width: 1100px;
+  margin: 30px 0 45px 0;
+  overflow-x: auto;
+}
+
+/* Table title */
+.reoc-table-wrap.wide-table caption {
+  caption-side: top;
+  text-align: left !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  line-height: 1.25;
+  color: var(--navy) !important;
+  padding: 0 0 10px 0 !important;
+}
+
+/* Main table */
+.reoc-table-wrap.wide-table table {
+  width: 100%;
+  border-collapse: collapse !important;
+  white-space: nowrap;
+  font-size: 12.5px;
+  color: var(--navy-dark);
+  margin: 0 !important;
+
+  border-top: 2px solid var(--navy) !important;
+  border-bottom: 2px solid var(--navy) !important;
+}
+
+/* Remove Bootstrap borders */
+.reoc-table-wrap.wide-table thead,
+.reoc-table-wrap.wide-table thead tr,
+.reoc-table-wrap.wide-table tbody,
+.reoc-table-wrap.wide-table tbody tr {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Column headings */
+.reoc-table-wrap.wide-table thead th {
+  text-align: left !important;
+  font-size: 12.5px;
+  font-weight: 800 !important;
+  color: var(--navy) !important;
+
+  padding: 9px 8px !important;
+
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid var(--green-light) !important;
+
+  background: transparent !important;
+}
+
+/* Body cells */
+.reoc-table-wrap.wide-table tbody td {
+  text-align: left !important;
+  padding: 7px 8px !important;
+
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+
+  background: transparent !important;
+}
+
+/* GREEN separators between years */
+.reoc-table-wrap.wide-table tbody tr + tr td {
+  border-top: 1px solid var(--green-light) !important;
+}
+
+/* Slightly stronger first column */
+.reoc-table-wrap.wide-table tbody td:first-child {
+  font-weight: 600;
+  padding-left: 8px !important;
+}
+
+/* Table note */
+.reoc-table-wrap.wide-table .reoc-table-note {
+  max-width: 1050px;
+  margin-top: 7px;
+  padding: 0;
+
+  font-size: 11px;
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--navy-dark);
+
+  border: none !important;
+}
+
+.reoc-table-wrap.wide-table .reoc-table-note strong {
+  font-weight: 800;
+  font-style: italic;
+}
+
+/* ---------- RQ1 chapter summary ---------- */
+
+.rq1-summary {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  column-gap: 40px;
+  row-gap: 0;
+  max-width: 1000px;
+  margin: 25px 0 30px 0;
+}
+
+.rq1-summary-label {
+  padding: 22px 0;
+  border-top: 2px solid var(--green);
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--navy);
+}
+
+.rq1-summary-label::first-line {
+  font-size: 30px;
+  color: var(--green);
+}
+
+.rq1-summary-text {
+  padding: 20px 0 22px 0;
+  border-top: 1px solid var(--green-light);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--navy-dark);
+}
+
+.rq1-summary-text p {
+  margin: 0;
+  max-width: 750px;
+}
+
+@media (max-width: 900px) {
+
+  .rq1-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .rq1-summary-label {
+    padding-bottom: 8px;
+  }
+
+  .rq1-summary-text {
+    padding-top: 8px;
+  }
+}
+
+/* ---------- Chapter 3 opening ---------- */
+
+.macro-chapter-opening {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 55px;
+  max-width: 1050px;
+  margin: 15px 0 45px 0;
+  align-items: start;
+}
+
+.macro-opening-main {
+  padding-right: 10px;
+}
+
+.macro-opening-main p {
+  font-size: 16px;
+  line-height: 1.65;
+  margin-top: 0;
+}
+
+.macro-opening-map {
+  padding-left: 35px;
+  border-left: 1px solid var(--green-light);
+}
+
+.macro-map {
+  display: grid;
+  grid-template-columns: 55px 1fr;
+  column-gap: 18px;
+}
+
+.macro-map-number {
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--green);
+  padding: 6px 0 18px 0;
+}
+
+.macro-map-content {
+  padding: 3px 0 18px 0;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--green-light);
+}
+
+.macro-map-label {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--navy);
+  margin-bottom: 5px;
+}
+
+.macro-map-text {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--navy-dark);
+}
+
+
+/* ---------- Research-question focus ---------- */
+
+.rq-focus {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  column-gap: 28px;
+  max-width: 950px;
+  margin: 22px 0 30px 0;
+}
+
+.rq-focus-label {
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--green);
+  padding-top: 15px;
+  border-top: 3px solid var(--green);
+}
+
+.rq-focus-text {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--navy-dark);
+  padding: 13px 0 18px 0;
+  border-top: 1px solid var(--green-light);
+}
+
+
+@media (max-width: 900px) {
+
+  .macro-chapter-opening {
+    grid-template-columns: 1fr;
+    row-gap: 25px;
+  }
+
+  .macro-opening-map {
+    border-left: none;
+    padding-left: 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--green-light);
+  }
+
+  .rq-focus {
+    grid-template-columns: 1fr;
+  }
+
+  .rq-focus-label {
+    padding-bottom: 8px;
+  }
+}
